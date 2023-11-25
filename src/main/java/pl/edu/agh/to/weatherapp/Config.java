@@ -1,16 +1,16 @@
 package pl.edu.agh.to.weatherapp;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+import javafx.util.Pair;
+
 import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.core.json.JsonReadFeature;
-import javafx.util.Pair;
+
 
 public class Config {
   private final Logger logger = Logger.getLogger(Config.class.toString());
