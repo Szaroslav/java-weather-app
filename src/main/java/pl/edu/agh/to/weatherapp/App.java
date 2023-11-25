@@ -5,7 +5,22 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
-public class App extends Application  {
+import java.io.IOException;
+
+public class App extends Application {
+  private Config config;
+
+  @Override
+  public void init() {
+      try {
+        config = new Config();
+        config.init();
+      }
+      catch (IOException e) {
+        System.out.println(e);
+      }
+  }
+
   @Override
   public void start(Stage primaryStage) {
     Scene scene = new Scene(new Label("test"));
