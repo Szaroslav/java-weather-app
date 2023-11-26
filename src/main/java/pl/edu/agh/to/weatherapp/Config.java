@@ -20,8 +20,6 @@ public class Config {
     return _weatherApiKey;
   }
 
-  public Config() { }
-
   public void init() throws IOException {
     JsonParser jsonParser = createJsonParser();
     read(jsonParser);
