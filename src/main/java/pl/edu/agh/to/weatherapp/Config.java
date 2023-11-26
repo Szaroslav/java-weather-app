@@ -15,9 +15,9 @@ import com.fasterxml.jackson.core.json.JsonReadFeature;
 public class Config {
   private final Logger logger = Logger.getLogger(Config.class.toString());
 
-  private String _weatherApiKey = null;
-  public String weatherApiKey() {
-    return _weatherApiKey;
+  private String weatherApiKey = null;
+  public String getWeatherApiKey() {
+    return weatherApiKey;
   }
 
   public void init() throws IOException {
@@ -25,7 +25,7 @@ public class Config {
     read(jsonParser);
 
     Pair<Boolean, String> initResult = isInitialized();
-    if (!initResult.getKey()) {
+    if (Boolean.FALSE.equals(initResult.getKey())) {
       throw new IOException(
         String.format(
           "Config hasn't been initialized correctly. %s is null.",
@@ -53,13 +53,13 @@ public class Config {
     while (parser.nextToken() != JsonToken.END_OBJECT) {
       parser.nextToken();
       if (parser.getCurrentName().equals("weatherApiKey")) {
-        _weatherApiKey = parser.getText();
+        weatherApiKey = parser.getText();
       }
     }
   }
 
   private Pair<Boolean, String> isInitialized() {
-    if (_weatherApiKey == null) {
+    if (weatherApiKey == null) {
       return new Pair<>(false, "weatherApiKey");
     }
     return new Pair<>(true, null);
