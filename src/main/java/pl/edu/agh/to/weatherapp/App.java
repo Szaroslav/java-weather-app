@@ -1,30 +1,37 @@
 package pl.edu.agh.to.weatherapp;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
-import java.io.IOException;
+import lombok.Getter;
 
+import pl.edu.agh.to.weatherapp.configuration.AppConfiguration;
+import pl.edu.agh.to.weatherapp.controllers.AppController;
+
+
+@Configuration
+@Import(AppConfiguration.class)
 public class App extends Application {
-  private Config config;
+  @Getter
+  private static ConfigurableApplicationContext applicationContext;
 
   @Override
-  public void init() {
-      try {
-        config = new Config();
-        config.init();
-      }
-      catch (IOException e) {
-        System.out.println(e);
-      }
+  public synchronized void init() {
+    applicationContext = SpringApplication.run(App.class);
+  }
+
+  @Override
+  public void stop() {
+    applicationContext.close();
   }
 
   @Override
   public void start(Stage primaryStage) {
-    Scene scene = new Scene(new Label("test"));
-    primaryStage.setScene(scene);
-    primaryStage.show();
+   new AppController(primaryStage).initRootLayout();
   }
 }

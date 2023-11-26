@@ -4,8 +4,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-import javafx.util.Pair;
-
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -15,25 +13,25 @@ import com.fasterxml.jackson.core.json.JsonReadFeature;
 public class Config {
   private final Logger logger = Logger.getLogger(Config.class.toString());
 
-  private String _WEATHER_API_KEY = null;
-  public String WEATHER_API_KEY() {
-    return _WEATHER_API_KEY;
+  private String weatherApiKey = null;
+  public String getWeatherApiKey() {
+    return weatherApiKey;
   }
 
-  public Config() { }
+  public boolean isInitialized() {
+    if (weatherApiKey == null) {
+      logger.severe("weatherApi is null.");
+      return false;
+    }
+    return true;
+  }
 
   public void init() throws IOException {
     JsonParser jsonParser = createJsonParser();
     read(jsonParser);
 
-    Pair<Boolean, String> initResult = isInitialized();
-    if (!initResult.getKey()) {
-      throw new IOException(
-        String.format(
-          "Config hasn't been initialized correctly. %s is null.",
-          initResult.getValue()
-        )
-      );
+    if (!isInitialized()) {
+      throw new IOException("Config hasn't been initialized correctly");
     }
 
     logger.info("Config has been initialised successfully.");
@@ -54,16 +52,9 @@ public class Config {
 
     while (parser.nextToken() != JsonToken.END_OBJECT) {
       parser.nextToken();
-      if (parser.getCurrentName().equals("WEATHER_API_KEY")) {
-        _WEATHER_API_KEY = parser.getText();
+      if (parser.getCurrentName().equals("weatherApiKey")) {
+        weatherApiKey = parser.getText();
       }
     }
-  }
-
-  private Pair<Boolean, String> isInitialized() {
-    if (_WEATHER_API_KEY == null) {
-      return new Pair<>(false, "WEATHER_API_KEY");
-    }
-    return new Pair<>(true, null);
   }
 }

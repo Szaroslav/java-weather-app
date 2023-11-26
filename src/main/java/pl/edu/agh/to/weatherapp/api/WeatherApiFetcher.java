@@ -1,16 +1,15 @@
 package pl.edu.agh.to.weatherapp.api;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
 
 
+@Component
 public class WeatherApiFetcher implements IWeatherFetcher {
-  private final static String BASE_API_URL = "http://api.weatherapi.com/v1/";
+  private static final String BASE_API_URL = "http://api.weatherapi.com/v1/";
   private final String apiKey;
   private final HttpClient client;
 
@@ -32,8 +31,7 @@ public class WeatherApiFetcher implements IWeatherFetcher {
       cityName,
       daysNumber
     );
-    HttpRequest request = HttpRequest.newBuilder(URI.create(url))
-      .build();
     // var response = client.send(request, new JsonBod)
+    return null;
   }
 }
