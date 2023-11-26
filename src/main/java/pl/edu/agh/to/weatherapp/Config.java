@@ -18,7 +18,7 @@ public class Config {
     return weatherApiKey;
   }
 
-  private boolean isInitialized() {
+  public boolean isInitialized() {
     if (weatherApiKey == null) {
       logger.severe("weatherApi is null.");
       return false;
