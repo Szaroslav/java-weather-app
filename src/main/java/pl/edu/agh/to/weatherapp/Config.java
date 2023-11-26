@@ -4,8 +4,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-import javafx.util.Pair;
-
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -20,18 +18,20 @@ public class Config {
     return weatherApiKey;
   }
 
+  private boolean isInitialized() {
+    if (weatherApiKey == null) {
+      logger.severe("weatherApi is null.");
+      return false;
+    }
+    return true;
+  }
+
   public void init() throws IOException {
     JsonParser jsonParser = createJsonParser();
     read(jsonParser);
 
-    Pair<Boolean, String> initResult = isInitialized();
-    if (Boolean.FALSE.equals(initResult.getKey())) {
-      throw new IOException(
-        String.format(
-          "Config hasn't been initialized correctly. %s is null.",
-          initResult.getValue()
-        )
-      );
+    if (!isInitialized()) {
+      throw new IOException("Config hasn't been initialized correctly");
     }
 
     logger.info("Config has been initialised successfully.");
@@ -56,12 +56,5 @@ public class Config {
         weatherApiKey = parser.getText();
       }
     }
-  }
-
-  private Pair<Boolean, String> isInitialized() {
-    if (weatherApiKey == null) {
-      return new Pair<>(false, "weatherApiKey");
-    }
-    return new Pair<>(true, null);
   }
 }
