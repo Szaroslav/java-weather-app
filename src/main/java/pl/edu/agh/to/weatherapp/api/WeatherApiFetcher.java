@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 
 @Component
@@ -20,18 +23,43 @@ public class WeatherApiFetcher implements IWeatherFetcher {
 
   @Override
   public String fetchCurrent(String cityName) throws MalformedURLException {
-    throw new RuntimeException("Not implemented");
+    String url = BASE_API_URL + String.format(
+            "current.json?key=%s&q=%s",
+            apiKey,
+            cityName
+    );
+
+    HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create(url))
+            .build();
+
+    client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+            .thenApply(HttpResponse::body)
+            .thenAccept(System.out::println)
+            .join();
+
+    return null;
   }
 
   @Override
   public String fetchForecast(String cityName, int daysNumber) throws MalformedURLException {
+
     String url = BASE_API_URL + String.format(
       "forecast.json?key=%s&q=%s&days=%d",
       apiKey,
       cityName,
       daysNumber
     );
-    // var response = client.send(request, new JsonBod)
+
+    HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create(url))
+            .build();
+
+    client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+            .thenApply(HttpResponse::body)
+            .thenAccept(System.out::println)
+            .join();
+
     return null;
   }
 }
