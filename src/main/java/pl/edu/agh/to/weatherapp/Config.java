@@ -15,9 +15,9 @@ import com.fasterxml.jackson.core.json.JsonReadFeature;
 public class Config {
   private final Logger logger = Logger.getLogger(Config.class.toString());
 
-  private String _WEATHER_API_KEY = null;
-  public String WEATHER_API_KEY() {
-    return _WEATHER_API_KEY;
+  private String _weatherApiKey = null;
+  public String weatherApiKey() {
+    return _weatherApiKey;
   }
 
   public Config() { }
@@ -54,15 +54,15 @@ public class Config {
 
     while (parser.nextToken() != JsonToken.END_OBJECT) {
       parser.nextToken();
-      if (parser.getCurrentName().equals("WEATHER_API_KEY")) {
-        _WEATHER_API_KEY = parser.getText();
+      if (parser.getCurrentName().equals("weatherApiKey")) {
+        _weatherApiKey = parser.getText();
       }
     }
   }
 
   private Pair<Boolean, String> isInitialized() {
-    if (_WEATHER_API_KEY == null) {
-      return new Pair<>(false, "WEATHER_API_KEY");
+    if (_weatherApiKey == null) {
+      return new Pair<>(false, "weatherApiKey");
     }
     return new Pair<>(true, null);
   }
