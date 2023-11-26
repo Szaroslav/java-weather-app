@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import pl.edu.agh.to.weatherapp.model.WeatherData;
 
 @Service
-public class WeatherServiceMock implements WeatherService {
+public class WeatherServiceMock implements IWeatherService {
     @Override
     @SneakyThrows
     public WeatherData getWeatherData(String location) {

@@ -5,8 +5,11 @@ import org.springframework.context.annotation.Configuration;
 import pl.edu.agh.to.weatherapp.Config;
 import pl.edu.agh.to.weatherapp.api.IWeatherFetcher;
 import pl.edu.agh.to.weatherapp.api.WeatherApiFetcher;
+import pl.edu.agh.to.weatherapp.parser.IResponseParser;
+import pl.edu.agh.to.weatherapp.parser.ResponseParser;
 import pl.edu.agh.to.weatherapp.presenters.WeatherPresenter;
-import pl.edu.agh.to.weatherapp.weather.WeatherServiceMock;
+import pl.edu.agh.to.weatherapp.weather.IWeatherService;
+import pl.edu.agh.to.weatherapp.weather.WeatherService;
 
 import java.io.IOException;
 
@@ -25,8 +28,18 @@ public class AppConfiguration {
     }
 
     @Bean
-    public WeatherPresenter weatherPresenter() {
-        return new WeatherPresenter(new WeatherServiceMock());
+    public WeatherPresenter weatherPresenter(IWeatherService weatherService) {
+        return new WeatherPresenter(weatherService);
+    }
+
+    @Bean
+    public IWeatherService weatherService(IWeatherFetcher weatherFetcher, IResponseParser responseParser) {
+        return new WeatherService(weatherFetcher, responseParser);
+    }
+
+    @Bean
+    public IResponseParser weatherParser() {
+        return new ResponseParser();
     }
 
     @Bean

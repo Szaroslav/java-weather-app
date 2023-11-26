@@ -8,11 +8,11 @@ import javafx.scene.control.TextField;
 import org.springframework.stereotype.Component;
 import pl.edu.agh.to.weatherapp.controllers.AppController;
 import pl.edu.agh.to.weatherapp.model.WeatherData;
-import pl.edu.agh.to.weatherapp.weather.WeatherService;
+import pl.edu.agh.to.weatherapp.weather.IWeatherService;
 
 @Component
 public class WeatherPresenter  {
-    private WeatherService weatherService;
+    private IWeatherService weatherService;
     private AppController appController;
     @FXML
     private TextField searchTextField;
@@ -23,7 +23,7 @@ public class WeatherPresenter  {
     @FXML
     private Label locationLabel;
 
-    public WeatherPresenter(WeatherService weatherService) {
+    public WeatherPresenter(IWeatherService weatherService) {
         this.weatherService = weatherService;
     }
 

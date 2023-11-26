@@ -1,6 +1,5 @@
 package pl.edu.agh.to.weatherapp.api;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.net.MalformedURLException;
@@ -8,6 +7,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.concurrent.CompletableFuture;
 
 
 @Component
@@ -22,27 +22,18 @@ public class WeatherApiFetcher implements IWeatherFetcher {
   }
 
   @Override
-  public String fetchCurrent(String cityName) throws MalformedURLException {
+  public CompletableFuture<String> fetchCurrent(String cityName) throws MalformedURLException {
     String url = BASE_API_URL + String.format(
             "current.json?key=%s&q=%s",
             apiKey,
             cityName
     );
 
-    HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create(url))
-            .build();
-
-    client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-            .thenApply(HttpResponse::body)
-            .thenAccept(System.out::println)
-            .join();
-
-    return null;
+    return fetchFromUrl(url);
   }
 
   @Override
-  public String fetchForecast(String cityName, int daysNumber) throws MalformedURLException {
+  public CompletableFuture<String> fetchForecast(String cityName, int daysNumber) throws MalformedURLException {
 
     String url = BASE_API_URL + String.format(
       "forecast.json?key=%s&q=%s&days=%d",
@@ -51,15 +42,15 @@ public class WeatherApiFetcher implements IWeatherFetcher {
       daysNumber
     );
 
+    return fetchFromUrl(url);
+  }
+
+  private CompletableFuture<String> fetchFromUrl(String url) {
     HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(url))
             .build();
 
-    client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-            .thenApply(HttpResponse::body)
-            .thenAccept(System.out::println)
-            .join();
-
-    return null;
+    return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+            .thenApply(HttpResponse::body);
   }
 }
