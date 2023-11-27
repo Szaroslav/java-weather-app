@@ -21,23 +21,6 @@ public class JsonParser implements Parser {
         }
     }
 
-//    private WeatherData handleErrorResponse(JsonObject errorJson) {
-//        int errorCode = errorJson.getAsJsonPrimitive("code").getAsInt();
-//        String errorMessage = errorJson.getAsJsonPrimitive("message").getAsString();
-//
-//        /*
-//          TODO:
-//            Handle somehow error response.
-//            eg. "code":1006,"message":"No matching location found."
-//        */
-//
-//        WeatherData weatherData = new WeatherData();
-//        weatherData.setLocationName("Error " + errorCode + ": " + errorMessage);
-//        weatherData.setTemp(-1);
-//
-//        return weatherData;
-//    }
-
     private  WeatherData weatherDataFromJson(JsonObject json) {
         // Parse location details
         JsonObject locationJson = json.getAsJsonObject("location");
