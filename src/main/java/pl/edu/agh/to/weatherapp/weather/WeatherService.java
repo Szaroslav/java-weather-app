@@ -23,7 +23,7 @@ public class WeatherService implements IWeatherService {
     @SneakyThrows
     public WeatherData getWeatherData(String location) {
         return weatherFetcher.fetchCurrent(location)
-                .thenApply(responseParser::parse)
-                .join();
+            .thenApply(responseParser::parse)
+            .join();
     }
 }

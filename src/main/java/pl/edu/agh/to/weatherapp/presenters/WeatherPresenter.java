@@ -32,15 +32,15 @@ public class WeatherPresenter  {
     }
 
     public void handleSearchAction() {
-        Task<WeatherData> executeAppTask = new Task<WeatherData>() {
+        Task<WeatherData> executeAppTask = new Task<>() {
             @Override
-            protected WeatherData call() throws Exception {
+            protected WeatherData call() {
                 return weatherService.getWeatherData(searchTextField.getText());
             }
         };
         executeAppTask.setOnSucceeded(e -> {
             locationLabel.setText(executeAppTask.getValue().getLocationName());
-            temperatureLabel.setText(String.valueOf(executeAppTask.getValue().getTemp()) + "°C");
+            temperatureLabel.setText(executeAppTask.getValue().getTemp() + "°C");
             conditionIconImageView.setImage(new Image(executeAppTask.getValue().getConditionIconUrl()));
         });
         executeAppTask.setOnFailed(e -> {
