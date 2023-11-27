@@ -1,8 +1,10 @@
 package pl.edu.agh.to.weatherapp.parser;
 
-import pl.edu.agh.to.weatherapp.model.WeatherData;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+
+import pl.edu.agh.to.weatherapp.exceptions.InvalidRequest;
+import pl.edu.agh.to.weatherapp.model.WeatherData;
 
 public class JsonParser implements IParser {
     @Override
@@ -10,30 +12,33 @@ public class JsonParser implements IParser {
         JsonObject json = new Gson().fromJson(content, JsonObject.class);
 
         if (json.has("error")) {
-            return handleErrorResponse(json.getAsJsonObject("error"));
+            String errorMessage = json.getAsJsonObject("error")
+                .getAsJsonPrimitive("message")
+                .getAsString();
+            throw new InvalidRequest(errorMessage);
         } else {
-            return parseWeatherData(json);
+            return weatherDataFromJson(json);
         }
     }
 
-    private WeatherData handleErrorResponse(JsonObject errorJson) {
-        int errorCode = errorJson.getAsJsonPrimitive("code").getAsInt();
-        String errorMessage = errorJson.getAsJsonPrimitive("message").getAsString();
+//    private WeatherData handleErrorResponse(JsonObject errorJson) {
+//        int errorCode = errorJson.getAsJsonPrimitive("code").getAsInt();
+//        String errorMessage = errorJson.getAsJsonPrimitive("message").getAsString();
+//
+//        /*
+//          TODO:
+//            Handle somehow error response.
+//            eg. "code":1006,"message":"No matching location found."
+//        */
+//
+//        WeatherData weatherData = new WeatherData();
+//        weatherData.setLocationName("Error " + errorCode + ": " + errorMessage);
+//        weatherData.setTemp(-1);
+//
+//        return weatherData;
+//    }
 
-        /*
-          TODO:
-            Handle somehow error response.
-            eg. "code":1006,"message":"No matching location found."
-        */
-
-        WeatherData weatherData = new WeatherData();
-        weatherData.setLocationName("Error " + errorCode + ": " + errorMessage);
-        weatherData.setTemp(-1);
-
-        return weatherData;
-    }
-
-    private  WeatherData parseWeatherData(JsonObject json) {
+    private  WeatherData weatherDataFromJson(JsonObject json) {
         // Parse location details
         JsonObject locationJson = json.getAsJsonObject("location");
         String cityName = locationJson.getAsJsonPrimitive("name").getAsString();
