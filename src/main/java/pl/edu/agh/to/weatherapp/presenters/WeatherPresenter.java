@@ -5,6 +5,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import org.springframework.stereotype.Component;
 import pl.edu.agh.to.weatherapp.controllers.AppController;
 import pl.edu.agh.to.weatherapp.model.WeatherData;
@@ -12,7 +14,7 @@ import pl.edu.agh.to.weatherapp.weather.WeatherService;
 
 @Component
 public class WeatherPresenter  {
-    private WeatherService weatherService;
+    private final WeatherService weatherService;
     private AppController appController;
     @FXML
     private TextField searchTextField;
@@ -22,21 +24,24 @@ public class WeatherPresenter  {
     private Label temperatureLabel;
     @FXML
     private Label locationLabel;
+    @FXML
+    private ImageView conditionIconImageView;
 
     public WeatherPresenter(WeatherService weatherService) {
         this.weatherService = weatherService;
     }
 
     public void handleSearchAction() {
-        Task<WeatherData> executeAppTask = new Task<WeatherData>() {
+        Task<WeatherData> executeAppTask = new Task<>() {
             @Override
-            protected WeatherData call() throws Exception {
+            protected WeatherData call() {
                 return weatherService.getWeatherData(searchTextField.getText());
             }
         };
         executeAppTask.setOnSucceeded(e -> {
             locationLabel.setText(executeAppTask.getValue().getLocationName());
-            temperatureLabel.setText(String.valueOf(executeAppTask.getValue().getTemp()));
+            temperatureLabel.setText(executeAppTask.getValue().getTemp() + "°C");
+            conditionIconImageView.setImage(new Image(executeAppTask.getValue().getConditionIconUrl()));
         });
         executeAppTask.setOnFailed(e -> {
             //https://stackoverflow.com/questions/44398611/running-a-process-in-a-separate-thread-so-rest-of-java-fx-application-is-usable

@@ -17,21 +17,21 @@ import pl.edu.agh.to.weatherapp.controllers.AppController;
 @Configuration
 @Import(AppConfiguration.class)
 public class App extends Application {
-  @Getter
-  private static ConfigurableApplicationContext applicationContext;
+    @Getter
+    private static ConfigurableApplicationContext applicationContext;
 
-  @Override
-  public synchronized void init() {
-    applicationContext = SpringApplication.run(App.class);
-  }
+    @Override
+    public synchronized void init() {
+        applicationContext = SpringApplication.run(App.class);
+    }
 
-  @Override
-  public void stop() {
-    applicationContext.close();
-  }
+    @Override
+    public void stop() {
+        applicationContext.close();
+    }
 
-  @Override
-  public void start(Stage primaryStage) {
-   new AppController(primaryStage).initRootLayout();
-  }
+    @Override
+    public void start(Stage primaryStage) {
+        new AppController(primaryStage).initRootLayout();
+    }
 }
