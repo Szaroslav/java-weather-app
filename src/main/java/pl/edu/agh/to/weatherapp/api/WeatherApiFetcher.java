@@ -1,17 +1,20 @@
 package pl.edu.agh.to.weatherapp.api;
 
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletableFuture;
 
 
 @Component
 public class WeatherApiFetcher implements IWeatherFetcher {
-    private static final String BASE_API_URL = "http://api.weatherapi.com/v1/";
+    private static final String BASE_API_URL = "https://api.weatherapi.com/v1/";
     private final String apiKey;
     private final HttpClient client;
 
@@ -22,25 +25,25 @@ public class WeatherApiFetcher implements IWeatherFetcher {
 
     @Override
     public CompletableFuture<String> fetchCurrent(String cityName) {
-        String url = BASE_API_URL + String.format(
+        String encodedUrl = BASE_API_URL + String.format(
             "current.json?key=%s&q=%s",
             apiKey,
-            cityName
+            URLEncoder.encode(cityName, StandardCharsets.UTF_8)
         );
 
-        return fetchFromUrl(url);
+        return fetchFromUrl(encodedUrl);
     }
 
     @Override
     public CompletableFuture<String> fetchForecast(String cityName, int daysNumber) {
-        String url = BASE_API_URL + String.format(
+        String encodedUrl = BASE_API_URL + String.format(
             "forecast.json?key=%s&q=%s&days=%d",
             apiKey,
-            cityName,
+            URLEncoder.encode(cityName, StandardCharsets.UTF_8),
             daysNumber
         );
 
-        return fetchFromUrl(url);
+        return fetchFromUrl(encodedUrl);
     }
 
     private CompletableFuture<String> fetchFromUrl(String url) {
