@@ -1,4 +1,4 @@
-package pl.edu.agh.to.weatherapp;
+package pl.edu.agh.to.weatherapp.configuration;
 
 import java.io.FileReader;
 import java.io.IOException;

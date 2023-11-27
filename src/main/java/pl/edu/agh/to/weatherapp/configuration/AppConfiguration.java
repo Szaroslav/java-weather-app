@@ -2,11 +2,10 @@ package pl.edu.agh.to.weatherapp.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import pl.edu.agh.to.weatherapp.Config;
 import pl.edu.agh.to.weatherapp.api.IWeatherFetcher;
 import pl.edu.agh.to.weatherapp.api.WeatherApiFetcher;
-import pl.edu.agh.to.weatherapp.parser.IResponseParser;
-import pl.edu.agh.to.weatherapp.parser.ResponseParser;
+import pl.edu.agh.to.weatherapp.parser.IParser;
+import pl.edu.agh.to.weatherapp.parser.JsonParser;
 import pl.edu.agh.to.weatherapp.presenters.WeatherPresenter;
 import pl.edu.agh.to.weatherapp.weather.IWeatherService;
 import pl.edu.agh.to.weatherapp.weather.WeatherService;
@@ -33,13 +32,13 @@ public class AppConfiguration {
     }
 
     @Bean
-    public IWeatherService weatherService(IWeatherFetcher weatherFetcher, IResponseParser responseParser) {
+    public IWeatherService weatherService(IWeatherFetcher weatherFetcher, IParser responseParser) {
         return new WeatherService(weatherFetcher, responseParser);
     }
 
     @Bean
-    public IResponseParser weatherParser() {
-        return new ResponseParser();
+    public IParser weatherParser() {
+        return new JsonParser();
     }
 
     @Bean
