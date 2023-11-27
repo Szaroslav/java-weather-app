@@ -71,7 +71,7 @@ public class JsonParser implements Parser {
         String windDirection = currentJson.getAsJsonPrimitive("wind_dir").getAsString();
         double pressureMb = currentJson.getAsJsonPrimitive("pressure_mb").getAsDouble();
         double pressureIn = currentJson.getAsJsonPrimitive("pressure_in").getAsDouble();
-        double precip_mm = currentJson.getAsJsonPrimitive("precip_mm").getAsDouble();
+        double precipMm = currentJson.getAsJsonPrimitive("precip_mm").getAsDouble();
         double precipIn = currentJson.getAsJsonPrimitive("precip_in").getAsDouble();
         int humidity = currentJson.getAsJsonPrimitive("humidity").getAsInt();
         int cloud = currentJson.getAsJsonPrimitive("cloud").getAsInt();
