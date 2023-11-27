@@ -4,6 +4,6 @@ import java.net.MalformedURLException;
 import java.util.concurrent.CompletableFuture;
 
 public interface IWeatherFetcher {
-  CompletableFuture<String> fetchCurrent(String locationName) throws MalformedURLException;
-  CompletableFuture<String> fetchForecast(String locationName, int daysNumber) throws MalformedURLException;
+  CompletableFuture<String> fetchCurrent(String locationName);
+  CompletableFuture<String> fetchForecast(String locationName, int daysNumber);
 }

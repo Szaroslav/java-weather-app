@@ -22,7 +22,7 @@ public class WeatherApiFetcher implements IWeatherFetcher {
     }
 
     @Override
-    public CompletableFuture<String> fetchCurrent(String cityName) throws MalformedURLException {
+    public CompletableFuture<String> fetchCurrent(String cityName) {
         String url = BASE_API_URL + String.format(
             "current.json?key=%s&q=%s",
             apiKey,
@@ -33,7 +33,7 @@ public class WeatherApiFetcher implements IWeatherFetcher {
     }
 
     @Override
-    public CompletableFuture<String> fetchForecast(String cityName, int daysNumber) throws MalformedURLException {
+    public CompletableFuture<String> fetchForecast(String cityName, int daysNumber) {
         String url = BASE_API_URL + String.format(
             "forecast.json?key=%s&q=%s&days=%d",
             apiKey,
