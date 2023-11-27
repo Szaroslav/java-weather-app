@@ -7,9 +7,34 @@ import com.google.gson.JsonObject;
 public class JsonParser implements IParser {
     @Override
     public WeatherData parse(String content) {
+        JsonObject json = new Gson().fromJson(content, JsonObject.class);
+
+        if (json.has("error")) {
+            return handleErrorResponse(json.getAsJsonObject("error"));
+        } else {
+            return parseWeatherData(json);
+        }
+    }
+
+    private WeatherData handleErrorResponse(JsonObject errorJson) {
+
+        int errorCode = errorJson.getAsJsonPrimitive("code").getAsInt();
+        String errorMessage = errorJson.getAsJsonPrimitive("message").getAsString();
+
+        /*
+          TODO:
+            Handle somehow error response.
+            eg. "code":1006,"message":"No matching location found."
+        */
+
         WeatherData weatherData = new WeatherData();
-        Gson gson = new Gson();
-        JsonObject json = gson.fromJson(content, JsonObject.class);
+        weatherData.setLocationName("Error " + errorCode + ": " + errorMessage);
+        weatherData.setTemp(-1);
+
+        return weatherData;
+    }
+
+    private  WeatherData parseWeatherData(JsonObject json) {
 
         // Parse location details
         JsonObject locationJson = json.getAsJsonObject("location");
@@ -55,6 +80,14 @@ public class JsonParser implements IParser {
         double gustMph = currentJson.getAsJsonPrimitive("gust_mph").getAsDouble();
         double gustKph = currentJson.getAsJsonPrimitive("gust_kph").getAsDouble();
 
+        /*
+         TODO:
+          Above are listed all weather values that we can get from API.
+          But we don't need that all.
+          Feel free to comment or remove the not needed ones.
+         */
+
+        WeatherData weatherData = new WeatherData();
         weatherData.setLocationName(cityName);
         weatherData.setTemp((int) tempC);
 
