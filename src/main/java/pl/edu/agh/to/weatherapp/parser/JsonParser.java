@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import pl.edu.agh.to.weatherapp.exceptions.InvalidRequest;
 import pl.edu.agh.to.weatherapp.model.WeatherData;
 
-public class JsonParser implements IParser {
+public class JsonParser implements Parser {
     @Override
     public WeatherData parse(String content) {
         JsonObject json = new Gson().fromJson(content, JsonObject.class);

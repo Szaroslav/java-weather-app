@@ -2,13 +2,13 @@ package pl.edu.agh.to.weatherapp.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import pl.edu.agh.to.weatherapp.api.IWeatherFetcher;
+import pl.edu.agh.to.weatherapp.api.WeatherFetcher;
 import pl.edu.agh.to.weatherapp.api.WeatherApiFetcher;
-import pl.edu.agh.to.weatherapp.parser.IParser;
+import pl.edu.agh.to.weatherapp.parser.Parser;
 import pl.edu.agh.to.weatherapp.parser.JsonParser;
 import pl.edu.agh.to.weatherapp.presenters.WeatherPresenter;
-import pl.edu.agh.to.weatherapp.weather.IWeatherService;
 import pl.edu.agh.to.weatherapp.weather.WeatherService;
+import pl.edu.agh.to.weatherapp.weather.WeatherApiService;
 
 import java.io.IOException;
 
@@ -27,22 +27,22 @@ public class AppConfiguration {
     }
 
     @Bean
-    public WeatherPresenter weatherPresenter(IWeatherService weatherService) {
+    public WeatherPresenter weatherPresenter(WeatherService weatherService) {
         return new WeatherPresenter(weatherService);
     }
 
     @Bean
-    public IWeatherService weatherService(IWeatherFetcher weatherFetcher, IParser responseParser) {
-        return new WeatherService(weatherFetcher, responseParser);
+    public WeatherService weatherService(WeatherFetcher weatherFetcher, Parser responseParser) {
+        return new WeatherApiService(weatherFetcher, responseParser);
     }
 
     @Bean
-    public IParser weatherParser() {
+    public Parser weatherParser() {
         return new JsonParser();
     }
 
     @Bean
-    public IWeatherFetcher weatherFetcher() {
+    public WeatherFetcher weatherFetcher() {
         return new WeatherApiFetcher(config.getWeatherApiKey());
     }
 }

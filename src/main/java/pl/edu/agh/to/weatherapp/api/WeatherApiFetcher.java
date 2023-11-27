@@ -1,6 +1,5 @@
 package pl.edu.agh.to.weatherapp.api;
 
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
@@ -13,7 +12,7 @@ import java.util.concurrent.CompletableFuture;
 
 
 @Component
-public class WeatherApiFetcher implements IWeatherFetcher {
+public class WeatherApiFetcher implements WeatherFetcher {
     private static final String BASE_API_URL = "https://api.weatherapi.com/v1/";
     private final String apiKey;
     private final HttpClient client;

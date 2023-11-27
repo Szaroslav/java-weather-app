@@ -10,11 +10,11 @@ import javafx.scene.image.ImageView;
 import org.springframework.stereotype.Component;
 import pl.edu.agh.to.weatherapp.controllers.AppController;
 import pl.edu.agh.to.weatherapp.model.WeatherData;
-import pl.edu.agh.to.weatherapp.weather.IWeatherService;
+import pl.edu.agh.to.weatherapp.weather.WeatherService;
 
 @Component
 public class WeatherPresenter  {
-    private final IWeatherService weatherService;
+    private final WeatherService weatherService;
     private AppController appController;
     @FXML
     private TextField searchTextField;
@@ -27,7 +27,7 @@ public class WeatherPresenter  {
     @FXML
     private ImageView conditionIconImageView;
 
-    public WeatherPresenter(IWeatherService weatherService) {
+    public WeatherPresenter(WeatherService weatherService) {
         this.weatherService = weatherService;
     }
 
