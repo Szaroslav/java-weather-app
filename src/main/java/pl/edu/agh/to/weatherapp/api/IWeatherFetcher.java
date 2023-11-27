@@ -1,6 +1,5 @@
 package pl.edu.agh.to.weatherapp.api;
 
-import java.net.MalformedURLException;
 import java.util.concurrent.CompletableFuture;
 
 public interface IWeatherFetcher {

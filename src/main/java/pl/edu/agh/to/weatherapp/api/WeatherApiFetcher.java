@@ -2,7 +2,6 @@ package pl.edu.agh.to.weatherapp.api;
 
 import org.springframework.stereotype.Component;
 
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
