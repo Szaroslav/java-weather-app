@@ -14,7 +14,7 @@ import pl.edu.agh.to.weatherapp.weather.IWeatherService;
 
 @Component
 public class WeatherPresenter  {
-    private IWeatherService weatherService;
+    private final IWeatherService weatherService;
     private AppController appController;
     @FXML
     private TextField searchTextField;
