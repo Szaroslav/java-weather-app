@@ -83,13 +83,15 @@ public class JsonParser implements IParser {
         /*
          TODO:
           Above are listed all weather values that we can get from API.
-          But we don't need that all.
+          But we don't need all of that.
           Feel free to comment or remove the not needed ones.
          */
 
+        // initialise WeatherData model
         WeatherData weatherData = new WeatherData();
-        weatherData.setLocationName(cityName);
+        weatherData.setLocationName(cityName + ", " + country);
         weatherData.setTemp((int) tempC);
+        weatherData.setConditionIconUrl("https:" + conditionIconUrl);
 
         return weatherData;
     }
