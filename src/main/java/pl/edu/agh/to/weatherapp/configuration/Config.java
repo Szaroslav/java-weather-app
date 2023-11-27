@@ -8,53 +8,52 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.core.json.JsonReadFeature;
+import lombok.Getter;
 
 
 public class Config {
-  private final Logger logger = Logger.getLogger(Config.class.toString());
+    private final Logger logger = Logger.getLogger(Config.class.toString());
 
-  private String weatherApiKey = null;
-  public String getWeatherApiKey() {
-    return weatherApiKey;
-  }
+    @Getter
+    private String weatherApiKey = null;
 
-  public boolean isInitialized() {
-    if (weatherApiKey == null) {
-      logger.severe("weatherApi is null.");
-      return false;
-    }
-    return true;
-  }
-
-  public void init() throws IOException {
-    JsonParser jsonParser = createJsonParser();
-    read(jsonParser);
-
-    if (!isInitialized()) {
-      throw new IOException("Config hasn't been initialized correctly");
+    public boolean isInitialized() {
+        if (weatherApiKey == null) {
+            logger.severe("weatherApi is null.");
+            return false;
+        }
+        return true;
     }
 
-    logger.info("Config has been initialised successfully.");
-  }
+    public void init() throws IOException {
+        JsonParser jsonParser = createJsonParser();
+        read(jsonParser);
 
-  private JsonParser createJsonParser() throws IOException {
-    FileReader configReader = new FileReader("config.json");
-    JsonFactory jsonFactory = JsonFactory.builder()
-      .enable(JsonReadFeature.ALLOW_JAVA_COMMENTS)
-      .build();
-    return jsonFactory.createParser(configReader);
-  }
+        if (!isInitialized()) {
+            throw new IOException("Config hasn't been initialized correctly");
+        }
 
-  private void read(JsonParser parser) throws IOException {
-    if (parser.nextToken() != JsonToken.START_OBJECT) {
-      throw new IOException("Invalid JSON parser.");
+        logger.info("Config has been initialised successfully.");
     }
 
-    while (parser.nextToken() != JsonToken.END_OBJECT) {
-      parser.nextToken();
-      if (parser.getCurrentName().equals("weatherApiKey")) {
-        weatherApiKey = parser.getText();
-      }
+    private JsonParser createJsonParser() throws IOException {
+        FileReader configReader = new FileReader("config.json");
+        JsonFactory jsonFactory = JsonFactory.builder()
+            .enable(JsonReadFeature.ALLOW_JAVA_COMMENTS)
+            .build();
+        return jsonFactory.createParser(configReader);
     }
-  }
+
+    private void read(JsonParser parser) throws IOException {
+        if (parser.nextToken() != JsonToken.START_OBJECT) {
+            throw new IOException("Invalid JSON parser.");
+        }
+
+        while (parser.nextToken() != JsonToken.END_OBJECT) {
+            parser.nextToken();
+            if (parser.getCurrentName().equals("weatherApiKey")) {
+                weatherApiKey = parser.getText();
+            }
+        }
+    }
 }

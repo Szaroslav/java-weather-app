@@ -12,45 +12,44 @@ import java.util.concurrent.CompletableFuture;
 
 @Component
 public class WeatherApiFetcher implements IWeatherFetcher {
-  private static final String BASE_API_URL = "http://api.weatherapi.com/v1/";
-  private final String apiKey;
-  private final HttpClient client;
+    private static final String BASE_API_URL = "http://api.weatherapi.com/v1/";
+    private final String apiKey;
+    private final HttpClient client;
 
-  public WeatherApiFetcher(String apiKey) {
-    this.apiKey = apiKey;
-    this.client = HttpClient.newHttpClient();
-  }
+    public WeatherApiFetcher(String apiKey) {
+        this.apiKey = apiKey;
+        this.client = HttpClient.newHttpClient();
+    }
 
-  @Override
-  public CompletableFuture<String> fetchCurrent(String cityName) throws MalformedURLException {
-    String url = BASE_API_URL + String.format(
+    @Override
+    public CompletableFuture<String> fetchCurrent(String cityName) throws MalformedURLException {
+        String url = BASE_API_URL + String.format(
             "current.json?key=%s&q=%s",
             apiKey,
             cityName
-    );
+        );
 
-    return fetchFromUrl(url);
-  }
+        return fetchFromUrl(url);
+    }
 
-  @Override
-  public CompletableFuture<String> fetchForecast(String cityName, int daysNumber) throws MalformedURLException {
+    @Override
+    public CompletableFuture<String> fetchForecast(String cityName, int daysNumber) throws MalformedURLException {
+        String url = BASE_API_URL + String.format(
+            "forecast.json?key=%s&q=%s&days=%d",
+            apiKey,
+            cityName,
+            daysNumber
+        );
 
-    String url = BASE_API_URL + String.format(
-      "forecast.json?key=%s&q=%s&days=%d",
-      apiKey,
-      cityName,
-      daysNumber
-    );
+        return fetchFromUrl(url);
+    }
 
-    return fetchFromUrl(url);
-  }
-
-  private CompletableFuture<String> fetchFromUrl(String url) {
-    HttpRequest request = HttpRequest.newBuilder()
+    private CompletableFuture<String> fetchFromUrl(String url) {
+        HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(url))
             .build();
 
-    return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+        return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
             .thenApply(HttpResponse::body);
-  }
+    }
 }

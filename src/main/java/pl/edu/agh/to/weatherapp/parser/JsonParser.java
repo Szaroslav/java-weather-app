@@ -17,7 +17,6 @@ public class JsonParser implements IParser {
     }
 
     private WeatherData handleErrorResponse(JsonObject errorJson) {
-
         int errorCode = errorJson.getAsJsonPrimitive("code").getAsInt();
         String errorMessage = errorJson.getAsJsonPrimitive("message").getAsString();
 
@@ -35,7 +34,6 @@ public class JsonParser implements IParser {
     }
 
     private  WeatherData parseWeatherData(JsonObject json) {
-
         // Parse location details
         JsonObject locationJson = json.getAsJsonObject("location");
         String cityName = locationJson.getAsJsonPrimitive("name").getAsString();
