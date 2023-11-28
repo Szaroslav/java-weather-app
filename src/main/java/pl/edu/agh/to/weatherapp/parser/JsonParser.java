@@ -6,10 +6,12 @@ import com.google.gson.JsonObject;
 import pl.edu.agh.to.weatherapp.exceptions.InvalidRequest;
 import pl.edu.agh.to.weatherapp.model.WeatherData;
 
+import java.nio.charset.StandardCharsets;
+
 public class JsonParser implements Parser {
     @Override
     public WeatherData parse(String content) {
-        JsonObject json = new Gson().fromJson(content, JsonObject.class);
+        JsonObject json = new Gson().fromJson(new String(content.getBytes(), StandardCharsets.UTF_8), JsonObject.class);
 
         if (json.has("error")) {
             String errorMessage = json.getAsJsonObject("error")
