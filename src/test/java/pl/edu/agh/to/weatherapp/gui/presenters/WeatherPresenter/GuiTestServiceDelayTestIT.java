@@ -83,4 +83,16 @@ class GuiTestServiceDelayTestIT {
                 Assertions.assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
                         .hasText(TEMPERATURE + "°C");
         }
+
+        @Test
+        void button_on_click_disabled(FxRobot robot) {
+                robot.write(LOCATION);
+                robot.clickOn("#searchButton");
+
+                Assertions.assertThat(robot.lookup("#searchButton").queryAs(Button.class).isDisabled()).isTrue();
+                await()
+                        .pollDelay(Duration.ofSeconds(3))
+                        .until(()->true);
+                Assertions.assertThat(robot.lookup("#searchButton").queryAs(Button.class).isDisabled()).isFalse();
+        }
 }

@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
@@ -11,19 +12,24 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
 import org.testfx.api.FxRobot;
+import org.testfx.assertions.api.Assertions;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
+import pl.edu.agh.to.weatherapp.exceptions.InvalidRequest;
 import pl.edu.agh.to.weatherapp.model.WeatherData;
 import pl.edu.agh.to.weatherapp.presenters.WeatherPresenter;
 import pl.edu.agh.to.weatherapp.weather.WeatherService;
 
+import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.concurrent.CompletionException;
 
-import static org.testfx.assertions.api.Assertions.*;
+import static org.testfx.assertions.api.Assertions.assertThat;
 
 @ExtendWith(ApplicationExtension.class)
-class GuiTestServiceWithoutDelayTestIT {
-        private static final String LOCATION = "Tarnów";
+class GuiTestServiceErrorTestIT {
+        private static final String LOCATION_VALID = "Tarnów";
+        private static final String LOCATION_INVALID = "Kraków";
         private static final int TEMPERATURE = 40;
         private static final String ICON_URL = "https://cdn.weatherapi.com/weather/64x64/night/116.png";
 
@@ -34,10 +40,14 @@ class GuiTestServiceWithoutDelayTestIT {
                 stage.setMinHeight(400);
 
                 WeatherService weatherServiceMock = Mockito.mock((WeatherService.class));
-                Mockito.when(weatherServiceMock.getWeatherData(LOCATION)).thenAnswer(
+                Mockito.when(weatherServiceMock.getWeatherData(LOCATION_INVALID)).thenAnswer(
+                        (Answer<WeatherData>) invocation -> {
+                                throw new CompletionException(new InvalidRequest("No matching location found."));
+                        });
+                Mockito.when(weatherServiceMock.getWeatherData(LOCATION_VALID)).thenAnswer(
                         (Answer<WeatherData>) invocation -> {
                                 WeatherData weatherData = new WeatherData();
-                                weatherData.setLocationName(LOCATION);
+                                weatherData.setLocationName(LOCATION_VALID);
                                 weatherData.setTemp(TEMPERATURE);
                                 weatherData.setConditionIconUrl(ICON_URL);
                                 return weatherData;
@@ -54,30 +64,20 @@ class GuiTestServiceWithoutDelayTestIT {
         }
 
         @Test
-        void should_contain_button_with_text(FxRobot robot) {
-                assertThat(robot.lookup("#searchButton").queryAs(Button.class)).hasText("");
-        }
-
-        @Test
-        void should_display_weather_on_click(FxRobot robot) {
+        void handle_error(FxRobot robot) {
                 robot.clickOn("#searchTextField");
-                robot.write(LOCATION);
+                robot.write(LOCATION_INVALID);
                 robot.clickOn("#searchButton");
-                assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
-                        .hasText(LOCATION);
-                assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
+                assertThat(robot.lookup("#errorLabel").queryAs(Label.class)).hasText("No matching location found.");
+                robot.clickOn("#searchTextField");
+                robot.type(KeyCode.BACK_SPACE, LOCATION_INVALID.length());
+                robot.write(LOCATION_VALID);
+                robot.clickOn("#searchButton");
+                assertThat(robot.lookup("#errorLabel").queryAs(Label.class)).hasText("");
+                Assertions.assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
+                        .hasText(LOCATION_VALID);
+                Assertions.assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
                         .hasText(TEMPERATURE + "°C");
         }
 
-        @Test
-        void no_weather_on_empty_prompt(FxRobot robot) {
-                robot.clickOn("#searchButton");
-                assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
-                        .hasText("");
-                assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
-                        .hasText("");
-                assertThat(robot.lookup("#errorLabel").queryAs(Label.class))
-                        .hasText("Search filed cannot be empty");
-
-        }
 }
