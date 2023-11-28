@@ -10,7 +10,6 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletableFuture;
 
-
 @Component
 public class WeatherApiFetcher implements WeatherFetcher {
     private static final String BASE_API_URL = "https://api.weatherapi.com/v1/";
