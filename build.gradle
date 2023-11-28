@@ -15,7 +15,7 @@ repositories {
 }
 
 application {
-    mainClassName = 'Main'
+    mainClassName = 'pl.edu.agh.to.weatherapp.Main'
 }
 java {
     sourceCompatibility = JavaVersion.VERSION_17
