@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,7 @@ import static org.testfx.assertions.api.Assertions.*;
 class GuiTestServiceWithoutDelayTestIT {
         private static final String LOCATION = "Tarnów";
         private static final int TEMPERATURE = 40;
+        private static final String TEMPERATURE_SUFFIX = "°C";
         private static final String ICON_URL = "https://cdn.weatherapi.com/weather/64x64/night/116.png";
 
         @Start
@@ -54,30 +56,41 @@ class GuiTestServiceWithoutDelayTestIT {
         }
 
         @Test
-        void should_contain_button_with_text(FxRobot robot) {
+        void shouldContainButton(FxRobot robot) {
                 assertThat(robot.lookup("#searchButton").queryAs(Button.class)).hasText("");
         }
 
         @Test
-        void should_display_weather_on_click(FxRobot robot) {
+        void shouldDisplayWeatherOnEnter(FxRobot robot) {
+                robot.clickOn("#searchTextField");
+                robot.write(LOCATION);
+                robot.type(KeyCode.ENTER);
+                assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
+                        .hasText(LOCATION);
+                assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
+                        .hasText(TEMPERATURE + TEMPERATURE_SUFFIX);
+        }
+
+        @Test
+        void shouldDisplayWeatherOnClick(FxRobot robot) {
                 robot.clickOn("#searchTextField");
                 robot.write(LOCATION);
                 robot.clickOn("#searchButton");
                 assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
                         .hasText(LOCATION);
                 assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
-                        .hasText(TEMPERATURE + "°C");
+                        .hasText(TEMPERATURE + TEMPERATURE_SUFFIX);
         }
 
         @Test
-        void no_weather_on_empty_prompt(FxRobot robot) {
+        void noWeatherInformationOnEmptyPrompt(FxRobot robot) {
                 robot.clickOn("#searchButton");
                 assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
                         .hasText("");
                 assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
                         .hasText("");
                 assertThat(robot.lookup("#errorLabel").queryAs(Label.class))
-                        .hasText("Search filed cannot be empty");
+                        .hasText("Search field cannot be empty");
 
         }
 }

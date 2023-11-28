@@ -33,16 +33,18 @@ public class WeatherPresenter  {
     public WeatherPresenter(WeatherService weatherService) {
         this.weatherService = weatherService;
     }
+
     public void initialize(){
-        searchTextField.setOnKeyPressed(ke -> {
-            if (ke.getCode().equals(KeyCode.ENTER)) {
+        searchTextField.setOnKeyPressed(key -> {
+            if (key.getCode().equals(KeyCode.ENTER)) {
                 handleSearchAction();
             }
         });
     }
+
     public void handleSearchAction() {
         if(searchTextField.getText().isEmpty()){
-            errorLabel.setText("Search filed cannot be empty");
+            errorLabel.setText("Search field cannot be empty");
             return;
         }
         Task<WeatherData> executeAppTask = new Task<>() {
@@ -69,8 +71,6 @@ public class WeatherPresenter  {
         executeAppTask.setOnCancelled(e ->
             searchButton.setDisable(false)
         );
-
-
         new Thread(executeAppTask).start();
     }
 

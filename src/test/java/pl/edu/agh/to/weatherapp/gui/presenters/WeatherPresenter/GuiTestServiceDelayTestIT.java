@@ -27,6 +27,8 @@ import static org.awaitility.Awaitility.await;
 class GuiTestServiceDelayTestIT {
         private static final String LOCATION = "Tarnów";
         private static final int TEMPERATURE = 40;
+        private static final String TEMPERATURE_SUFFIX = "°C";
+        private static final String BUTTON_TEXT_AFTER_CLICK = "clicked!";
         private static final String ICON_URL = "https://cdn.weatherapi.com/weather/64x64/night/116.png";
 
         @Start
@@ -55,7 +57,7 @@ class GuiTestServiceDelayTestIT {
 
                 Button button = new Button("click me!");
                 button.setId("myButton");
-                button.setOnAction(actionEvent -> button.setText("clicked!"));
+                button.setOnAction(actionEvent -> button.setText(BUTTON_TEXT_AFTER_CLICK));
                 rootLayout .getChildren().add(button);
 
                 Scene scene = new Scene(rootLayout);
@@ -64,7 +66,7 @@ class GuiTestServiceDelayTestIT {
         }
 
         @Test
-        void service_non_blocking(FxRobot robot) {
+        void serviceNonBlocking(FxRobot robot) {
                 robot.clickOn("#searchTextField");
                 robot.write(LOCATION);
                 robot.clickOn("#searchButton");
@@ -74,18 +76,18 @@ class GuiTestServiceDelayTestIT {
                         .hasText("");
                 robot.clickOn("#myButton");
                 Assertions.assertThat(robot.lookup("#myButton").queryAs(Button.class))
-                        .hasText("clicked!");
+                        .hasText(BUTTON_TEXT_AFTER_CLICK);
                 await()
                         .pollDelay(Duration.ofSeconds(3))
                         .until(()->true);
                 Assertions.assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
                         .hasText(LOCATION);
                 Assertions.assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
-                        .hasText(TEMPERATURE + "°C");
+                        .hasText(TEMPERATURE + TEMPERATURE_SUFFIX);
         }
 
         @Test
-        void button_on_click_disabled(FxRobot robot) {
+        void whenSearchButtonClick_thenButtonDisabled(FxRobot robot) {
                 robot.write(LOCATION);
                 robot.clickOn("#searchButton");
 

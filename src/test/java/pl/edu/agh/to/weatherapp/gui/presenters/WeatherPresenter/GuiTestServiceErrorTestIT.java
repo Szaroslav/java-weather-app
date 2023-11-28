@@ -31,6 +31,7 @@ class GuiTestServiceErrorTestIT {
         private static final String LOCATION_VALID = "Tarnów";
         private static final String LOCATION_INVALID = "Kraków";
         private static final int TEMPERATURE = 40;
+        private static final String TEMPERATURE_SUFFIX = "°C";
         private static final String ICON_URL = "https://cdn.weatherapi.com/weather/64x64/night/116.png";
 
         @Start
@@ -64,7 +65,7 @@ class GuiTestServiceErrorTestIT {
         }
 
         @Test
-        void handle_error(FxRobot robot) {
+        void handlingErrorsFromService(FxRobot robot) {
                 robot.clickOn("#searchTextField");
                 robot.write(LOCATION_INVALID);
                 robot.clickOn("#searchButton");
@@ -77,7 +78,7 @@ class GuiTestServiceErrorTestIT {
                 Assertions.assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
                         .hasText(LOCATION_VALID);
                 Assertions.assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
-                        .hasText(TEMPERATURE + "°C");
+                        .hasText(TEMPERATURE + TEMPERATURE_SUFFIX);
         }
 
 }
