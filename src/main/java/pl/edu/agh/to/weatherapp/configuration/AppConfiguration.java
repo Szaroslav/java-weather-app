@@ -11,6 +11,7 @@ import pl.edu.agh.to.weatherapp.weather.WeatherService;
 import pl.edu.agh.to.weatherapp.weather.WeatherApiService;
 
 import java.io.IOException;
+import java.net.http.HttpClient;
 
 @Configuration
 public class AppConfiguration {
@@ -43,6 +44,11 @@ public class AppConfiguration {
 
     @Bean
     public WeatherFetcher weatherFetcher() {
-        return new WeatherApiFetcher(config.getWeatherApiKey());
+        return new WeatherApiFetcher(config.getWeatherApiKey(), httpClient());
+    }
+
+    @Bean
+    public HttpClient httpClient() {
+        return HttpClient.newHttpClient();
     }
 }

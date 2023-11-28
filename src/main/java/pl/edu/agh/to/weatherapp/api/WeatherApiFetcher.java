@@ -17,9 +17,9 @@ public class WeatherApiFetcher implements WeatherFetcher {
     private final String apiKey;
     private final HttpClient client;
 
-    public WeatherApiFetcher(String apiKey) {
+    public WeatherApiFetcher(String apiKey, HttpClient client) {
         this.apiKey = apiKey;
-        this.client = HttpClient.newHttpClient();
+        this.client = client;
     }
 
     @Override
