@@ -11,7 +11,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lombok.SneakyThrows;
 import pl.edu.agh.to.weatherapp.App;
-import pl.edu.agh.to.weatherapp.presenters.WeatherPresenter;
 
 public class AppController {
     @FXML
@@ -24,7 +23,9 @@ public class AppController {
     private Label locationLabel;
     @FXML
     private ImageView conditionIconImageView;
-    private Stage primaryStage;
+    private final Stage primaryStage;
+    private static final String APP_TITLE = "Potezna wichura";
+    private static final String PRESENTER_RESOURCE = "/view/WeatherPresenter.fxml";
 
     public AppController(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -32,17 +33,14 @@ public class AppController {
 
     @SneakyThrows
     public void initRootLayout() {
-        primaryStage.setTitle("Potezna wichura");
+        primaryStage.setTitle(APP_TITLE);
         primaryStage.setMinWidth(400);
         primaryStage.setMinHeight(400);
 
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/WeatherPresenter.fxml"));
+        loader.setLocation(getClass().getResource(PRESENTER_RESOURCE));
         loader.setControllerFactory(App.getApplicationContext()::getBean);
         AnchorPane rootLayout = loader.load();
-
-        WeatherPresenter controller = loader.getController();
-        controller.setAppController(this);
 
         Scene scene = new Scene(rootLayout);
         primaryStage.setScene(scene);
