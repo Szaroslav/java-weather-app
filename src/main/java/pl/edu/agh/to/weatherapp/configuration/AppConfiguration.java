@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import pl.edu.agh.to.weatherapp.api.WeatherFetcher;
 import pl.edu.agh.to.weatherapp.api.WeatherApiFetcher;
-import pl.edu.agh.to.weatherapp.parser.Parser;
 import pl.edu.agh.to.weatherapp.parser.JsonParser;
 import pl.edu.agh.to.weatherapp.presenters.WeatherPresenter;
 import pl.edu.agh.to.weatherapp.weather.WeatherService;
@@ -26,12 +25,12 @@ public class AppConfiguration {
     }
 
     @Bean
-    public WeatherService weatherService(WeatherFetcher weatherFetcher, Parser responseParser) {
+    public WeatherService weatherService(WeatherFetcher weatherFetcher, JsonParser responseParser) {
         return new WeatherApiService(weatherFetcher, responseParser);
     }
 
     @Bean
-    public Parser weatherParser() {
+    public JsonParser weatherParser() {
         return new JsonParser();
     }
 

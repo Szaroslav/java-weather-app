@@ -8,8 +8,7 @@ import pl.edu.agh.to.weatherapp.model.WeatherData;
 
 import java.nio.charset.StandardCharsets;
 
-public class JsonParser implements Parser {
-    @Override
+public class JsonParser {
     public WeatherData parse(String content) {
         JsonObject json = new Gson().fromJson(new String(content.getBytes(), StandardCharsets.UTF_8), JsonObject.class);
 
