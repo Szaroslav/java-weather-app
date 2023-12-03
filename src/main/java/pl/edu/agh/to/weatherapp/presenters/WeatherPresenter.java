@@ -29,6 +29,8 @@ public class WeatherPresenter  {
     private Label locationLabel;
     @FXML
     private ImageView conditionIconImageView;
+    private static final String FIELD_CANNOT_BE_EMPTY = "Search field cannot be empty";
+    private static final String TEMP_SUFFIX = "°C";
 
     public WeatherPresenter(WeatherService weatherService) {
         this.weatherService = weatherService;
@@ -44,7 +46,7 @@ public class WeatherPresenter  {
 
     public void handleSearchAction() {
         if(searchTextField.getText().isEmpty()){
-            errorLabel.setText("Search field cannot be empty");
+            errorLabel.setText(FIELD_CANNOT_BE_EMPTY);
             return;
         }
         Task<WeatherData> executeAppTask = new Task<>() {
@@ -60,7 +62,7 @@ public class WeatherPresenter  {
         executeAppTask.setOnSucceeded(e -> {
             errorLabel.setText("");
             locationLabel.setText(executeAppTask.getValue().getLocationName());
-            temperatureLabel.setText(executeAppTask.getValue().getTemp() + "°C");
+            temperatureLabel.setText(executeAppTask.getValue().getTemp() + TEMP_SUFFIX);
             conditionIconImageView.setImage(new Image(executeAppTask.getValue().getConditionIconUrl()));
             searchButton.setDisable(false);
         });
