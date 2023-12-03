@@ -9,14 +9,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import org.springframework.stereotype.Component;
-import pl.edu.agh.to.weatherapp.controllers.AppController;
 import pl.edu.agh.to.weatherapp.model.WeatherData;
 import pl.edu.agh.to.weatherapp.weather.WeatherService;
 
 @Component
 public class WeatherPresenter  {
     private final WeatherService weatherService;
-    private AppController appController;
     @FXML
     private TextField searchTextField;
     @FXML
@@ -74,9 +72,5 @@ public class WeatherPresenter  {
             searchButton.setDisable(false)
         );
         new Thread(executeAppTask).start();
-    }
-
-    public void setAppController(AppController appController) {
-        this.appController = appController;
     }
 }
