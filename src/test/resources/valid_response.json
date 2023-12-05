@@ -1,0 +1,41 @@
+{
+    "location": {
+        "name": "Tarnów",
+        "region": "",
+        "country": "Pologne",
+        "lat": 50.02,
+        "lon": 20.98,
+        "tz_id": "Europe/Warsaw",
+        "localtime_epoch": 1701129261,
+        "localtime": "2023-11-28 0:54"
+    },
+    "current": {
+        "last_updated_epoch": 1701128700,
+        "last_updated": "2023-11-28 00:45",
+        "temp_c": -1.8,
+        "temp_f": 28.7,
+        "is_day": 0,
+        "condition": {
+            "text": "Overcast",
+            "icon": "//cdn.weatherapi.com/weather/64x64/night/122.png",
+            "code": 1009
+        },
+        "wind_mph": 5.4,
+        "wind_kph": 8.6,
+        "wind_degree": 131,
+        "wind_dir": "SE",
+        "pressure_mb": 1002.0,
+        "pressure_in": 29.59,
+        "precip_mm": 0.0,
+        "precip_in": 0.0,
+        "humidity": 69,
+        "cloud": 100,
+        "feelslike_c": -5.1,
+        "feelslike_f": 22.8,
+        "vis_km": 10.0,
+        "vis_miles": 6.0,
+        "uv": 1.0,
+        "gust_mph": 8.6,
+        "gust_kph": 13.9
+    }
+}
