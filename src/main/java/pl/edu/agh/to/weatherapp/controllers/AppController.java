@@ -7,7 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import lombok.SneakyThrows;
 import pl.edu.agh.to.weatherapp.App;
@@ -40,7 +40,7 @@ public class AppController {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource(PRESENTER_RESOURCE));
         loader.setControllerFactory(App.getApplicationContext()::getBean);
-        AnchorPane rootLayout = loader.load();
+        GridPane rootLayout = loader.load();
 
         Scene scene = new Scene(rootLayout);
         primaryStage.setScene(scene);
