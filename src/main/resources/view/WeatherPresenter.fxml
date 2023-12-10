@@ -15,115 +15,124 @@
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.text.Font?>
 
-
-<GridPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.edu.agh.to.weatherapp.presenters.WeatherPresenter">
+<GridPane prefHeight="600.0" prefWidth="900.0" stylesheets="@WeatherPresenter.css" xmlns="http://javafx.com/javafx/21"
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.edu.agh.to.weatherapp.presenters.WeatherPresenter">
    <columnConstraints>
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
    </columnConstraints>
    <rowConstraints>
-      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
    </rowConstraints>
-   <children>
-      <VBox alignment="TOP_CENTER" prefHeight="550.0" prefWidth="510.0" style="-fx-spacing: 10px; -fx-padding: 30;">
-         <children>
-            <TextField fx:id="searchTextField" prefHeight="25.0" prefWidth="229.0" promptText="Start" style="-fx-border-radius: 0; -fx-background-radius: 0; -fx-background-color: #D9D9D9;" />
-            <TextField fx:id="searchEndTextField" prefHeight="25.0" prefWidth="229.0" promptText="End" style="-fx-background-radius: 0; -fx-border-radius: 0; -fx-background-color: #D9D9D9;" />
-            <HBox alignment="CENTER" prefHeight="31.0">
-               <children>
-                  <TextField prefHeight="25.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 0; -fx-border-radius: 0;" HBox.hgrow="ALWAYS" />
-                  <Label alignment="CENTER" prefHeight="32.0" text="↔" textAlignment="CENTER" HBox.hgrow="ALWAYS">
-                     <font>
-                        <Font size="22.0" />
-                     </font>
-                  </Label>
-                  <TextField prefHeight="25.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 0; -fx-border-radius: 0;" HBox.hgrow="ALWAYS" />
-               </children>
-            </HBox>
-            <Button fx:id="searchButton" maxHeight="25.0" maxWidth="1.7976931348623157E308" minHeight="25.0" mnemonicParsing="false" style="-fx-background-radius: 0; -fx-border-radius: 0; -fx-background-color: #77DD77;">
+   <VBox alignment="TOP_CENTER" prefHeight="550.0" prefWidth="510.0" style="-fx-spacing: 10px; -fx-padding: 30;">
+      <TextField fx:id="searchTextField" prefHeight="25.0" prefWidth="229.0" promptText="Start"
+                 style="-fx-border-radius: 0; -fx-background-radius: 0; -fx-background-color: #D9D9D9;"/>
+      <TextField fx:id="searchDestinationTextField" prefHeight="25.0" prefWidth="229.0" promptText="End"
+                 style="-fx-background-radius: 0; -fx-border-radius: 0; -fx-background-color: #D9D9D9;"/>
+      <HBox alignment="CENTER" prefHeight="31.0">
+         <TextField prefHeight="25.0"
+                    style="-fx-background-color: #D9D9D9; -fx-background-radius: 0; -fx-border-radius: 0;"
+                    HBox.hgrow="ALWAYS"/>
+         <Label alignment="CENTER" prefHeight="32.0" text="↔" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+            <font>
+               <Font size="22.0"/>
+            </font>
+         </Label>
+         <TextField prefHeight="25.0"
+                    style="-fx-background-color: #D9D9D9; -fx-background-radius: 0; -fx-border-radius: 0;"
+                    HBox.hgrow="ALWAYS"/>
+      </HBox>
+      <Button fx:id="searchButton" maxHeight="25.0" maxWidth="1.7976931348623157E308" minHeight="25.0"
+              mnemonicParsing="false" onAction="#handleSearchAction"
+              style="-fx-background-radius: 0; -fx-border-radius: 0; -fx-background-color: #77DD77;">
+         <font>
+            <Font size="22.0"/>
+         </font>
+         <graphic>
+            <Label text="→">
                <font>
-                  <Font size="22.0" />
-               </font>
-               <graphic>
-                  <Label text="→">
-                     <font>
-                        <Font size="22.0" />
-                     </font>
-                  </Label>
-               </graphic>
-            </Button>
-            <Label fx:id="errorLabel" text="Label" />
-            <Label fx:id="locationLabel" contentDisplay="CENTER" prefHeight="42.0" prefWidth="82.0" textAlignment="CENTER">
-               <font>
-                  <Font name="Arial" size="18.0" />
+                  <Font size="22.0"/>
                </font>
             </Label>
-         </children>
-      </VBox>
-      <VBox alignment="TOP_CENTER" prefHeight="600.0" prefWidth="566.0" style="-fx-spacing: 20; -fx-padding: 30;" GridPane.columnIndex="1">
-         <children>
-            <Label alignment="CENTER" prefHeight="41.0" prefWidth="364.0" style="-fx-background-color: linear-gradient(from 0.0% 0.0% to 100.0% 100.0%, #6562ff 0.0%, #914eff 100.0%);" text="Kraków → Tarnów" textFill="WHITE">
+         </graphic>
+      </Button>
+      <Label fx:id="errorLabel" text="ErrorLabel"/>
+      <Label contentDisplay="CENTER" prefHeight="42.0" prefWidth="82.0" textAlignment="CENTER">
+         <font>
+            <Font name="Arial" size="18.0"/>
+         </font>
+      </Label>
+   </VBox>
+   <VBox fx:id="weatherInfoVBox" alignment="TOP_CENTER" prefHeight="600.0" prefWidth="566.0"
+         style="-fx-spacing: 10; -fx-padding: 30;" GridPane.columnIndex="1">
+      <Label fx:id="locationLabel" alignment="CENTER" prefHeight="41.0" prefWidth="364.0"
+             style="-fx-background-color: linear-gradient(from 0.0% 0.0% to 100.0% 100.0%, #6562ff 0.0%, #914eff 100.0%);"
+             text="Kraków długa nazwa → Tarnów" textFill="WHITE">
+         <font>
+            <Font size="19.0"/>
+         </font>
+      </Label>
+      <ImageView fx:id="conditionIconImageView" fitHeight="191.0" fitWidth="189.0" pickOnBounds="true"
+                 preserveRatio="true">
+         <Image url="@../../../../../../../../Desktop/116.png"/>
+      </ImageView>
+      <Label prefHeight="6.0" prefWidth="28.0" text="Label" visible="false"/>
+      <StackPane fx:id="temperatureBox" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="95.0" prefWidth="95.0"
+                 style="-fx-background-radius: 50; -fx-border-radius: 50;">
+         <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="38.0" minWidth="45.0"
+               prefHeight="38.0" prefWidth="66.0">
+            <Label fx:id="temperatureLabel" alignment="CENTER_RIGHT" contentDisplay="CENTER" text="3"
+                   textAlignment="CENTER" textFill="WHITE">
                <font>
-                  <Font size="19.0" />
+                  <Font name="System Bold" size="30.0"/>
                </font>
             </Label>
-            <ImageView fx:id="conditionIconImageView" fitHeight="191.0" fitWidth="189.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../../../../../../Desktop/116.png" />
-               </image>
-            </ImageView>
-            <Label prefHeight="6.0" prefWidth="28.0" text="Label" visible="false" />
-            <HBox alignment="CENTER" maxWidth="95.0" minHeight="95.0" minWidth="74.0" prefHeight="95.0" prefWidth="70.0" style="-fx-background-radius: 50; -fx-border-radius: 50; -fx-background-color: linear-gradient(from 0.0% 0.0% to 100.0% 100.0%, #ffd540 0.0%, #fb9b65 100.0%);">
-               <children>
-                  <Label fx:id="temperatureLabel" alignment="CENTER_RIGHT" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" prefHeight="77.0" prefWidth="75.0" text="-30" textAlignment="CENTER" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="30.0" />
-                     </font>
-                  </Label>
-                  <VBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="46.0">
-                     <children>
-                        <Label alignment="CENTER" style="-fx-font-weight: 800;" text="°C" textFill="WHITE">
-                           <font>
-                              <Font size="11.0" />
-                           </font>
-                        </Label>
-                        <Label opacity="0.0" prefHeight="22.0" prefWidth="28.0" text="Label" />
-                     </children>
-                  </VBox>
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" maxWidth="262.0" minWidth="195.0" prefHeight="129.0" prefWidth="262.0" style="-fx-spacing: 10;">
-               <children>
-                  <VBox alignment="CENTER" prefHeight="82.0" prefWidth="79.0">
-                     <children>
-                        <SVGPath content="M20.3617 8.75C21.0712 7.98281 22.1024 7.5 23.25 7.5C25.3902 7.5 27.125 9.17894 27.125 11.25C27.125 13.3211 25.3902 15 23.25 15H3.875M10.9911 5.83334C11.4642 5.32187 12.1516 5 12.9167 5C14.3434 5 15.5 6.11929 15.5 7.5C15.5 8.88071 14.3434 10 12.9167 10H3.875M14.8662 24.1666C15.3392 24.6781 16.0266 25 16.7917 25C18.2184 25 19.375 23.8807 19.375 22.5C19.375 21.1193 18.2184 20 16.7917 20H3.875" scaleX="1.5" scaleY="1.5" stroke="WHITE" style="-fx-stroke-line-cap: round; -fx-stroke-line-join: round; -fx-stroke-width: 2; -fx-fill: #f4f4f4; -fx-stroke: #FFB347;" />
-                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="45.0" text="6m/s" textFill="#ffb347">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </VBox>
-                  <VBox alignment="CENTER" prefHeight="82.0" prefWidth="70.0">
-                     <children>
-                        <SVGPath content="M10.5 1.72083C14.5836 6.79582 16.625 10.4067 16.625 12.5542C16.625 14.1013 15.9797 15.585 14.831 16.6789C13.6824 17.7729 12.1245 18.3875 10.5 18.3875C8.87555 18.3875 7.31763 17.7729 6.16897 16.6789C5.02031 15.585 4.375 14.1013 4.375 12.5542C4.375 10.4067 6.41638 6.79582 10.5 1.72083Z M20.5 11.8069C24.5836 17.1356 26.625 20.927 26.625 23.1819C26.625 24.8063 25.9797 26.3643 24.831 27.5129C23.6824 28.6616 22.1245 29.3069 20.5 29.3069C18.8755 29.3069 17.3176 28.6616 16.169 27.5129C15.0203 26.3643 14.375 24.8063 14.375 23.1819C14.375 20.927 16.4164 17.1356 20.5 11.8069Z" fill="#77dd77" scaleX="1.5" scaleY="1.5" />
-                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="42.0" text="9mm" textFill="#77dd77">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </VBox>
-                  <StackPane prefHeight="105.0" prefWidth="72.0" scaleX="1.5" scaleY="1.5">
-                     <children>
-                        <SVGPath content="M18.2495 14.8884L15.4953 12.2359C15.1715 11.9241 15.1685 11.4214 15.4936 11.1084C15.8164 10.7975 16.3403 10.7979 16.6643 11.11L18.2495 12.6367V7.90026C18.2495 7.45919 18.6164 7.10162 19.0761 7.10162C19.5326 7.10162 19.9027 7.45439 19.9027 7.90026V12.6621L21.5143 11.11C21.8381 10.7982 22.36 10.7953 22.6851 11.1084C23.0079 11.4193 23.0074 11.9238 22.6833 12.2359L19.9027 14.9139V26.9988L22.6924 29.6856C23.0165 29.9976 23.017 30.5022 22.6941 30.8131C22.3691 31.1262 21.8472 31.1233 21.5234 30.8114L19.9027 29.2506V34.0347C19.9027 34.4758 19.5358 34.8334 19.0761 34.8334C18.6196 34.8334 18.2495 34.4806 18.2495 34.0347V29.2537L16.6321 30.8114C16.308 31.1235 15.7841 31.124 15.4613 30.8131C15.1362 30.5 15.1393 29.9974 15.463 29.6856L18.2495 27.0019V14.8884Z M24.643 23.2388L28.2995 22.1778C28.7293 22.0531 29.1639 22.3018 29.2718 22.7401C29.3789 23.1753 29.1177 23.6292 28.6875 23.754L26.583 24.3647L30.3137 26.7556C30.6937 26.9761 30.8191 27.4729 30.5902 27.8714C30.3629 28.2671 29.8748 28.4115 29.4906 28.1886L25.738 25.785L26.2729 27.958C26.3804 28.3945 26.123 28.8483 25.6915 28.9736C25.2629 29.0979 24.8284 28.8452 24.7209 28.4083L23.798 24.6591L13.3863 18.6167L9.68269 19.6914C9.25247 19.8162 8.81755 19.5643 8.71041 19.1291C8.60252 18.6908 8.86485 18.2398 9.29468 18.1151L11.4463 17.4908L7.67448 15.076C7.29447 14.8555 7.16908 14.3587 7.39796 13.9602C7.62524 13.5645 8.11342 13.42 8.49756 13.643L12.2667 16.0562L11.7298 13.8754C11.6223 13.4384 11.8827 12.9841 12.3113 12.8598C12.7428 12.7345 13.1744 12.9885 13.2819 13.425L14.2067 17.1821L24.643 23.2388Z M14.1688 24.6841L13.2547 28.3977C13.1472 28.8342 12.7157 29.0881 12.2841 28.9629C11.8555 28.8385 11.5951 28.3842 11.7027 27.9473L12.2288 25.81L8.49811 28.2008C8.11811 28.4214 7.62738 28.2821 7.39851 27.8837C7.17122 27.4879 7.29089 26.9908 7.67503 26.7678L11.4276 24.3642L9.28808 23.7434C8.85825 23.6187 8.59591 23.1677 8.70381 22.7294C8.81095 22.2941 9.24587 22.0423 9.67609 22.1671L13.3677 23.2383L23.7793 17.1959L24.7052 13.4344C24.8128 12.9975 25.2473 12.7448 25.6758 12.8692C26.1074 12.9944 26.3647 13.4482 26.2573 13.8848L25.7194 16.07L29.4912 13.6552C29.8712 13.4347 30.3619 13.574 30.5908 13.9724C30.8181 14.3682 30.6984 14.8653 30.3143 15.0883L26.5452 17.5014L28.6924 18.1245C29.1226 18.2494 29.3838 18.7032 29.2767 19.1385C29.1688 19.5768 28.7343 19.8255 28.3044 19.7008L24.6051 18.6273L14.1688 24.6841Z M17.2431 14.9714L14.9565 12.7816C14.3091 12.1616 14.3061 11.1451 14.9548 10.524C15.5827 9.92259 16.5874 9.92383 17.2158 10.5256L17.4982 10.763V7.86439C17.4982 6.98344 18.2253 6.28314 19.1127 6.28314C19.9986 6.28314 20.7272 6.98011 20.7272 7.86439V10.763L21.0362 10.5256C21.6649 9.9236 22.6676 9.92091 23.2973 10.524C23.9442 11.1434 23.9428 12.1618 23.2956 12.7816L21.009 14.9714H23.6123L24.042 13.2357C24.2567 12.3683 25.1368 11.8588 25.9952 12.1065C26.8334 12.3484 27.3322 13.2173 27.123 14.0623L27.0078 14.5161L28.3276 13.6017C28.6464 13.1246 28.8319 12.5538 28.8319 11.9405C28.8319 10.7846 28.1733 9.77991 27.2046 9.26869C27.2068 9.20241 27.208 9.13586 27.208 9.06905C27.208 5.80927 24.5179 3.16669 21.1994 3.16669C18.567 3.16669 16.33 4.8296 15.5176 7.1444C14.9341 6.8453 14.2706 6.6762 13.5669 6.6762C11.2351 6.6762 9.34473 8.53315 9.34473 10.8238C9.34473 12.1391 9.96799 13.3114 10.9402 14.0713L10.9357 14.0528C10.7265 13.2081 11.2276 12.3382 12.0634 12.0971C12.9242 11.8487 13.8019 12.3586 14.0167 13.2262L14.4487 14.9714H17.2431Z" fill="#77dd77" />
-                        <Line fx:id="noSnowBackLine" endX="30.103271484375" endY="37.775054931640625" startX="3.9498863220214844" startY="2.2733726501464844" stroke="#f4f4f4" style="-fx-stroke-width: 5;" visible="false" />
-                        <Line fx:id="noSnowLine" endX="24.75" endY="29.75" startX="1.25" startY="-1.75" style="-fx-stroke-width: 3;" visible="false" />
-                     </children>
-                  </StackPane>
-               </children>
-            </HBox>
-         </children>
-      </VBox>
-   </children>
+            <VBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="14.0">
+               <Label fx:id="temperatureUnitLabel" alignment="CENTER" style="-fx-font-weight: 800;"
+                      text="°C" textFill="WHITE">
+                  <font>
+                     <Font size="11.0"/>
+                  </font>
+               </Label>
+               <Label opacity="0.0" prefHeight="22.0" prefWidth="28.0" text="Label"/>
+            </VBox>
+         </HBox>
+      </StackPane>
+      <HBox alignment="CENTER" maxWidth="262.0" minWidth="195.0" prefHeight="86.0" prefWidth="262.0"
+            style="-fx-spacing: 10;">
+         <VBox alignment="CENTER" prefHeight="82.0" prefWidth="79.0">
+            <SVGPath fx:id="windSVGPath"
+                     content="M20.3617 8.75C21.0712 7.98281 22.1024 7.5 23.25 7.5C25.3902 7.5 27.125 9.17894 27.125 11.25C27.125 13.3211 25.3902 15 23.25 15H3.875M10.9911 5.83334C11.4642 5.32187 12.1516 5 12.9167 5C14.3434 5 15.5 6.11929 15.5 7.5C15.5 8.88071 14.3434 10 12.9167 10H3.875M14.8662 24.1666C15.3392 24.6781 16.0266 25 16.7917 25C18.2184 25 19.375 23.8807 19.375 22.5C19.375 21.1193 18.2184 20 16.7917 20H3.875"
+                     scaleX="1.5" scaleY="1.5" stroke="WHITE"
+                     style="-fx-stroke-line-cap: round; -fx-stroke-line-join: round; -fx-stroke-width: 2; -fx-fill: #f4f4f4;"/>
+            <Label fx:id="windLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0"
+                   prefWidth="45.0" text="6m/s" textFill="#ffb347">
+               <font>
+                  <Font size="15.0"/>
+               </font>
+            </Label>
+         </VBox>
+         <VBox alignment="CENTER" prefHeight="82.0" prefWidth="70.0">
+            <SVGPath fx:id="rainSVGPath"
+                     content="M10.5 1.72083C14.5836 6.79582 16.625 10.4067 16.625 12.5542C16.625 14.1013 15.9797 15.585 14.831 16.6789C13.6824 17.7729 12.1245 18.3875 10.5 18.3875C8.87555 18.3875 7.31763 17.7729 6.16897 16.6789C5.02031 15.585 4.375 14.1013 4.375 12.5542C4.375 10.4067 6.41638 6.79582 10.5 1.72083Z M20.5 11.8069C24.5836 17.1356 26.625 20.927 26.625 23.1819C26.625 24.8063 25.9797 26.3643 24.831 27.5129C23.6824 28.6616 22.1245 29.3069 20.5 29.3069C18.8755 29.3069 17.3176 28.6616 16.169 27.5129C15.0203 26.3643 14.375 24.8063 14.375 23.1819C14.375 20.927 16.4164 17.1356 20.5 11.8069Z"
+                     fill="WHITE" scaleX="1.5" scaleY="1.5"/>
+            <Label fx:id="rainLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0"
+                   prefWidth="42.0" text="9mm" textFill="#77dd77">
+               <font>
+                  <Font size="15.0"/>
+               </font>
+            </Label>
+         </VBox>
+         <StackPane prefHeight="105.0" prefWidth="72.0" scaleX="1.5" scaleY="1.5">
+            <SVGPath fx:id="snowSVGPath"
+                     content="M18.2495 14.8884L15.4953 12.2359C15.1715 11.9241 15.1685 11.4214 15.4936 11.1084C15.8164 10.7975 16.3403 10.7979 16.6643 11.11L18.2495 12.6367V7.90026C18.2495 7.45919 18.6164 7.10162 19.0761 7.10162C19.5326 7.10162 19.9027 7.45439 19.9027 7.90026V12.6621L21.5143 11.11C21.8381 10.7982 22.36 10.7953 22.6851 11.1084C23.0079 11.4193 23.0074 11.9238 22.6833 12.2359L19.9027 14.9139V26.9988L22.6924 29.6856C23.0165 29.9976 23.017 30.5022 22.6941 30.8131C22.3691 31.1262 21.8472 31.1233 21.5234 30.8114L19.9027 29.2506V34.0347C19.9027 34.4758 19.5358 34.8334 19.0761 34.8334C18.6196 34.8334 18.2495 34.4806 18.2495 34.0347V29.2537L16.6321 30.8114C16.308 31.1235 15.7841 31.124 15.4613 30.8131C15.1362 30.5 15.1393 29.9974 15.463 29.6856L18.2495 27.0019V14.8884Z M24.643 23.2388L28.2995 22.1778C28.7293 22.0531 29.1639 22.3018 29.2718 22.7401C29.3789 23.1753 29.1177 23.6292 28.6875 23.754L26.583 24.3647L30.3137 26.7556C30.6937 26.9761 30.8191 27.4729 30.5902 27.8714C30.3629 28.2671 29.8748 28.4115 29.4906 28.1886L25.738 25.785L26.2729 27.958C26.3804 28.3945 26.123 28.8483 25.6915 28.9736C25.2629 29.0979 24.8284 28.8452 24.7209 28.4083L23.798 24.6591L13.3863 18.6167L9.68269 19.6914C9.25247 19.8162 8.81755 19.5643 8.71041 19.1291C8.60252 18.6908 8.86485 18.2398 9.29468 18.1151L11.4463 17.4908L7.67448 15.076C7.29447 14.8555 7.16908 14.3587 7.39796 13.9602C7.62524 13.5645 8.11342 13.42 8.49756 13.643L12.2667 16.0562L11.7298 13.8754C11.6223 13.4384 11.8827 12.9841 12.3113 12.8598C12.7428 12.7345 13.1744 12.9885 13.2819 13.425L14.2067 17.1821L24.643 23.2388Z M14.1688 24.6841L13.2547 28.3977C13.1472 28.8342 12.7157 29.0881 12.2841 28.9629C11.8555 28.8385 11.5951 28.3842 11.7027 27.9473L12.2288 25.81L8.49811 28.2008C8.11811 28.4214 7.62738 28.2821 7.39851 27.8837C7.17122 27.4879 7.29089 26.9908 7.67503 26.7678L11.4276 24.3642L9.28808 23.7434C8.85825 23.6187 8.59591 23.1677 8.70381 22.7294C8.81095 22.2941 9.24587 22.0423 9.67609 22.1671L13.3677 23.2383L23.7793 17.1959L24.7052 13.4344C24.8128 12.9975 25.2473 12.7448 25.6758 12.8692C26.1074 12.9944 26.3647 13.4482 26.2573 13.8848L25.7194 16.07L29.4912 13.6552C29.8712 13.4347 30.3619 13.574 30.5908 13.9724C30.8181 14.3682 30.6984 14.8653 30.3143 15.0883L26.5452 17.5014L28.6924 18.1245C29.1226 18.2494 29.3838 18.7032 29.2767 19.1385C29.1688 19.5768 28.7343 19.8255 28.3044 19.7008L24.6051 18.6273L14.1688 24.6841Z M17.2431 14.9714L14.9565 12.7816C14.3091 12.1616 14.3061 11.1451 14.9548 10.524C15.5827 9.92259 16.5874 9.92383 17.2158 10.5256L17.4982 10.763V7.86439C17.4982 6.98344 18.2253 6.28314 19.1127 6.28314C19.9986 6.28314 20.7272 6.98011 20.7272 7.86439V10.763L21.0362 10.5256C21.6649 9.9236 22.6676 9.92091 23.2973 10.524C23.9442 11.1434 23.9428 12.1618 23.2956 12.7816L21.009 14.9714H23.6123L24.042 13.2357C24.2567 12.3683 25.1368 11.8588 25.9952 12.1065C26.8334 12.3484 27.3322 13.2173 27.123 14.0623L27.0078 14.5161L28.3276 13.6017C28.6464 13.1246 28.8319 12.5538 28.8319 11.9405C28.8319 10.7846 28.1733 9.77991 27.2046 9.26869C27.2068 9.20241 27.208 9.13586 27.208 9.06905C27.208 5.80927 24.5179 3.16669 21.1994 3.16669C18.567 3.16669 16.33 4.8296 15.5176 7.1444C14.9341 6.8453 14.2706 6.6762 13.5669 6.6762C11.2351 6.6762 9.34473 8.53315 9.34473 10.8238C9.34473 12.1391 9.96799 13.3114 10.9402 14.0713L10.9357 14.0528C10.7265 13.2081 11.2276 12.3382 12.0634 12.0971C12.9242 11.8487 13.8019 12.3586 14.0167 13.2262L14.4487 14.9714H17.2431Z"
+                     fill="WHITE"/>
+            <Line fx:id="noSnowBackLine" endX="30.103271484375" endY="37.775054931640625"
+                  startX="3.9498863220214844" startY="2.2733726501464844" stroke="#f4f4f4"
+                  style="-fx-stroke-width: 5;" visible="false"/>
+            <Line fx:id="noSnowLine" endX="24.75" endY="29.75" startX="1.25" startY="-1.75"
+                  style="-fx-stroke-width: 3;" visible="false"/>
+         </StackPane>
+      </HBox>
+   </VBox>
 </GridPane>
