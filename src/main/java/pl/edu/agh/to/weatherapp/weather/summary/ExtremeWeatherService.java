@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static dataprocessing.WeatherDataProcessing.getApparentTemperature;
 import static dataprocessing.WeatherDataProcessing.kphToMps;
 
 public class ExtremeWeatherService implements WeatherSummaryService {
@@ -36,7 +37,8 @@ public class ExtremeWeatherService implements WeatherSummaryService {
     @Override
     public InternalWeatherData getSummary(List<ForecastWeatherData> weatherDataList) {
 
-        int minTemperatureC = Integer.MAX_VALUE;
+        int minTemperature = Integer.MAX_VALUE;
+        float minApparentTemperature = Integer.MAX_VALUE;
         float maxWindInMps = 0;
         float maxPrecipitationMm = 0;
         boolean willRain = false;
@@ -45,7 +47,8 @@ public class ExtremeWeatherService implements WeatherSummaryService {
 
         for(ForecastWeatherData forecastWeatherData : weatherDataList) {
             for(WeatherData weatherData : forecastWeatherData.getHourlyWeatherForecasts()) {
-                minTemperatureC = Math.min(minTemperatureC, weatherData.getTemperatureC());
+                minTemperature = Math.min(minTemperature, weatherData.getTemperatureC());
+                minApparentTemperature = Math.min(minApparentTemperature, getApparentTemperature(weatherData.getTemperatureC(), weatherData.getWindKph()));
                 if (!willRain && weatherData.isWillRain()) {
                     willRain = true;
                     if (!willSnow) {
@@ -68,12 +71,12 @@ public class ExtremeWeatherService implements WeatherSummaryService {
         InternalWeatherData extremeWeatherData = new InternalWeatherData();
 
         for (Map.Entry<int[], TemperatureLevel> entry : temperatureLevelBoundaries.entrySet()) {
-            if (entry.getKey()[0] <= minTemperatureC && minTemperatureC <= entry.getKey()[1]) {
+            if (entry.getKey()[0] <= minApparentTemperature && minApparentTemperature <= entry.getKey()[1]) {
                 extremeWeatherData.setTemperatureLevel(entry.getValue());
                 break;
             }
         }
-        extremeWeatherData.setTemperature(minTemperatureC);
+        extremeWeatherData.setTemperature(minTemperature);
 
         extremeWeatherData.setConditionIconUrl(dominatingConditionIconUrl);
 
