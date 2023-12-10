@@ -45,8 +45,8 @@ public class WeatherApiService implements WeatherService {
     @SneakyThrows
     public InternalWeatherData getSummaryWeatherData(String startLocation, String endLocation) {
         List<ForecastWeatherData> weatherList = new ArrayList<>();
-//        weatherList.add(getWeatherForecast(startLocation));
-//        weatherList.add(getWeatherForecast(endLocation));
+        weatherList.add(getForecastWeatherData(startLocation));
+        weatherList.add(getForecastWeatherData(endLocation));
         return weatherSummaryService.getSummary(weatherList);
     }
 }
