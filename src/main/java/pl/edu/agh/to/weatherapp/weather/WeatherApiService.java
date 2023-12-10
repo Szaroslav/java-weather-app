@@ -33,10 +33,9 @@ public class WeatherApiService implements WeatherService {
     @Override
     @SneakyThrows
     public InternalWeatherData getWeatherData(String location) {
+        // Placeholder code, use `WeatherSummaryService`.
         ForecastWeatherData forecast = getForecastWeatherData(location);
-
         InternalWeatherData weather  = new InternalWeatherData();
-        weather.setLocationNames(new ArrayList<>());
         weather.getLocationNames().add(forecast.getLocationName());
 
         return weather;
