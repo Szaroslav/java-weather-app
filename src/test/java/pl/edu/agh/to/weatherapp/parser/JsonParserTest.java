@@ -4,16 +4,17 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import pl.edu.agh.to.weatherapp.exceptions.InvalidRequest;
-import pl.edu.agh.to.weatherapp.model.WeatherData;
+import pl.edu.agh.to.weatherapp.model.ForecastWeatherData;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class JsonParserTest {
-    private static final String VALID_JSON_FILENAME = "valid_response.json";
+    private static final String VALID_JSON_FILENAME = "weather_forecast_krakow.json";
     private static final String ERROR_JSON_FILENAME = "error_response.json";
     private static String validJsonContent;
     private static String errorJsonContent;
@@ -22,16 +23,30 @@ public class JsonParserTest {
     @SneakyThrows
     @BeforeAll
     public static void init() {
-        validJsonContent = new String(Files.readAllBytes(Paths.get(JsonParserTest.class.getClassLoader().getResource(VALID_JSON_FILENAME).toURI())));
-        errorJsonContent = new String(Files.readAllBytes(Paths.get(JsonParserTest.class.getClassLoader().getResource(ERROR_JSON_FILENAME).toURI())));
+        final ClassLoader classLoader = JsonParserTest.class.getClassLoader();
+
+        validJsonContent = new String(
+            Files.readAllBytes(
+                Paths.get(Objects.requireNonNull(
+                    classLoader.getResource(VALID_JSON_FILENAME)).toURI()
+                )
+            )
+        );
+        errorJsonContent = new String(
+            Files.readAllBytes(
+                Paths.get(Objects.requireNonNull(
+                    classLoader.getResource(ERROR_JSON_FILENAME)).toURI()
+                )
+            )
+        );
     }
 
     @Test
     void parseValidResponse() {
-        WeatherData weatherData = jsonParser.parseForecast(validJsonContent);
-        assertThat(weatherData.getTemperature()).isEqualTo(-1);
-        assertThat(weatherData.getLocationName()).isEqualTo("Tarnów, Pologne");
-        assertThat(weatherData.getConditionIconUrl()).isEqualTo("https://cdn.weatherapi.com/weather/64x64/night/122.png");
+        ForecastWeatherData forecast = jsonParser.parseForecast(validJsonContent);
+        assertThat(forecast.getLocationName()).isEqualTo("Cracow, Poland");
+        assertThat(forecast.getHourlyWeatherForecasts().size()).isEqualTo(24);
+        // TODO: Verify a first forecast.
     }
 
     @Test
