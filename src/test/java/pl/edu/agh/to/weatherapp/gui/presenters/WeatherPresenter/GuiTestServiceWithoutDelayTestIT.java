@@ -14,7 +14,7 @@ import org.mockito.stubbing.Answer;
 import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
-import pl.edu.agh.to.weatherapp.model.WeatherData;
+import pl.edu.agh.to.weatherapp.model.ForecastWeatherData;
 import pl.edu.agh.to.weatherapp.presenters.WeatherPresenter;
 import pl.edu.agh.to.weatherapp.weather.WeatherService;
 
@@ -37,11 +37,8 @@ class GuiTestServiceWithoutDelayTestIT {
 
                 WeatherService weatherServiceMock = Mockito.mock((WeatherService.class));
                 Mockito.when(weatherServiceMock.getWeatherForecast(LOCATION)).thenAnswer(
-                        (Answer<WeatherData>) invocation -> {
-                                WeatherData weatherData = new WeatherData();
-                                weatherData.setLocationName(LOCATION);
-                                weatherData.setTemperature(TEMPERATURE);
-                                weatherData.setConditionIconUrl(ICON_URL);
+                        (Answer<ForecastWeatherData>) invocation -> {
+                                ForecastWeatherData weatherData = new ForecastWeatherData();
                                 return weatherData;
                         });
 

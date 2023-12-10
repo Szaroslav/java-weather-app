@@ -15,7 +15,7 @@ import org.testfx.assertions.api.Assertions;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import pl.edu.agh.to.weatherapp.exceptions.InvalidRequest;
-import pl.edu.agh.to.weatherapp.model.WeatherData;
+import pl.edu.agh.to.weatherapp.model.ForecastWeatherData;
 import pl.edu.agh.to.weatherapp.presenters.WeatherPresenter;
 import pl.edu.agh.to.weatherapp.weather.WeatherService;
 
@@ -40,15 +40,13 @@ class GuiTestServiceErrorTestIT {
 
                 WeatherService weatherServiceMock = Mockito.mock((WeatherService.class));
                 Mockito.when(weatherServiceMock.getWeatherForecast(LOCATION_INVALID)).thenAnswer(
-                        (Answer<WeatherData>) invocation -> {
+                        (Answer<ForecastWeatherData>) invocation -> {
                                 throw new CompletionException(new InvalidRequest("No matching location found."));
                         });
                 Mockito.when(weatherServiceMock.getWeatherForecast(LOCATION_VALID)).thenAnswer(
-                        (Answer<WeatherData>) invocation -> {
-                                WeatherData weatherData = new WeatherData();
+                        (Answer<ForecastWeatherData>) invocation -> {
+                                ForecastWeatherData weatherData = new ForecastWeatherData();
                                 weatherData.setLocationName(LOCATION_VALID);
-                                weatherData.setTemperature(TEMPERATURE);
-                                weatherData.setConditionIconUrl(ICON_URL);
                                 return weatherData;
                         });
 
