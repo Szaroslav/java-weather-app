@@ -7,13 +7,13 @@ import com.google.gson.JsonObject;
 
 import pl.edu.agh.to.weatherapp.exceptions.InvalidRequest;
 import pl.edu.agh.to.weatherapp.model.WeatherData;
-import pl.edu.agh.to.weatherapp.model.WeatherForecastData;
+import pl.edu.agh.to.weatherapp.model.ForecastWeatherData;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 public class JsonParser {
-    public WeatherForecastData parse(String content) {
+    public ForecastWeatherData parse(String content) {
         JsonObject json = new Gson()
             .fromJson(new String(
                 content.getBytes(),
@@ -53,7 +53,7 @@ public class JsonParser {
 //        return weatherData;
 //    }
 
-    private WeatherForecastData forecastWeatherFromJson(JsonObject json) {
+    private ForecastWeatherData forecastWeatherFromJson(JsonObject json) {
         // Parse location details.
         JsonObject locationJson = json.getAsJsonObject("location");
         String locationName = locationJson.getAsJsonPrimitive("name").getAsString();
@@ -62,7 +62,7 @@ public class JsonParser {
         JsonArray hourlyWeatherJsonArray = hourlyWeatherFromJson(json);
 
         // Init forecast weather data.
-        WeatherForecastData forecastWeather = new WeatherForecastData();
+        ForecastWeatherData forecastWeather = new ForecastWeatherData();
         forecastWeather.setLocationName(String.format("%s, %s", locationName, country));
 
         // Fill hourly weather list.

@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class WeatherForecastData {
+public class ForecastWeatherData {
     private String locationName;
     private final List<WeatherData> hourlyWeatherForecasts = new ArrayList<>();
 }

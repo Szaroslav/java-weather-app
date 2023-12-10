@@ -8,7 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import org.springframework.stereotype.Component;
-import pl.edu.agh.to.weatherapp.model.WeatherForecastData;
+import pl.edu.agh.to.weatherapp.model.ForecastWeatherData;
 import pl.edu.agh.to.weatherapp.weather.WeatherService;
 
 @Component
@@ -46,9 +46,9 @@ public class WeatherPresenter  {
             errorLabel.setText(FIELD_CANNOT_BE_EMPTY);
             return;
         }
-        Task<WeatherForecastData> executeAppTask = new Task<>() {
+        Task<ForecastWeatherData> executeAppTask = new Task<>() {
             @Override
-            protected WeatherForecastData call() {
+            protected ForecastWeatherData call() {
                 return weatherService.getWeatherForecast(searchTextField.getText());
             }
         };
