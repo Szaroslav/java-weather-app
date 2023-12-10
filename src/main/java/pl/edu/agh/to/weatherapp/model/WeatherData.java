@@ -14,7 +14,6 @@ import lombok.Setter;
 public class WeatherData {
     private Date date;
     private String conditionIconUrl;
-
     private int temperatureC;
     private float windKph;
     private float precipitationMm;

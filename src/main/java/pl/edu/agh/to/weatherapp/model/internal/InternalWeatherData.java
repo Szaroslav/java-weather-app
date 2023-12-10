@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 public class InternalWeatherData {
-    private List<String> locationNames = new ArrayList<>();
+    private final List<String> locationNames = new ArrayList<>();
     private TemperatureLevel temperatureLevel;
     private int temperature;
     private String conditionIconUrl;
