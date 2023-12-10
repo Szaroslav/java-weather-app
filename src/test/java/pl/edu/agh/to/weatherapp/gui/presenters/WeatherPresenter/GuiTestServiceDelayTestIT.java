@@ -14,7 +14,7 @@ import org.testfx.api.FxRobot;
 import org.testfx.assertions.api.Assertions;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
-import pl.edu.agh.to.weatherapp.model.ForecastWeatherData;
+import pl.edu.agh.to.weatherapp.model.internal.InternalWeatherData;
 import pl.edu.agh.to.weatherapp.presenters.WeatherPresenter;
 import pl.edu.agh.to.weatherapp.weather.WeatherService;
 
@@ -38,13 +38,13 @@ class GuiTestServiceDelayTestIT {
                 stage.setMinHeight(400);
 
                 WeatherService weatherServiceMock = Mockito.mock((WeatherService.class));
-                Mockito.when(weatherServiceMock.getWeatherForecast(LOCATION)).thenAnswer(
-                    (Answer< ForecastWeatherData>) invocation -> {
+                Mockito.when(weatherServiceMock.getWeatherData(LOCATION)).thenAnswer(
+                    (Answer<InternalWeatherData>) invocation -> {
                             await()
                                 .pollDelay(Duration.ofSeconds(2))
                                 .until(()->true);
-                            ForecastWeatherData weatherData = new ForecastWeatherData();
-                            weatherData.setLocationName(LOCATION);
+                            InternalWeatherData weatherData = new InternalWeatherData();
+                            weatherData.getLocationNames().add(LOCATION);
                             return weatherData;
                     });
 

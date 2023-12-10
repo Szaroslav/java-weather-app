@@ -23,12 +23,23 @@ public class WeatherApiService implements WeatherService {
         this.weatherSummaryService = weatherSummaryService;
     }
 
-    @Override
-    @SneakyThrows
-    public ForecastWeatherData getWeatherForecast(String location) {
-        return weatherFetcher.fetchForecast(location, 1)
+    private ForecastWeatherData getForecastWeatherData(String location) {
+        final int daysNumber = 1;
+        return weatherFetcher.fetchForecast(location, daysNumber)
             .thenApply(responseParser::parseForecast)
             .join();
+    }
+
+    @Override
+    @SneakyThrows
+    public InternalWeatherData getWeatherData(String location) {
+        ForecastWeatherData forecast = getForecastWeatherData(location);
+
+        InternalWeatherData weather  = new InternalWeatherData();
+        weather.setLocationNames(new ArrayList<>());
+        weather.getLocationNames().add(forecast.getLocationName());
+
+        return weather;
     }
 
     @Override

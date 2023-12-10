@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import org.springframework.stereotype.Component;
 import pl.edu.agh.to.weatherapp.model.ForecastWeatherData;
+import pl.edu.agh.to.weatherapp.model.internal.InternalWeatherData;
 import pl.edu.agh.to.weatherapp.weather.WeatherService;
 
 @Component
@@ -46,10 +47,10 @@ public class WeatherPresenter  {
             errorLabel.setText(FIELD_CANNOT_BE_EMPTY);
             return;
         }
-        Task<ForecastWeatherData> executeAppTask = new Task<>() {
+        Task<InternalWeatherData> executeAppTask = new Task<>() {
             @Override
-            protected ForecastWeatherData call() {
-                return weatherService.getWeatherForecast(searchTextField.getText());
+            protected InternalWeatherData call() {
+                return weatherService.getWeatherData(searchTextField.getText());
             }
         };
         searchButton.setDisable(true);
@@ -59,7 +60,7 @@ public class WeatherPresenter  {
         executeAppTask.setOnSucceeded(e -> {
             // TODO: Weather summary.
             errorLabel.setText("");
-            locationLabel.setText(executeAppTask.getValue().getLocationName());
+            locationLabel.setText(executeAppTask.getValue().getLocationNames().get(0));
             // temperatureLabel.setText(executeAppTask.getValue().getTemperature() + TEMP_SUFFIX);
             // conditionIconImageView.setImage(new Image(executeAppTask.getValue().getConditionIconUrl()));
             searchButton.setDisable(false);
