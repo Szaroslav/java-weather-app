@@ -9,6 +9,7 @@ import java.util.List;
 @Setter
 public class InternalWeatherData {
     private List<String> locationNames;
+    private TemperatureLevel temperatureLevel;
     private int temperature;
     private String conditionIconUrl;
     private PrecipitationIntensity precipitationIntensity;
