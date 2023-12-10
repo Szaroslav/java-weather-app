@@ -21,7 +21,7 @@ import pl.edu.agh.to.weatherapp.weather.WeatherService;
 import java.util.List;
 
 @Component
-public class WeatherPresenter  {
+public class WeatherPresenter {
     private final WeatherService weatherService;
     @FXML
     private VBox weatherInfoVBox;
@@ -71,7 +71,7 @@ public class WeatherPresenter  {
         this.weatherService = weatherService;
     }
 
-    public void initialize(){
+    public void initialize() {
         searchTextField.setOnKeyPressed(key -> {
             if (key.getCode().equals(KeyCode.ENTER)) {
                 handleSearchAction();
@@ -87,7 +87,7 @@ public class WeatherPresenter  {
     }
 
     public void handleSearchAction() {
-        if(searchTextField.getText().isEmpty()){
+        if (searchTextField.getText().isEmpty()) {
             errorLabel.setText(FIELD_CANNOT_BE_EMPTY);
             return;
         }
@@ -111,24 +111,23 @@ public class WeatherPresenter  {
             toggleSearchButtonVisibility();
         });
         executeAppTask.setOnFailed(e -> {
-            if(executeAppTask.getException().getCause() != null){
+            if (executeAppTask.getException().getCause() != null) {
                 errorLabel.setText(executeAppTask.getException().getMessage());
-            }else{
+            } else {
                 errorLabel.setText(executeAppTask.getException().getCause().getMessage());
             }
             toggleSearchButtonVisibility();
         });
-        executeAppTask.setOnCancelled(e ->
-                toggleSearchButtonVisibility()
-        );
+        executeAppTask.setOnCancelled(e -> toggleSearchButtonVisibility());
         new Thread(executeAppTask).start();
     }
-    private void showLocation(List<String> locationNames){
-        locationLabel.setText(locationNames.size() == 1 ? locationNames.get(0): locationNames.get(0) + CITY_NAMES_SEPARATOR + locationNames.get(1));
+
+    private void showLocation(List<String> locationNames) {
+        locationLabel.setText(locationNames.size() == 1 ? locationNames.get(0) : locationNames.get(0) + CITY_NAMES_SEPARATOR + locationNames.get(1));
     }
 
-    private void showTemperature(String temperature, TemperatureLevel temperatureLevel){
-        String backgroundColorClass = switch (temperatureLevel){
+    private void showTemperature(String temperature, TemperatureLevel temperatureLevel) {
+        String backgroundColorClass = switch (temperatureLevel) {
             case HOT -> "green";
             case WARM -> "orange";
             case COLD -> "red";
@@ -138,8 +137,8 @@ public class WeatherPresenter  {
         temperatureLabel.setText(temperature);
     }
 
-    private void showWind(String windInMps, WindIntensity windIntensity){
-        String backgroundColor = switch (windIntensity){
+    private void showWind(String windInMps, WindIntensity windIntensity) {
+        String backgroundColor = switch (windIntensity) {
             case BREEZE -> COLOR_GREEN;
             case WINDY -> COLOR_ORANGE;
             case STORM -> COLOR_RED;
@@ -149,8 +148,8 @@ public class WeatherPresenter  {
         windLabel.textFillProperty().setValue(Paint.valueOf(backgroundColor));
     }
 
-    private void showRain(String precipitationInMm, PrecipitationIntensity precipitationIntensity){
-        String backgroundColor = switch (precipitationIntensity){
+    private void showRain(String precipitationInMm, PrecipitationIntensity precipitationIntensity) {
+        String backgroundColor = switch (precipitationIntensity) {
             case WEAK -> COLOR_GREEN;
             case MEDIUM -> COLOR_ORANGE;
             case STRONG -> COLOR_RED;
@@ -160,7 +159,7 @@ public class WeatherPresenter  {
         rainLabel.textFillProperty().setValue(Paint.valueOf(backgroundColor));
     }
 
-    private void showSnow(PrecipitationType precipitationType){
+    private void showSnow(PrecipitationType precipitationType) {
         String backgroundColor;
         switch (precipitationType) {
             case SNOW, BOTH -> {
@@ -179,21 +178,23 @@ public class WeatherPresenter  {
         snowSVGPath.setFill(Color.web(backgroundColor));
     }
 
-    private void hideWeatherInfo(){
+    private void hideWeatherInfo() {
         weatherInfoVBox.setVisible(false);
     }
-    private void showWeatherInfo(){
+
+    private void showWeatherInfo() {
         weatherInfoVBox.setVisible(true);
     }
 
-    private void clearErrorLabel(){
+    private void clearErrorLabel() {
         errorLabel.setText("");
     }
 
-    private void setConditionIconImage(String imageUrl){
+    private void setConditionIconImage(String imageUrl) {
         conditionIconImageView.setImage(new Image(imageUrl));
     }
-    private void toggleSearchButtonVisibility(){
+
+    private void toggleSearchButtonVisibility() {
         searchButton.setDisable(!searchButton.isDisabled());
     }
 }
