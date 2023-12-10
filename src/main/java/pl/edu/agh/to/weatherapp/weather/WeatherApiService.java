@@ -3,7 +3,7 @@ package pl.edu.agh.to.weatherapp.weather;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import pl.edu.agh.to.weatherapp.api.WeatherFetcher;
-import pl.edu.agh.to.weatherapp.model.WeatherData;
+import pl.edu.agh.to.weatherapp.model.WeatherForecastData;
 import pl.edu.agh.to.weatherapp.model.internal.InternalWeatherData;
 import pl.edu.agh.to.weatherapp.parser.JsonParser;
 import pl.edu.agh.to.weatherapp.weather.summary.WeatherSummaryService;
@@ -25,8 +25,8 @@ public class WeatherApiService implements WeatherService {
 
     @Override
     @SneakyThrows
-    public WeatherData getWeatherData(String location) {
-        return weatherFetcher.fetchCurrent(location)
+    public WeatherForecastData getWeatherForecast(String location) {
+        return weatherFetcher.fetchForecast(location, 1)
             .thenApply(responseParser::parse)
             .join();
     }
@@ -34,9 +34,9 @@ public class WeatherApiService implements WeatherService {
     @Override
     @SneakyThrows
     public InternalWeatherData getSummaryWeatherData(String startLocation, String endLocation) {
-        List<WeatherData> weatherList = new ArrayList<>();
-        weatherList.add(getWeatherData(startLocation));
-        weatherList.add(getWeatherData(endLocation));
+        List<WeatherForecastData> weatherList = new ArrayList<>();
+//        weatherList.add(getWeatherForecast(startLocation));
+//        weatherList.add(getWeatherForecast(endLocation));
         return weatherSummaryService.getSummary(weatherList);
     }
 }

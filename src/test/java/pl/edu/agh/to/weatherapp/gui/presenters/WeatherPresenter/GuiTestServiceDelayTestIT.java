@@ -38,14 +38,14 @@ class GuiTestServiceDelayTestIT {
                 stage.setMinHeight(400);
 
                 WeatherService weatherServiceMock = Mockito.mock((WeatherService.class));
-                Mockito.when(weatherServiceMock.getWeatherData(LOCATION)).thenAnswer(
+                Mockito.when(weatherServiceMock.getWeatherForecast(LOCATION)).thenAnswer(
                         (Answer<WeatherData>) invocation -> {
                                 await()
                                         .pollDelay(Duration.ofSeconds(2))
                                         .until(()->true);
                                 WeatherData weatherData = new WeatherData();
                                 weatherData.setLocationName(LOCATION);
-                                weatherData.setTemp(TEMPERATURE);
+                                weatherData.setTemperature(TEMPERATURE);
                                 weatherData.setConditionIconUrl(ICON_URL);
                                 return weatherData;
                         });

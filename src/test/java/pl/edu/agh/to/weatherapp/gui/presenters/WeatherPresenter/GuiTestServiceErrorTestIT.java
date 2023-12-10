@@ -2,7 +2,6 @@ package pl.edu.agh.to.weatherapp.gui.presenters.WeatherPresenter;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
@@ -20,7 +19,6 @@ import pl.edu.agh.to.weatherapp.model.WeatherData;
 import pl.edu.agh.to.weatherapp.presenters.WeatherPresenter;
 import pl.edu.agh.to.weatherapp.weather.WeatherService;
 
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.concurrent.CompletionException;
 
@@ -41,15 +39,15 @@ class GuiTestServiceErrorTestIT {
                 stage.setMinHeight(400);
 
                 WeatherService weatherServiceMock = Mockito.mock((WeatherService.class));
-                Mockito.when(weatherServiceMock.getWeatherData(LOCATION_INVALID)).thenAnswer(
+                Mockito.when(weatherServiceMock.getWeatherForecast(LOCATION_INVALID)).thenAnswer(
                         (Answer<WeatherData>) invocation -> {
                                 throw new CompletionException(new InvalidRequest("No matching location found."));
                         });
-                Mockito.when(weatherServiceMock.getWeatherData(LOCATION_VALID)).thenAnswer(
+                Mockito.when(weatherServiceMock.getWeatherForecast(LOCATION_VALID)).thenAnswer(
                         (Answer<WeatherData>) invocation -> {
                                 WeatherData weatherData = new WeatherData();
                                 weatherData.setLocationName(LOCATION_VALID);
-                                weatherData.setTemp(TEMPERATURE);
+                                weatherData.setTemperature(TEMPERATURE);
                                 weatherData.setConditionIconUrl(ICON_URL);
                                 return weatherData;
                         });

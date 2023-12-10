@@ -5,11 +5,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import org.springframework.stereotype.Component;
-import pl.edu.agh.to.weatherapp.model.WeatherData;
+import pl.edu.agh.to.weatherapp.model.WeatherForecastData;
 import pl.edu.agh.to.weatherapp.weather.WeatherService;
 
 @Component
@@ -47,10 +46,10 @@ public class WeatherPresenter  {
             errorLabel.setText(FIELD_CANNOT_BE_EMPTY);
             return;
         }
-        Task<WeatherData> executeAppTask = new Task<>() {
+        Task<WeatherForecastData> executeAppTask = new Task<>() {
             @Override
-            protected WeatherData call() {
-                return weatherService.getWeatherData(searchTextField.getText());
+            protected WeatherForecastData call() {
+                return weatherService.getWeatherForecast(searchTextField.getText());
             }
         };
         searchButton.setDisable(true);
@@ -58,10 +57,11 @@ public class WeatherPresenter  {
         temperatureLabel.setText("");
         conditionIconImageView.setImage(null);
         executeAppTask.setOnSucceeded(e -> {
+            // TODO: Weather summary.
             errorLabel.setText("");
             locationLabel.setText(executeAppTask.getValue().getLocationName());
-            temperatureLabel.setText(executeAppTask.getValue().getTemp() + TEMP_SUFFIX);
-            conditionIconImageView.setImage(new Image(executeAppTask.getValue().getConditionIconUrl()));
+            // temperatureLabel.setText(executeAppTask.getValue().getTemperature() + TEMP_SUFFIX);
+            // conditionIconImageView.setImage(new Image(executeAppTask.getValue().getConditionIconUrl()));
             searchButton.setDisable(false);
         });
         executeAppTask.setOnFailed(e -> {
