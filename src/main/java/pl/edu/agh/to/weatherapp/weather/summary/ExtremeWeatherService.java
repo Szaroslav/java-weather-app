@@ -12,12 +12,19 @@ import static dataprocessing.WeatherDataProcessing.getApparentTemperature;
 import static dataprocessing.WeatherDataProcessing.kphToMps;
 
 public class ExtremeWeatherService implements WeatherSummaryService {
+    private int minTemperature = Integer.MAX_VALUE;
+    private float minApparentTemperature = Integer.MAX_VALUE;
+    private float maxWindInMps = 0;
+    private float maxPrecipitationMm = 0;
+    private boolean willRain = false;
+    private boolean willSnow = false;
+    private String dominatingConditionIconUrl = null;
 
     private final Map<int[], TemperatureLevel> temperatureLevelBoundaries = new HashMap<>();
     private final Map<int[], PrecipitationIntensity> precipitationIntensityBoundaries = new HashMap<>();
     private final Map<int[], WindIntensity> windIntensityBoundaries = new HashMap<>();
-    public ExtremeWeatherService() {
 
+    public ExtremeWeatherService() {
         // set temperatureLevel boundaries
         temperatureLevelBoundaries.put(new int[]{20, Integer.MAX_VALUE}, TemperatureLevel.HOT);
         temperatureLevelBoundaries.put(new int[]{5, 20}, TemperatureLevel.WARM);
@@ -36,79 +43,91 @@ public class ExtremeWeatherService implements WeatherSummaryService {
 
     @Override
     public InternalWeatherData getSummary(List<ForecastWeatherData> weatherDataList) {
+        initializeSummaryData(weatherDataList);
+        return initializeInternalWeatherData();
+    }
 
-        int minTemperature = Integer.MAX_VALUE;
-        float minApparentTemperature = Integer.MAX_VALUE;
-        float maxWindInMps = 0;
-        float maxPrecipitationMm = 0;
-        boolean willRain = false;
-        boolean willSnow = false;
-        String dominatingConditionIconUrl = null;
-
+    private void initializeSummaryData(List<ForecastWeatherData> weatherDataList) {
         for(ForecastWeatherData forecastWeatherData : weatherDataList) {
             for(WeatherData weatherData : forecastWeatherData.getHourlyWeatherForecasts()) {
-                minTemperature = Math.min(minTemperature, weatherData.getTemperatureC());
-                minApparentTemperature = Math.min(minApparentTemperature, getApparentTemperature(weatherData.getTemperatureC(), weatherData.getWindKph()));
-                if (!willRain && weatherData.isWillRain()) {
-                    willRain = true;
-                    if (!willSnow) {
-                        dominatingConditionIconUrl = weatherData.getConditionIconUrl();
-                    }
-                }
-                if (!willSnow && weatherData.isWillSnow()) {
-                    willSnow = true;
-                    dominatingConditionIconUrl = weatherData.getConditionIconUrl();
-                }
-                if (!willRain && !willSnow) {
-                    dominatingConditionIconUrl = weatherData.getConditionIconUrl();
-                }
-                maxPrecipitationMm = Math.max(maxPrecipitationMm, weatherData.getPrecipitationMm());
-                maxWindInMps = Math.max(maxWindInMps, kphToMps(weatherData.getWindKph()));
+                analyzeWeatherData(weatherData);
             }
         }
+    }
 
+    private void analyzeWeatherData(WeatherData weatherData) {
+        minTemperature = Math.min(minTemperature, weatherData.getTemperatureC());
+        minApparentTemperature = Math.min(minApparentTemperature, getApparentTemperature(weatherData.getTemperatureC(), weatherData.getWindKph()));
+        maxPrecipitationMm = Math.max(maxPrecipitationMm, weatherData.getPrecipitationMm());
+        maxWindInMps = Math.max(maxWindInMps, kphToMps(weatherData.getWindKph()));
 
+        if (!willRain && weatherData.isWillRain()) {
+            willRain = true;
+            if (!willSnow) {
+                dominatingConditionIconUrl = weatherData.getConditionIconUrl();
+            }
+        }
+        if (!willSnow && weatherData.isWillSnow()) {
+            willSnow = true;
+            dominatingConditionIconUrl = weatherData.getConditionIconUrl();
+        }
+        if (!willRain && !willSnow) {
+            dominatingConditionIconUrl = weatherData.getConditionIconUrl();
+        }
+    }
+
+    private InternalWeatherData initializeInternalWeatherData() {
         InternalWeatherData extremeWeatherData = new InternalWeatherData();
 
-        for (Map.Entry<int[], TemperatureLevel> entry : temperatureLevelBoundaries.entrySet()) {
-            if (entry.getKey()[0] <= minApparentTemperature && minApparentTemperature <= entry.getKey()[1]) {
-                extremeWeatherData.setTemperatureLevel(entry.getValue());
-                break;
-            }
-        }
-        extremeWeatherData.setTemperature(minTemperature);
+        initializeTemperatureData(extremeWeatherData);
+        initializePrecipitationData(extremeWeatherData);
+        initializeWindData(extremeWeatherData);
 
         extremeWeatherData.setConditionIconUrl(dominatingConditionIconUrl);
 
+        return extremeWeatherData;
+    }
+
+    private void initializeTemperatureData(InternalWeatherData weatherData) {
+        for (Map.Entry<int[], TemperatureLevel> entry : temperatureLevelBoundaries.entrySet()) {
+            if (entry.getKey()[0] <= minApparentTemperature && minApparentTemperature <= entry.getKey()[1]) {
+                weatherData.setTemperatureLevel(entry.getValue());
+                break;
+            }
+        }
+        weatherData.setTemperature(minTemperature);
+    }
+
+    private void initializePrecipitationData(InternalWeatherData weatherData) {
         if (willRain && willSnow) {
-            extremeWeatherData.setPrecipitationType(PrecipitationType.BOTH);
+            weatherData.setPrecipitationType(PrecipitationType.BOTH);
         }
         else if (willRain) {
-            extremeWeatherData.setPrecipitationType(PrecipitationType.RAIN);
+            weatherData.setPrecipitationType(PrecipitationType.RAIN);
         }
         else if (willSnow) {
-            extremeWeatherData.setPrecipitationType(PrecipitationType.SNOW);
+            weatherData.setPrecipitationType(PrecipitationType.SNOW);
         }
         else {
-            extremeWeatherData.setPrecipitationType(PrecipitationType.NONE);
+            weatherData.setPrecipitationType(PrecipitationType.NONE);
         }
 
         for (Map.Entry<int[], PrecipitationIntensity> entry : precipitationIntensityBoundaries.entrySet()) {
             if (entry.getKey()[0] <= maxPrecipitationMm && maxPrecipitationMm <= entry.getKey()[1]) {
-                extremeWeatherData.setPrecipitationIntensity(entry.getValue());
+                weatherData.setPrecipitationIntensity(entry.getValue());
                 break;
             }
         }
-        extremeWeatherData.setPrecipitationInMm((int) maxPrecipitationMm);
+        weatherData.setPrecipitationInMm((int) maxPrecipitationMm);
+    }
 
+    private void initializeWindData(InternalWeatherData weatherData) {
         for (Map.Entry<int[], WindIntensity> entry : windIntensityBoundaries.entrySet()) {
             if (entry.getKey()[0] <= maxWindInMps && maxWindInMps <= entry.getKey()[1]) {
-                extremeWeatherData.setWindIntensity(entry.getValue());
+                weatherData.setWindIntensity(entry.getValue());
                 break;
             }
         }
-        extremeWeatherData.setWindInMps((int) maxWindInMps);
-
-        return extremeWeatherData;
+        weatherData.setWindInMps((int) maxWindInMps);
     }
 }
