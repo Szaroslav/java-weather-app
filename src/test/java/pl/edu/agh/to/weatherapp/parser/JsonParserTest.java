@@ -29,7 +29,7 @@ public class JsonParserTest {
     @Test
     void parseValidResponse() {
         WeatherData weatherData = jsonParser.parse(validJsonContent);
-        assertThat(weatherData.getTemp()).isEqualTo(-1);
+        assertThat(weatherData.getTemperature()).isEqualTo(-1);
         assertThat(weatherData.getLocationName()).isEqualTo("Tarnów, Pologne");
         assertThat(weatherData.getConditionIconUrl()).isEqualTo("https://cdn.weatherapi.com/weather/64x64/night/122.png");
     }
