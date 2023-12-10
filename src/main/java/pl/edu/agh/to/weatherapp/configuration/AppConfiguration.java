@@ -21,6 +21,11 @@ public class AppConfiguration {
     @Value("${weather.apiKey}")
     private String apiKey;
 
+    @Bean(name = "apiKey")
+    public String apiKey() {
+        return apiKey;
+    }
+
     @Bean
     public WeatherPresenter weatherPresenter(WeatherService weatherService) {
         return new WeatherPresenter(weatherService);
