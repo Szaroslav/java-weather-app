@@ -2,7 +2,6 @@ package pl.edu.agh.to.weatherapp.gui.presenters.WeatherPresenter;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
@@ -16,11 +15,10 @@ import org.testfx.assertions.api.Assertions;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import pl.edu.agh.to.weatherapp.exceptions.InvalidRequest;
-import pl.edu.agh.to.weatherapp.model.WeatherData;
+import pl.edu.agh.to.weatherapp.model.internal.InternalWeatherData;
 import pl.edu.agh.to.weatherapp.presenters.WeatherPresenter;
 import pl.edu.agh.to.weatherapp.weather.WeatherService;
 
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.concurrent.CompletionException;
 
@@ -42,15 +40,13 @@ class GuiTestServiceErrorTestIT {
 
                 WeatherService weatherServiceMock = Mockito.mock((WeatherService.class));
                 Mockito.when(weatherServiceMock.getWeatherData(LOCATION_INVALID)).thenAnswer(
-                        (Answer<WeatherData>) invocation -> {
+                        (Answer<InternalWeatherData>) invocation -> {
                                 throw new CompletionException(new InvalidRequest("No matching location found."));
                         });
                 Mockito.when(weatherServiceMock.getWeatherData(LOCATION_VALID)).thenAnswer(
-                        (Answer<WeatherData>) invocation -> {
-                                WeatherData weatherData = new WeatherData();
-                                weatherData.setLocationName(LOCATION_VALID);
-                                weatherData.setTemp(TEMPERATURE);
-                                weatherData.setConditionIconUrl(ICON_URL);
+                        (Answer<InternalWeatherData>) invocation -> {
+                                InternalWeatherData weatherData = new InternalWeatherData();
+                                weatherData.getLocationNames().add(LOCATION_VALID);
                                 return weatherData;
                         });
 

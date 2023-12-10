@@ -3,12 +3,13 @@ package pl.edu.agh.to.weatherapp.model.internal;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
 public class InternalWeatherData {
-    private List<String> locationNames;
+    private final List<String> locationNames = new ArrayList<>();
     private TemperatureLevel temperatureLevel;
     private int temperature;
     private String conditionIconUrl;

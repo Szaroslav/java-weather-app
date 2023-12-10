@@ -3,7 +3,7 @@ package pl.edu.agh.to.weatherapp.weather;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import pl.edu.agh.to.weatherapp.api.WeatherFetcher;
-import pl.edu.agh.to.weatherapp.model.WeatherData;
+import pl.edu.agh.to.weatherapp.model.ForecastWeatherData;
 import pl.edu.agh.to.weatherapp.model.internal.InternalWeatherData;
 import pl.edu.agh.to.weatherapp.parser.JsonParser;
 import pl.edu.agh.to.weatherapp.weather.summary.WeatherSummaryService;
@@ -23,20 +23,30 @@ public class WeatherApiService implements WeatherService {
         this.weatherSummaryService = weatherSummaryService;
     }
 
-    @Override
-    @SneakyThrows
-    public WeatherData getWeatherData(String location) {
-        return weatherFetcher.fetchCurrent(location)
-            .thenApply(responseParser::parse)
+    private ForecastWeatherData getForecastWeatherData(String location) {
+        final int daysNumber = 1;
+        return weatherFetcher.fetchForecast(location, daysNumber)
+            .thenApply(responseParser::parseForecast)
             .join();
     }
 
     @Override
     @SneakyThrows
+    public InternalWeatherData getWeatherData(String location) {
+        // Placeholder code, use `WeatherSummaryService`.
+        ForecastWeatherData forecast = getForecastWeatherData(location);
+        InternalWeatherData weather  = new InternalWeatherData();
+        weather.getLocationNames().add(forecast.getLocationName());
+
+        return weather;
+    }
+
+    @Override
+    @SneakyThrows
     public InternalWeatherData getSummaryWeatherData(String startLocation, String endLocation) {
-        List<WeatherData> weatherList = new ArrayList<>();
-        weatherList.add(getWeatherData(startLocation));
-        weatherList.add(getWeatherData(endLocation));
+        List<ForecastWeatherData> weatherList = new ArrayList<>();
+//        weatherList.add(getWeatherForecast(startLocation));
+//        weatherList.add(getWeatherForecast(endLocation));
         return weatherSummaryService.getSummary(weatherList);
     }
 }

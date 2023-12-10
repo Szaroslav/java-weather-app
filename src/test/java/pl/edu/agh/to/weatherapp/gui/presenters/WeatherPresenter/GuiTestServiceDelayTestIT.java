@@ -14,7 +14,7 @@ import org.testfx.api.FxRobot;
 import org.testfx.assertions.api.Assertions;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
-import pl.edu.agh.to.weatherapp.model.WeatherData;
+import pl.edu.agh.to.weatherapp.model.internal.InternalWeatherData;
 import pl.edu.agh.to.weatherapp.presenters.WeatherPresenter;
 import pl.edu.agh.to.weatherapp.weather.WeatherService;
 
@@ -39,16 +39,14 @@ class GuiTestServiceDelayTestIT {
 
                 WeatherService weatherServiceMock = Mockito.mock((WeatherService.class));
                 Mockito.when(weatherServiceMock.getWeatherData(LOCATION)).thenAnswer(
-                        (Answer<WeatherData>) invocation -> {
-                                await()
-                                        .pollDelay(Duration.ofSeconds(2))
-                                        .until(()->true);
-                                WeatherData weatherData = new WeatherData();
-                                weatherData.setLocationName(LOCATION);
-                                weatherData.setTemp(TEMPERATURE);
-                                weatherData.setConditionIconUrl(ICON_URL);
-                                return weatherData;
-                        });
+                    (Answer<InternalWeatherData>) invocation -> {
+                            await()
+                                .pollDelay(Duration.ofSeconds(2))
+                                .until(()->true);
+                            InternalWeatherData weatherData = new InternalWeatherData();
+                            weatherData.getLocationNames().add(LOCATION);
+                            return weatherData;
+                    });
 
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("/view/WeatherPresenter.fxml"));
@@ -71,19 +69,19 @@ class GuiTestServiceDelayTestIT {
                 robot.write(LOCATION);
                 robot.clickOn("#searchButton");
                 Assertions.assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
-                        .hasText("");
+                    .hasText("");
                 Assertions.assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
-                        .hasText("");
+                    .hasText("");
                 robot.clickOn("#myButton");
                 Assertions.assertThat(robot.lookup("#myButton").queryAs(Button.class))
-                        .hasText(BUTTON_TEXT_AFTER_CLICK);
+                    .hasText(BUTTON_TEXT_AFTER_CLICK);
                 await()
-                        .pollDelay(Duration.ofSeconds(3))
-                        .until(()->true);
+                    .pollDelay(Duration.ofSeconds(3))
+                    .until(()->true);
                 Assertions.assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
-                        .hasText(LOCATION);
+                    .hasText(LOCATION);
                 Assertions.assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
-                        .hasText(TEMPERATURE + TEMPERATURE_SUFFIX);
+                    .hasText(TEMPERATURE + TEMPERATURE_SUFFIX);
         }
 
         @Test
@@ -93,8 +91,8 @@ class GuiTestServiceDelayTestIT {
 
                 Assertions.assertThat(robot.lookup("#searchButton").queryAs(Button.class).isDisabled()).isTrue();
                 await()
-                        .pollDelay(Duration.ofSeconds(3))
-                        .until(()->true);
+                    .pollDelay(Duration.ofSeconds(3))
+                    .until(()->true);
                 Assertions.assertThat(robot.lookup("#searchButton").queryAs(Button.class).isDisabled()).isFalse();
         }
 }
