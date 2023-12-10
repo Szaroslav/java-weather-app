@@ -8,20 +8,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.*;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.SVGPath;
 import org.springframework.stereotype.Component;
-import pl.edu.agh.to.weatherapp.model.WeatherData;
-import pl.edu.agh.to.weatherapp.model.internal.PrecipitationIntensity;
-import pl.edu.agh.to.weatherapp.model.internal.PrecipitationType;
-import pl.edu.agh.to.weatherapp.model.internal.TemperatureLevel;
-import pl.edu.agh.to.weatherapp.model.internal.WindIntensity;
+import pl.edu.agh.to.weatherapp.model.internal.*;
 import pl.edu.agh.to.weatherapp.weather.WeatherService;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -64,7 +60,6 @@ public class WeatherPresenter  {
     private static final String FIELD_CANNOT_BE_EMPTY = "Search field cannot be empty";
     private static final String TEMP_SUFFIX = "°C";
     private static final String CITY_NAMES_SEPARATOR = " → ";
-    private static final String SECOND_CITY_NAME = "Second City Name";
     private static final String WIND = "2";
     private static final String WIND_SUFFIX = "m/s";
     private static final String RAIN = "9";
@@ -98,18 +93,18 @@ public class WeatherPresenter  {
             errorLabel.setText(FIELD_CANNOT_BE_EMPTY);
             return;
         }
-        Task<WeatherData> executeAppTask = new Task<>() {
+        Task<InternalWeatherData> executeAppTask = new Task<>() {
             @Override
-            protected WeatherData call() {
+            protected InternalWeatherData call() {
                 return weatherService.getWeatherData(searchTextField.getText());
             }
         };
         toggleSearchButtonVisibility();
         executeAppTask.setOnSucceeded(e -> {
-            WeatherData weatherData = executeAppTask.getValue();
+            InternalWeatherData weatherData = executeAppTask.getValue();
             clearErrorLabel();
-            showLocation(Arrays.asList(weatherData.getLocationName(), SECOND_CITY_NAME));
-            showTemperature(String.valueOf(weatherData.getTemp()), TemperatureLevel.COLD);
+            showLocation(weatherData.getLocationNames());
+            showTemperature(String.valueOf(weatherData.getTemperature()), TemperatureLevel.COLD);
             showRain(RAIN, PrecipitationIntensity.STRONG);
             showSnow(PrecipitationType.SNOW);
             showWind(WIND, WindIntensity.STORM);
