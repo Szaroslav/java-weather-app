@@ -60,9 +60,7 @@ public class WeatherPresenter  {
     private static final String FIELD_CANNOT_BE_EMPTY = "Search field cannot be empty";
     private static final String TEMP_SUFFIX = "°C";
     private static final String CITY_NAMES_SEPARATOR = " → ";
-    private static final String WIND = "2";
     private static final String WIND_SUFFIX = "m/s";
-    private static final String RAIN = "9";
     private static final String RAIN_SUFFIX = "mm";
     private static final String COLOR_GREEN = "#77dd77";
     private static final String COLOR_ORANGE = "#FFB347";
@@ -104,10 +102,10 @@ public class WeatherPresenter  {
             InternalWeatherData weatherData = executeAppTask.getValue();
             clearErrorLabel();
             showLocation(weatherData.getLocationNames());
-            showTemperature(String.valueOf(weatherData.getTemperature()), TemperatureLevel.COLD);
-            showRain(RAIN, PrecipitationIntensity.STRONG);
-            showSnow(PrecipitationType.SNOW);
-            showWind(WIND, WindIntensity.STORM);
+            showTemperature(String.valueOf(weatherData.getTemperature()), weatherData.getTemperatureLevel());
+            showRain(String.valueOf(weatherData.getPrecipitationInMm()), weatherData.getPrecipitationIntensity());
+            showSnow(weatherData.getPrecipitationType());
+            showWind(String.valueOf(weatherData.getWindInMps()), weatherData.getWindIntensity());
             setConditionIconImage(weatherData.getConditionIconUrl());
             showWeatherInfo();
             toggleSearchButtonVisibility();
