@@ -27,7 +27,7 @@ public class WeatherApiService implements WeatherService {
     @SneakyThrows
     public ForecastWeatherData getWeatherForecast(String location) {
         return weatherFetcher.fetchForecast(location, 1)
-            .thenApply(responseParser::parse)
+            .thenApply(responseParser::parseForecast)
             .join();
     }
 

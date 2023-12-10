@@ -13,7 +13,31 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 public class JsonParser {
-    public ForecastWeatherData parse(String content) {
+    private WeatherData weatherDataFromJsonObject(JsonObject json) {
+        Date date = new Date(json.getAsJsonPrimitive("time_epoch").getAsLong());
+        String conditionIconUrl = json
+            .getAsJsonObject("condition")
+            .getAsJsonPrimitive("icon")
+            .getAsString();
+
+        int temperatureC      = json.getAsJsonPrimitive("temp_c").getAsInt();
+        float windKph         = json.getAsJsonPrimitive("wind_kph").getAsFloat();
+        float precipitationMm = json.getAsJsonPrimitive("precip_mm").getAsFloat();
+        boolean willRain      = json.getAsJsonPrimitive("will_it_rain").getAsBoolean();
+        boolean willSnow      = json.getAsJsonPrimitive("will_it_snow").getAsBoolean();
+
+        return new WeatherData(
+            date,
+            conditionIconUrl,
+            temperatureC,
+            windKph,
+            precipitationMm,
+            willRain,
+            willSnow
+        );
+    }
+
+    public ForecastWeatherData parseForecast(String content) {
         JsonObject json = new Gson()
             .fromJson(new String(
                 content.getBytes(),
@@ -68,29 +92,7 @@ public class JsonParser {
         // Fill hourly weather list.
         for (JsonElement element : hourlyWeatherJsonArray) {
             JsonObject object = element.getAsJsonObject();
-
-            Date date = new Date(object.getAsJsonPrimitive("time_epoch").getAsLong());
-            String conditionIconUrl = object
-                .getAsJsonObject("condition")
-                .getAsJsonPrimitive("icon")
-                .getAsString();
-
-            int temperatureC = object.getAsJsonPrimitive("temp_c").getAsInt();
-            float windKph = object.getAsJsonPrimitive("wind_kph").getAsFloat();
-            float precipitationMm = object.getAsJsonPrimitive("precip_mm").getAsFloat();
-            boolean willRain = object.getAsJsonPrimitive("will_it_rain").getAsBoolean();
-            boolean willSnow = object.getAsJsonPrimitive("will_it_snow").getAsBoolean();
-
-            WeatherData weatherData = new WeatherData(
-                date,
-                conditionIconUrl,
-                temperatureC,
-                windKph,
-                precipitationMm,
-                willRain,
-                willSnow
-            );
-
+            WeatherData weatherData = weatherDataFromJsonObject(object);
             forecastWeather.getHourlyWeatherForecasts().add(weatherData);
         }
 

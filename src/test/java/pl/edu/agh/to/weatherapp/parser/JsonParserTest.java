@@ -28,7 +28,7 @@ public class JsonParserTest {
 
     @Test
     void parseValidResponse() {
-        WeatherData weatherData = jsonParser.parse(validJsonContent);
+        WeatherData weatherData = jsonParser.parseForecast(validJsonContent);
         assertThat(weatherData.getTemperature()).isEqualTo(-1);
         assertThat(weatherData.getLocationName()).isEqualTo("Tarnów, Pologne");
         assertThat(weatherData.getConditionIconUrl()).isEqualTo("https://cdn.weatherapi.com/weather/64x64/night/122.png");
@@ -36,6 +36,6 @@ public class JsonParserTest {
 
     @Test
     void parseErrorResponse() {
-        assertThrows(InvalidRequest.class, () -> jsonParser.parse(errorJsonContent));
+        assertThrows(InvalidRequest.class, () -> jsonParser.parseForecast(errorJsonContent));
     }
 }
