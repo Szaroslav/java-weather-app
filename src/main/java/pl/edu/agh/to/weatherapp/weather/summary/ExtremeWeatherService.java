@@ -8,8 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static dataprocessing.WeatherDataProcessing.getApparentTemperature;
-import static dataprocessing.WeatherDataProcessing.kphToMps;
+import dataprocessing.WeatherDataProcessing;
 
 public class ExtremeWeatherService implements WeatherSummaryService {
     private int minTemperature = Integer.MAX_VALUE;
@@ -56,9 +55,9 @@ public class ExtremeWeatherService implements WeatherSummaryService {
 
     private void analyzeWeatherData(WeatherData weatherData) {
         minTemperature = Math.min(minTemperature, weatherData.getTemperatureC());
-        minApparentTemperature = Math.min(minApparentTemperature, getApparentTemperature(weatherData.getTemperatureC(), weatherData.getWindKph()));
+        minApparentTemperature = Math.min(minApparentTemperature, WeatherDataProcessing.getApparentTemperature(weatherData.getTemperatureC(), weatherData.getWindKph()));
         maxPrecipitationMm = Math.max(maxPrecipitationMm, weatherData.getPrecipitationMm());
-        maxWindInMps = Math.max(maxWindInMps, kphToMps(weatherData.getWindKph()));
+        maxWindInMps = Math.max(maxWindInMps, WeatherDataProcessing.kphToMps(weatherData.getWindKph()));
         if (weatherData.isWillRain()) willRain = true;
         if (weatherData.isWillSnow()) willSnow = true;
     }
