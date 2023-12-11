@@ -38,7 +38,7 @@ public class WeatherApiService implements WeatherService {
     }
 
     private boolean between(int val, int start, int end) {
-        return val >= start && val < end;
+        return val >= start && val <= end;
     }
 
     @Override
