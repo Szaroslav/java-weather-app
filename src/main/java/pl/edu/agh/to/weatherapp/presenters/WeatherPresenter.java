@@ -59,8 +59,13 @@ public class WeatherPresenter {
     private Line noPrecipitationBackLine;
     @FXML
     private Line noPrecipitationLine;
+    @FXML
+    private TextField timeStartTextField;
+    @FXML
+    private TextField timeEndTextField;
 
     private static final String FIELD_CANNOT_BE_EMPTY = "Search field cannot be empty";
+    private static final String TIME_INVALID = "Invalid time range";
     private static final String TEMP_SUFFIX = "°C";
     private static final String CITY_NAMES_SEPARATOR = " → ";
     private static final String WIND_SUFFIX = "m/s";
@@ -84,6 +89,16 @@ public class WeatherPresenter {
                 handleSearchAction();
             }
         });
+        timeEndTextField.setOnKeyPressed(key -> {
+            if (key.getCode().equals(KeyCode.ENTER)) {
+                handleSearchAction();
+            }
+        });
+        timeStartTextField.setOnKeyPressed(key -> {
+            if (key.getCode().equals(KeyCode.ENTER)) {
+                handleSearchAction();
+            }
+        });
         hideWeatherInfo();
         clearErrorLabel();
     }
@@ -93,14 +108,21 @@ public class WeatherPresenter {
             errorLabel.setText(FIELD_CANNOT_BE_EMPTY);
             return;
         }
+        if (!isTimeValid(timeStartTextField.getText(), timeEndTextField.getText())) {
+            errorLabel.setText(TIME_INVALID);
+            return;
+        }
         toggleSearchButtonVisibility();
         Task<InternalWeatherData> executeAppTask = new Task<>() {
             @Override
             protected InternalWeatherData call() {
+                int startTime = timeStartTextField.getText().isEmpty() ? 0 : Integer.parseInt(timeStartTextField.getText());
+                int endTime = timeEndTextField.getText().isEmpty() ? 24 : Integer.parseInt(timeEndTextField.getText());
+
                 if (searchDestinationTextField.getText().isEmpty()) {
-                    return weatherService.getWeatherData(searchTextField.getText());
+                    return weatherService.getWeatherData(searchTextField.getText(), startTime, endTime);
                 } else {
-                    return weatherService.getSummaryWeatherData(searchTextField.getText(), searchDestinationTextField.getText());
+                    return weatherService.getSummaryWeatherData(searchTextField.getText(), searchDestinationTextField.getText(), startTime, endTime);
                 }
             }
         };
@@ -125,6 +147,22 @@ public class WeatherPresenter {
         });
         executeAppTask.setOnCancelled(e -> toggleSearchButtonVisibility());
         new Thread(executeAppTask).start();
+    }
+
+    private boolean isTimeValid(String timeStart, String timeEnd) {
+        if (timeStart.isEmpty() ^ timeEnd.isEmpty()) {
+            return false;
+        }
+        if (timeEnd.isEmpty()) {
+            return true;
+        }
+        try {
+            int startTime = Integer.parseInt(timeStart);
+            int endTime = Integer.parseInt(timeEnd);
+            return startTime <= endTime;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     private void showLocation(List<String> locationNames) {
