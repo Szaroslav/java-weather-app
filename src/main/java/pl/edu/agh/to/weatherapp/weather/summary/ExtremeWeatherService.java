@@ -1,19 +1,22 @@
 package pl.edu.agh.to.weatherapp.weather.summary;
 
+import pl.edu.agh.to.weatherapp.dataprocessing.WeatherDataProcessing;
 import pl.edu.agh.to.weatherapp.model.ForecastWeatherData;
 import pl.edu.agh.to.weatherapp.model.WeatherData;
-import pl.edu.agh.to.weatherapp.model.internal.*;
+import pl.edu.agh.to.weatherapp.model.internal.InternalWeatherData;
+import pl.edu.agh.to.weatherapp.model.internal.PrecipitationIntensity;
+import pl.edu.agh.to.weatherapp.model.internal.PrecipitationType;
+import pl.edu.agh.to.weatherapp.model.internal.TemperatureLevel;
+import pl.edu.agh.to.weatherapp.model.internal.WindIntensity;
 
 import java.util.Comparator;
 import java.util.List;
-
-import pl.edu.agh.to.weatherapp.dataprocessing.WeatherDataProcessing;
 
 public class ExtremeWeatherService implements WeatherSummaryService {
     @Override
     public InternalWeatherData getSummary(List<ForecastWeatherData> weatherDataList) {
         List<InternalWeatherData> summarisedLocations = weatherDataList.stream()
-                .map(x->mapLocation(x.getHourlyWeatherForecasts()))
+                .map(x -> mapLocation(x.getHourlyWeatherForecasts()))
                 .toList();
         return getExtremeWeather(summarisedLocations);
     }
@@ -53,11 +56,9 @@ public class ExtremeWeatherService implements WeatherSummaryService {
 
         if (willRain && willSnow) {
             precipitationType = PrecipitationType.BOTH;
-        }
-        else if (willRain) {
+        } else if (willRain) {
             precipitationType = PrecipitationType.RAIN;
-        }
-        else if (willSnow) {
+        } else if (willSnow) {
             precipitationType = PrecipitationType.SNOW;
         }
 
@@ -69,7 +70,6 @@ public class ExtremeWeatherService implements WeatherSummaryService {
                 .setPrecipitationType(precipitationType)
                 .setPrecipitationIntensity(getPrecipitationIntensity((int) maxPrecipitationMm))
                 .setPrecipitationInMm((int) maxPrecipitationMm);
-
     }
 
     private InternalWeatherData getExtremeWeather(List<InternalWeatherData> summarisedLocations) {
