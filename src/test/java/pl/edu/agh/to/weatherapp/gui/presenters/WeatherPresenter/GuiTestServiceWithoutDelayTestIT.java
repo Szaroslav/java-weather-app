@@ -25,89 +25,87 @@ import static org.testfx.assertions.api.Assertions.*;
 
 @ExtendWith(ApplicationExtension.class)
 class GuiTestServiceWithoutDelayTestIT {
-        private static final String LOCATION_START = "Tarnów";
-        private static final String LOCATION_END = "Kraków";
-        private static final String CITY_NAMES_SEPARATOR = " → ";
-        private static final int WIND = 1;
-        private static final int RAIN = 2;
-        private static final int TEMP = 3;
-        private static final String ICON_URL = "https://cdn.weatherapi.com/weather/64x64/night/116.png";
+    private static final String LOCATION_START = "Tarnów";
+    private static final String LOCATION_END = "Kraków";
+    private static final String CITY_NAMES_SEPARATOR = " → ";
+    private static final int WIND = 1;
+    private static final int RAIN = 2;
+    private static final int TEMP = 3;
 
-        @Start
-        private void start(Stage stage) throws IOException {
-                stage.setTitle("Potezna wichura");
-                stage.setMinWidth(400);
-                stage.setMinHeight(400);
+    @Start
+    private void start(Stage stage) throws IOException {
+        stage.setTitle("Potezna wichura");
+        stage.setMinWidth(400);
+        stage.setMinHeight(400);
 
-                WeatherService weatherServiceMock = Mockito.mock((WeatherService.class));
-                Mockito.when(weatherServiceMock.getWeatherData(LOCATION_START)).thenAnswer(
-                        (Answer<InternalWeatherData>) invocation -> {
-                                InternalWeatherData weatherData = new InternalWeatherData();
-                                weatherData.getLocationNames().add(LOCATION_START);
-                                weatherData.getLocationNames().add(LOCATION_END);
-                                weatherData.setTemperatureLevel(TemperatureLevel.COLD);
-                                weatherData.setWindIntensity(WindIntensity.WINDY);
-                                weatherData.setPrecipitationIntensity(PrecipitationIntensity.WEAK);
-                                weatherData.setPrecipitationType(PrecipitationType.BOTH);
-                                weatherData.setTemperature(TEMP);
-                                weatherData.setWindInMps(WIND);
-                                weatherData.setPrecipitationInMm(RAIN);
-                                weatherData.setConditionIconUrl(ICON_URL);
-                                return weatherData;
-                        });
+        WeatherService weatherServiceMock = Mockito.mock((WeatherService.class));
+        Mockito.when(weatherServiceMock.getSummaryWeatherData(LOCATION_START, LOCATION_END)).thenAnswer(
+                (Answer<InternalWeatherData>) invocation -> {
+                    InternalWeatherData weatherData = new InternalWeatherData();
+                    weatherData.getLocationNames().add(LOCATION_START);
+                    weatherData.getLocationNames().add(LOCATION_END);
+                    weatherData.setTemperatureLevel(TemperatureLevel.COLD);
+                    weatherData.setWindIntensity(WindIntensity.WINDY);
+                    weatherData.setPrecipitationIntensity(PrecipitationIntensity.WEAK);
+                    weatherData.setPrecipitationType(PrecipitationType.BOTH);
+                    weatherData.setTemperature(TEMP);
+                    weatherData.setWindInMps(WIND);
+                    weatherData.setPrecipitationInMm(RAIN);
+                    return weatherData;
+                });
 
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("/view/WeatherPresenter.fxml"));
-                loader.setControllerFactory(c -> new WeatherPresenter(weatherServiceMock));
-                GridPane rootLayout = loader.load();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/WeatherPresenter.fxml"));
+        loader.setControllerFactory(c -> new WeatherPresenter(weatherServiceMock));
+        GridPane rootLayout = loader.load();
 
-                Scene scene = new Scene(rootLayout);
-                stage.setScene(scene);
-                stage.show();
-        }
+        Scene scene = new Scene(rootLayout);
+        stage.setScene(scene);
+        stage.show();
+    }
 
-        @Test
-        void shouldContainButton(FxRobot robot) {
-                assertThat(robot.lookup("#searchButton").queryAs(Button.class)).hasText("");
-        }
+    @Test
+    void shouldContainButton(FxRobot robot) {
+        assertThat(robot.lookup("#searchButton").queryAs(Button.class)).hasText("");
+    }
 
-        @Test
-        void shouldDisplayWeatherOnEnter(FxRobot robot) {
-                robot.clickOn("#searchTextField");
-                robot.write(LOCATION_START);
-                robot.clickOn("#searchDestinationTextField");
-                robot.write(LOCATION_END);
-                robot.type(KeyCode.ENTER);
-                assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
-                        .hasText(LOCATION_START + CITY_NAMES_SEPARATOR + LOCATION_END);
-                assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
-                        .hasText(String.valueOf(TEMP));
-                assertThat(robot.lookup("#weatherInfoVBox").queryAs(VBox.class).isVisible()).isTrue();
-        }
+    @Test
+    void shouldDisplayWeatherOnEnter(FxRobot robot) {
+        robot.clickOn("#searchTextField");
+        robot.write(LOCATION_START);
+        robot.clickOn("#searchDestinationTextField");
+        robot.write(LOCATION_END);
+        robot.type(KeyCode.ENTER);
+        assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
+                .hasText(LOCATION_START + CITY_NAMES_SEPARATOR + LOCATION_END);
+        assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
+                .hasText(String.valueOf(TEMP));
+        assertThat(robot.lookup("#weatherInfoVBox").queryAs(VBox.class).isVisible()).isTrue();
+    }
 
-        @Test
-        void shouldDisplayWeatherOnClick(FxRobot robot) {
-                robot.clickOn("#searchTextField");
-                robot.write(LOCATION_START);
-                robot.clickOn("#searchDestinationTextField");
-                robot.write(LOCATION_END);
-                robot.clickOn("#searchButton");
-                assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
-                        .hasText(LOCATION_START + CITY_NAMES_SEPARATOR + LOCATION_END);
-                assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
-                        .hasText(String.valueOf(TEMP));
-                assertThat(robot.lookup("#weatherInfoVBox").queryAs(VBox.class).isVisible()).isTrue();
-        }
+    @Test
+    void shouldDisplayWeatherOnClick(FxRobot robot) {
+        robot.clickOn("#searchTextField");
+        robot.write(LOCATION_START);
+        robot.clickOn("#searchDestinationTextField");
+        robot.write(LOCATION_END);
+        robot.clickOn("#searchButton");
+        assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
+                .hasText(LOCATION_START + CITY_NAMES_SEPARATOR + LOCATION_END);
+        assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
+                .hasText(String.valueOf(TEMP));
+        assertThat(robot.lookup("#weatherInfoVBox").queryAs(VBox.class).isVisible()).isTrue();
+    }
 
-        @Test
-        void noWeatherInformationOnEmptyPrompt(FxRobot robot) {
-                robot.clickOn("#searchButton");
-                assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
-                        .hasText("");
-                assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
-                        .hasText("");
-                assertThat(robot.lookup("#errorLabel").queryAs(Label.class))
-                        .hasText("Search field cannot be empty");
-                assertThat(robot.lookup("#weatherInfoVBox").queryAs(VBox.class).isVisible()).isFalse();
-        }
+    @Test
+    void noWeatherInformationOnEmptyPrompt(FxRobot robot) {
+        robot.clickOn("#searchButton");
+        assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
+                .hasText("");
+        assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
+                .hasText("");
+        assertThat(robot.lookup("#errorLabel").queryAs(Label.class))
+                .hasText("Search field cannot be empty");
+        assertThat(robot.lookup("#weatherInfoVBox").queryAs(VBox.class).isVisible()).isFalse();
+    }
 }

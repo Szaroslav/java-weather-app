@@ -27,87 +27,90 @@ import static org.testfx.assertions.api.Assertions.assertThat;
 
 @ExtendWith(ApplicationExtension.class)
 class GuiTestServiceDelayTestIT {
-        private static final String LOCATION_START = "Tarnów";
-        private static final String LOCATION_END = "Kraków";
-        private static final String CITY_NAMES_SEPARATOR = " → ";
-        private static final int WIND = 1;
-        private static final int RAIN = 2;
-        private static final int TEMP = 3;
-        private static final String ICON_URL = "https://cdn.weatherapi.com/weather/64x64/night/116.png";
-        private static final String BUTTON_TEXT_AFTER_CLICK = "clicked!";
+    private static final String LOCATION_START = "Tarnów";
+    private static final String LOCATION_END = "Kraków";
+    private static final String CITY_NAMES_SEPARATOR = " → ";
+    private static final int WIND = 1;
+    private static final int RAIN = 2;
+    private static final int TEMP = 3;
+    private static final String BUTTON_TEXT_AFTER_CLICK = "clicked!";
 
-        @Start
-        private void start(Stage stage) throws IOException {
-                stage.setTitle("Potezna wichura");
-                stage.setMinWidth(400);
-                stage.setMinHeight(400);
+    @Start
+    private void start(Stage stage) throws IOException {
+        stage.setTitle("Potezna wichura");
+        stage.setMinWidth(400);
+        stage.setMinHeight(400);
 
-                WeatherService weatherServiceMock = Mockito.mock((WeatherService.class));
-                Mockito.when(weatherServiceMock.getWeatherData(LOCATION_START)).thenAnswer(
-                    (Answer<InternalWeatherData>) invocation -> {
-                            await()
-                                .pollDelay(Duration.ofSeconds(2))
-                                .until(()->true);
-                            InternalWeatherData weatherData = new InternalWeatherData();
-                            weatherData.getLocationNames().add(LOCATION_START);
-                            weatherData.getLocationNames().add(LOCATION_END);
-                            weatherData.setTemperatureLevel(TemperatureLevel.COLD);
-                            weatherData.setWindIntensity(WindIntensity.WINDY);
-                            weatherData.setPrecipitationIntensity(PrecipitationIntensity.WEAK);
-                            weatherData.setPrecipitationType(PrecipitationType.BOTH);
-                            weatherData.setTemperature(TEMP);
-                            weatherData.setWindInMps(WIND);
-                            weatherData.setPrecipitationInMm(RAIN);
-                            weatherData.setConditionIconUrl(ICON_URL);
-                            return weatherData;
-                    });
+        WeatherService weatherServiceMock = Mockito.mock((WeatherService.class));
+        Mockito.when(weatherServiceMock.getSummaryWeatherData(LOCATION_START, LOCATION_END)).thenAnswer(
+                (Answer<InternalWeatherData>) invocation -> {
+                    await()
+                            .pollDelay(Duration.ofSeconds(2))
+                            .until(() -> true);
+                    InternalWeatherData weatherData = new InternalWeatherData();
+                    weatherData.getLocationNames().add(LOCATION_START);
+                    weatherData.getLocationNames().add(LOCATION_END);
+                    weatherData.setTemperatureLevel(TemperatureLevel.COLD);
+                    weatherData.setWindIntensity(WindIntensity.WINDY);
+                    weatherData.setPrecipitationIntensity(PrecipitationIntensity.WEAK);
+                    weatherData.setPrecipitationType(PrecipitationType.BOTH);
+                    weatherData.setTemperature(TEMP);
+                    weatherData.setWindInMps(WIND);
+                    weatherData.setPrecipitationInMm(RAIN);
+                    return weatherData;
+                });
 
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("/view/WeatherPresenter.fxml"));
-                loader.setControllerFactory(c -> new WeatherPresenter(weatherServiceMock));
-                GridPane rootLayout = loader.load();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/WeatherPresenter.fxml"));
+        loader.setControllerFactory(c -> new WeatherPresenter(weatherServiceMock));
+        GridPane rootLayout = loader.load();
 
-                Button button = new Button("click me!");
-                button.setId("myButton");
-                button.setOnAction(actionEvent -> button.setText(BUTTON_TEXT_AFTER_CLICK));
-                rootLayout .getChildren().add(button);
+        Button button = new Button("click me!");
+        button.setId("myButton");
+        button.setOnAction(actionEvent -> button.setText(BUTTON_TEXT_AFTER_CLICK));
+        rootLayout.getChildren().add(button);
 
-                Scene scene = new Scene(rootLayout);
-                stage.setScene(scene);
-                stage.show();
-        }
+        Scene scene = new Scene(rootLayout);
+        stage.setScene(scene);
+        stage.show();
+    }
 
-        @Test
-        void serviceNonBlocking(FxRobot robot) {
-                robot.clickOn("#searchTextField");
-                robot.write(LOCATION_START);
-                robot.clickOn("#searchButton");
-                Assertions.assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
-                    .hasText("");
-                Assertions.assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
-                    .hasText("");
-                robot.clickOn("#myButton");
-                Assertions.assertThat(robot.lookup("#myButton").queryAs(Button.class))
-                    .hasText(BUTTON_TEXT_AFTER_CLICK);
-                await()
-                    .pollDelay(Duration.ofSeconds(3))
-                    .until(()->true);
-                assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
-                        .hasText(LOCATION_START + CITY_NAMES_SEPARATOR + LOCATION_END);
-                assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
-                        .hasText(String.valueOf(TEMP));
-                org.assertj.core.api.Assertions.assertThat(robot.lookup("#weatherInfoVBox").queryAs(VBox.class).isVisible()).isTrue();
-        }
+    @Test
+    void serviceNonBlocking(FxRobot robot) {
+        robot.clickOn("#searchTextField");
+        robot.write(LOCATION_START);
+        robot.clickOn("#searchDestinationTextField");
+        robot.write(LOCATION_END);
+        robot.clickOn("#searchButton");
+        Assertions.assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
+                .hasText("");
+        Assertions.assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
+                .hasText("");
+        robot.clickOn("#myButton");
+        Assertions.assertThat(robot.lookup("#myButton").queryAs(Button.class))
+                .hasText(BUTTON_TEXT_AFTER_CLICK);
+        await()
+                .pollDelay(Duration.ofSeconds(3))
+                .until(() -> true);
+        assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
+                .hasText(LOCATION_START + CITY_NAMES_SEPARATOR + LOCATION_END);
+        assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
+                .hasText(String.valueOf(TEMP));
+        org.assertj.core.api.Assertions.assertThat(robot.lookup("#weatherInfoVBox").queryAs(VBox.class).isVisible()).isTrue();
+    }
 
-        @Test
-        void whenSearchButtonClick_thenButtonDisabled(FxRobot robot) {
-                robot.write(LOCATION_START);
-                robot.clickOn("#searchButton");
+    @Test
+    void whenSearchButtonClick_thenButtonDisabled(FxRobot robot) {
+        robot.clickOn("#searchTextField");
+        robot.write(LOCATION_START);
+        robot.clickOn("#searchDestinationTextField");
+        robot.write(LOCATION_END);
+        robot.clickOn("#searchButton");
 
-                Assertions.assertThat(robot.lookup("#searchButton").queryAs(Button.class).isDisabled()).isTrue();
-                await()
-                    .pollDelay(Duration.ofSeconds(3))
-                    .until(()->true);
-                Assertions.assertThat(robot.lookup("#searchButton").queryAs(Button.class).isDisabled()).isFalse();
-        }
+        Assertions.assertThat(robot.lookup("#searchButton").queryAs(Button.class).isDisabled()).isTrue();
+        await()
+                .pollDelay(Duration.ofSeconds(3))
+                .until(() -> true);
+        Assertions.assertThat(robot.lookup("#searchButton").queryAs(Button.class).isDisabled()).isFalse();
+    }
 }

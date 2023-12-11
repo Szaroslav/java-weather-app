@@ -3,7 +3,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -60,9 +59,7 @@
             <Font size="19.0" />
          </font>
       </Label>
-      <ImageView fx:id="conditionIconImageView" fitHeight="191.0" fitWidth="189.0" pickOnBounds="true" preserveRatio="true">
-         <Image url="@../../../../../../../../Desktop/116.png" />
-      </ImageView>
+      <ImageView fx:id="conditionIconImageView" fitHeight="191.0" fitWidth="189.0" pickOnBounds="true" preserveRatio="true" />
       <Label prefHeight="6.0" prefWidth="28.0" text="Label" visible="false" />
       <StackPane fx:id="temperatureBox" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="95.0" prefWidth="95.0" style="-fx-background-radius: 50; -fx-border-radius: 50;">
          <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="38.0" minWidth="45.0" prefHeight="38.0" prefWidth="66.0">
