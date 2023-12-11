@@ -1,6 +1,5 @@
 package pl.edu.agh.to.weatherapp.weather;
 
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import pl.edu.agh.to.weatherapp.api.WeatherFetcher;
 import pl.edu.agh.to.weatherapp.model.ForecastWeatherData;
@@ -31,21 +30,40 @@ public class WeatherApiService implements WeatherService {
                 .join();
     }
 
+    private ForecastWeatherData getForecastWeatherData(String location, int startHour, int endHour) {
+        var forecastWeatherData = getForecastWeatherData(location);
+        forecastWeatherData.getHourlyWeatherForecasts()
+                .removeIf(weatherData -> !between(weatherData.getDate().getHourOfDay(), startHour, endHour));
+        return forecastWeatherData;
+    }
+
+    private boolean between(int val, int start, int end) {
+        return val >= start && val < end;
+    }
+
     @Override
-    @SneakyThrows
     public InternalWeatherData getWeatherData(String location) {
-        ForecastWeatherData forecast = getForecastWeatherData(location);
+        return getWeatherData(location, 0, 24);
+    }
+
+    @Override
+    public InternalWeatherData getWeatherData(String location, int startHour, int endHour) {
+        ForecastWeatherData forecast = getForecastWeatherData(location, startHour, endHour);
         InternalWeatherData weather = weatherSummaryService.getSummary(Collections.singletonList(forecast));
         weather.getLocationNames().add(location);
         return weather;
     }
 
     @Override
-    @SneakyThrows
     public InternalWeatherData getSummaryWeatherData(String startLocation, String endLocation) {
+        return getSummaryWeatherData(startLocation, endLocation, 0, 24);
+    }
+
+    @Override
+    public InternalWeatherData getSummaryWeatherData(String startLocation, String endLocation, int startHour, int endHour) {
         List<ForecastWeatherData> weatherList = new ArrayList<>();
-        weatherList.add(getForecastWeatherData(startLocation));
-        weatherList.add(getForecastWeatherData(endLocation));
+        weatherList.add(getForecastWeatherData(startLocation, startHour, endHour));
+        weatherList.add(getForecastWeatherData(endLocation, startHour, endHour));
         InternalWeatherData summary = weatherSummaryService.getSummary(weatherList);
         summary.getLocationNames().add(startLocation);
         summary.getLocationNames().add(endLocation);

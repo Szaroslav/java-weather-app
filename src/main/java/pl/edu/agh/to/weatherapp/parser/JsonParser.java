@@ -4,17 +4,16 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
+import org.joda.time.DateTime;
 import pl.edu.agh.to.weatherapp.exceptions.InvalidRequest;
-import pl.edu.agh.to.weatherapp.model.WeatherData;
 import pl.edu.agh.to.weatherapp.model.ForecastWeatherData;
+import pl.edu.agh.to.weatherapp.model.WeatherData;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
 
 public class JsonParser {
     private WeatherData weatherDataFromJsonObject(JsonObject json) {
-        Date date = new Date(json.getAsJsonPrimitive("time_epoch").getAsLong() * 1000);
+        DateTime date = new DateTime(json.getAsJsonPrimitive("time_epoch").getAsLong() * 1000);
         String conditionIconUrl = json
                 .getAsJsonObject("condition")
                 .getAsJsonPrimitive("icon")

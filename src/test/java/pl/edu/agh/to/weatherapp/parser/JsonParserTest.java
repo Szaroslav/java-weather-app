@@ -47,7 +47,7 @@ public class JsonParserTest {
         assertThat(forecast.getLocationName()).isEqualTo("Cracow, Poland");
         assertThat(forecast.getHourlyWeatherForecasts()).hasSize(24);
         var weatherData = forecast.getHourlyWeatherForecasts().get(8);
-        assertThat(weatherData.getDate()).hasHourOfDay(8);
+        assertThat(weatherData.getDate().getHourOfDay()).isEqualTo(8);
         assertThat(weatherData.getWindKph()).isCloseTo(5.8F, Percentage.withPercentage(1));
         assertThat(weatherData.getPrecipitationMm()).isCloseTo(0.24F, Percentage.withPercentage(1));
         assertThat(weatherData.getTemperatureC()).isEqualTo(-5);
