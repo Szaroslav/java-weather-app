@@ -27,13 +27,13 @@
       <TextField fx:id="searchTextField" prefHeight="25.0" prefWidth="229.0" promptText="Start" style="-fx-border-radius: 0; -fx-background-radius: 0; -fx-background-color: #D9D9D9;" />
       <TextField fx:id="searchDestinationTextField" prefHeight="25.0" prefWidth="229.0" promptText="End" style="-fx-background-radius: 0; -fx-border-radius: 0; -fx-background-color: #D9D9D9;" />
       <HBox alignment="CENTER" prefHeight="31.0">
-         <TextField prefHeight="25.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 0; -fx-border-radius: 0;" HBox.hgrow="ALWAYS" />
+         <TextField fx:id="timeStartTextField" prefHeight="25.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 0; -fx-border-radius: 0;" HBox.hgrow="ALWAYS" />
          <Label alignment="CENTER" prefHeight="32.0" text="↔" textAlignment="CENTER" HBox.hgrow="ALWAYS">
             <font>
                <Font size="22.0" />
             </font>
          </Label>
-         <TextField prefHeight="25.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 0; -fx-border-radius: 0;" HBox.hgrow="ALWAYS" />
+         <TextField fx:id="timeEndTextField" prefHeight="25.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 0; -fx-border-radius: 0;" HBox.hgrow="ALWAYS" />
       </HBox>
       <Button fx:id="searchButton" maxHeight="25.0" maxWidth="1.7976931348623157E308" minHeight="25.0" mnemonicParsing="false" onAction="#handleSearchAction" style="-fx-background-radius: 0; -fx-border-radius: 0; -fx-background-color: #77DD77;">
          <font>
