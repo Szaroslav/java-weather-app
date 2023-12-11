@@ -18,25 +18,22 @@ public class ExtremeWeatherService implements WeatherSummaryService {
     private boolean willRain = false;
     private boolean willSnow = false;
 
-    private final Map<int[], TemperatureLevel> temperatureLevelBoundaries = new HashMap<>();
-    private final Map<int[], PrecipitationIntensity> precipitationIntensityBoundaries = new HashMap<>();
-    private final Map<int[], WindIntensity> windIntensityBoundaries = new HashMap<>();
+    private TemperatureLevel getTemperatureLevel(int minTemperature) {
+        if (20 <= minTemperature) return TemperatureLevel.HOT;
+        else if (minTemperature <= 5) return TemperatureLevel.COLD;
+        else return TemperatureLevel.WARM;
+    }
 
-    public ExtremeWeatherService() {
-        // set temperatureLevel boundaries
-        temperatureLevelBoundaries.put(new int[]{20, Integer.MAX_VALUE}, TemperatureLevel.HOT);
-        temperatureLevelBoundaries.put(new int[]{5, 20}, TemperatureLevel.WARM);
-        temperatureLevelBoundaries.put(new int[]{Integer.MIN_VALUE, 5}, TemperatureLevel.COLD);
+    private PrecipitationIntensity getPrecipitationIntensity(int precipitationMm) {
+        if (precipitationMm <= 5) return PrecipitationIntensity.WEAK;
+        else if (precipitationMm <= 10) return PrecipitationIntensity.MEDIUM;
+        else return PrecipitationIntensity.STRONG;
+    }
 
-        // set precipitationIntensity boundaries
-        precipitationIntensityBoundaries.put(new int[]{0, 5}, PrecipitationIntensity.WEAK);
-        precipitationIntensityBoundaries.put(new int[]{5, 10}, PrecipitationIntensity.MEDIUM);
-        precipitationIntensityBoundaries.put(new int[]{10, Integer.MAX_VALUE}, PrecipitationIntensity.STRONG);
-
-        // set windIntensity boundaries
-        windIntensityBoundaries.put(new int[]{0, 5}, WindIntensity.BREEZE);
-        windIntensityBoundaries.put(new int[]{5, 10}, WindIntensity.WINDY);
-        windIntensityBoundaries.put(new int[]{10, Integer.MAX_VALUE}, WindIntensity.STORM);
+    private WindIntensity getWindIntensity(int maxWindInMps) {
+        if (maxWindInMps <= 5) return WindIntensity.BREEZE;
+        else if (maxWindInMps <= 10) return WindIntensity.WINDY;
+        else return WindIntensity.STORM;
     }
 
     @Override
@@ -65,21 +62,13 @@ public class ExtremeWeatherService implements WeatherSummaryService {
     private InternalWeatherData initializeInternalWeatherData() {
         InternalWeatherData extremeWeatherData = new InternalWeatherData();
 
-        initializeTemperatureData(extremeWeatherData);
+        extremeWeatherData.setTemperatureLevel(getTemperatureLevel((int) minApparentTemperature));
+        extremeWeatherData.setTemperature(minTemperature);
+        extremeWeatherData.setWindIntensity(getWindIntensity((int) maxWindInMps));
+        extremeWeatherData.setWindInMps((int) maxWindInMps);
         initializePrecipitationData(extremeWeatherData);
-        initializeWindData(extremeWeatherData);
 
         return extremeWeatherData;
-    }
-
-    private void initializeTemperatureData(InternalWeatherData weatherData) {
-        for (Map.Entry<int[], TemperatureLevel> entry : temperatureLevelBoundaries.entrySet()) {
-            if (entry.getKey()[0] <= minApparentTemperature && minApparentTemperature <= entry.getKey()[1]) {
-                weatherData.setTemperatureLevel(entry.getValue());
-                break;
-            }
-        }
-        weatherData.setTemperature(minTemperature);
     }
 
     private void initializePrecipitationData(InternalWeatherData weatherData) {
@@ -96,22 +85,7 @@ public class ExtremeWeatherService implements WeatherSummaryService {
             weatherData.setPrecipitationType(PrecipitationType.NONE);
         }
 
-        for (Map.Entry<int[], PrecipitationIntensity> entry : precipitationIntensityBoundaries.entrySet()) {
-            if (entry.getKey()[0] <= maxPrecipitationMm && maxPrecipitationMm <= entry.getKey()[1]) {
-                weatherData.setPrecipitationIntensity(entry.getValue());
-                break;
-            }
-        }
+        weatherData.setPrecipitationIntensity(getPrecipitationIntensity((int) maxPrecipitationMm));
         weatherData.setPrecipitationInMm((int) maxPrecipitationMm);
-    }
-
-    private void initializeWindData(InternalWeatherData weatherData) {
-        for (Map.Entry<int[], WindIntensity> entry : windIntensityBoundaries.entrySet()) {
-            if (entry.getKey()[0] <= maxWindInMps && maxWindInMps <= entry.getKey()[1]) {
-                weatherData.setWindIntensity(entry.getValue());
-                break;
-            }
-        }
-        weatherData.setWindInMps((int) maxWindInMps);
     }
 }
