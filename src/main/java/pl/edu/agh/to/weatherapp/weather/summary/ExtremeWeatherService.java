@@ -18,7 +18,6 @@ public class ExtremeWeatherService implements WeatherSummaryService {
     private float maxPrecipitationMm = 0;
     private boolean willRain = false;
     private boolean willSnow = false;
-    private String dominatingConditionIconUrl = null;
 
     private final Map<int[], TemperatureLevel> temperatureLevelBoundaries = new HashMap<>();
     private final Map<int[], PrecipitationIntensity> precipitationIntensityBoundaries = new HashMap<>();
@@ -60,20 +59,8 @@ public class ExtremeWeatherService implements WeatherSummaryService {
         minApparentTemperature = Math.min(minApparentTemperature, getApparentTemperature(weatherData.getTemperatureC(), weatherData.getWindKph()));
         maxPrecipitationMm = Math.max(maxPrecipitationMm, weatherData.getPrecipitationMm());
         maxWindInMps = Math.max(maxWindInMps, kphToMps(weatherData.getWindKph()));
-
-        if (!willRain && weatherData.isWillRain()) {
-            willRain = true;
-            if (!willSnow) {
-                dominatingConditionIconUrl = weatherData.getConditionIconUrl();
-            }
-        }
-        if (!willSnow && weatherData.isWillSnow()) {
-            willSnow = true;
-            dominatingConditionIconUrl = weatherData.getConditionIconUrl();
-        }
-        if (!willRain && !willSnow) {
-            dominatingConditionIconUrl = weatherData.getConditionIconUrl();
-        }
+        if (weatherData.isWillRain()) willRain = true;
+        if (weatherData.isWillSnow()) willSnow = true;
     }
 
     private InternalWeatherData initializeInternalWeatherData() {
@@ -82,8 +69,6 @@ public class ExtremeWeatherService implements WeatherSummaryService {
         initializeTemperatureData(extremeWeatherData);
         initializePrecipitationData(extremeWeatherData);
         initializeWindData(extremeWeatherData);
-
-        extremeWeatherData.setConditionIconUrl(dominatingConditionIconUrl);
 
         return extremeWeatherData;
     }
