@@ -101,6 +101,10 @@ public class WeatherPresenter {
         });
         hideWeatherInfo();
         clearErrorLabel();
+        locationLabel.setText("");
+        temperatureLabel.setText("");
+        precipitationLabel.setText("");
+        windLabel.setText("");
     }
 
     public void handleSearchAction() {
