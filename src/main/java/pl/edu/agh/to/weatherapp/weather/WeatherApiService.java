@@ -9,6 +9,7 @@ import pl.edu.agh.to.weatherapp.parser.JsonParser;
 import pl.edu.agh.to.weatherapp.weather.summary.WeatherSummaryService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -26,18 +27,16 @@ public class WeatherApiService implements WeatherService {
     private ForecastWeatherData getForecastWeatherData(String location) {
         final int daysNumber = 1;
         return weatherFetcher.fetchForecast(location, daysNumber)
-            .thenApply(responseParser::parseForecast)
-            .join();
+                .thenApply(responseParser::parseForecast)
+                .join();
     }
 
     @Override
     @SneakyThrows
     public InternalWeatherData getWeatherData(String location) {
-        // Placeholder code, use `WeatherSummaryService`.
         ForecastWeatherData forecast = getForecastWeatherData(location);
-        InternalWeatherData weather  = new InternalWeatherData();
-        weather.getLocationNames().add(forecast.getLocationName());
-
+        InternalWeatherData weather = weatherSummaryService.getSummary(Collections.singletonList(forecast));
+        weather.getLocationNames().add(location);
         return weather;
     }
 
@@ -47,6 +46,9 @@ public class WeatherApiService implements WeatherService {
         List<ForecastWeatherData> weatherList = new ArrayList<>();
         weatherList.add(getForecastWeatherData(startLocation));
         weatherList.add(getForecastWeatherData(endLocation));
-        return weatherSummaryService.getSummary(weatherList);
+        InternalWeatherData summary = weatherSummaryService.getSummary(weatherList);
+        summary.getLocationNames().add(startLocation);
+        summary.getLocationNames().add(endLocation);
+        return summary;
     }
 }

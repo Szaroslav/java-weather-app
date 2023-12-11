@@ -5,8 +5,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -15,7 +13,11 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.SVGPath;
 import org.springframework.stereotype.Component;
-import pl.edu.agh.to.weatherapp.model.internal.*;
+import pl.edu.agh.to.weatherapp.model.internal.InternalWeatherData;
+import pl.edu.agh.to.weatherapp.model.internal.PrecipitationIntensity;
+import pl.edu.agh.to.weatherapp.model.internal.PrecipitationType;
+import pl.edu.agh.to.weatherapp.model.internal.TemperatureLevel;
+import pl.edu.agh.to.weatherapp.model.internal.WindIntensity;
 import pl.edu.agh.to.weatherapp.weather.WeatherService;
 
 import java.util.List;
@@ -57,8 +59,6 @@ public class WeatherPresenter {
     private Line noPrecipitationBackLine;
     @FXML
     private Line noPrecipitationLine;
-    @FXML
-    private ImageView conditionIconImageView;
 
     private static final String FIELD_CANNOT_BE_EMPTY = "Search field cannot be empty";
     private static final String TEMP_SUFFIX = "°C";
@@ -93,13 +93,15 @@ public class WeatherPresenter {
             errorLabel.setText(FIELD_CANNOT_BE_EMPTY);
             return;
         }
-
         toggleSearchButtonVisibility();
-
         Task<InternalWeatherData> executeAppTask = new Task<>() {
             @Override
             protected InternalWeatherData call() {
-                return weatherService.getWeatherData(searchTextField.getText());
+                if (searchDestinationTextField.getText().isEmpty()) {
+                    return weatherService.getWeatherData(searchTextField.getText());
+                } else {
+                    return weatherService.getSummaryWeatherData(searchTextField.getText(), searchDestinationTextField.getText());
+                }
             }
         };
         executeAppTask.setOnSucceeded(e -> {
@@ -110,7 +112,6 @@ public class WeatherPresenter {
             showPrecipitation(String.valueOf(weatherData.getPrecipitationInMm()), weatherData.getPrecipitationIntensity());
             showPrecipitationType(weatherData.getPrecipitationType());
             showWind(String.valueOf(weatherData.getWindInMps()), weatherData.getWindIntensity());
-            setConditionIconImage(weatherData.getConditionIconUrl());
             showWeatherInfo();
             toggleSearchButtonVisibility();
         });
@@ -123,7 +124,6 @@ public class WeatherPresenter {
             toggleSearchButtonVisibility();
         });
         executeAppTask.setOnCancelled(e -> toggleSearchButtonVisibility());
-
         new Thread(executeAppTask).start();
     }
 
@@ -137,6 +137,7 @@ public class WeatherPresenter {
             case WARM -> "orange";
             case COLD -> "red";
         };
+        temperatureBox.getStyleClass().clear();
         temperatureBox.getStyleClass().add(backgroundColorClass);
         temperatureUnitLabel.setText(TEMP_SUFFIX);
         temperatureLabel.setText(temperature);
@@ -188,7 +189,7 @@ public class WeatherPresenter {
         }
     }
 
-    private void resetPrecipitationType(){
+    private void resetPrecipitationType() {
         snowSVGPath.setVisible(false);
         rainSVGPath.setVisible(false);
         snowRainSVGPath.setVisible(false);
@@ -206,10 +207,6 @@ public class WeatherPresenter {
 
     private void clearErrorLabel() {
         errorLabel.setText("");
-    }
-
-    private void setConditionIconImage(String imageUrl) {
-        conditionIconImageView.setImage(new Image(imageUrl));
     }
 
     private void toggleSearchButtonVisibility() {
