@@ -1,3 +1,23 @@
 #searchButton:disabled{
-    -fx-opacity:1;
+    -fx-background-color: #525252;
+}
+
+.orange_gradient{
+    -fx-background-color: linear-gradient(from 0.0% 0.0% to 100.0% 100.0%, #ffd540 0.0%, #fb9b65 100.0%);
+}
+
+.orange{
+    -fx-background-color: #FFB347;
+}
+
+.green{
+    -fx-background-color: #77dd77;
+}
+
+.red{
+    -fx-background-color: #FF6961;
+}
+
+#errorLabel{
+    -fx-text-fill: #FF6961;
 }
