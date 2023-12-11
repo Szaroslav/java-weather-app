@@ -4,7 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +15,7 @@ import org.testfx.assertions.api.Assertions;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import pl.edu.agh.to.weatherapp.exceptions.InvalidRequest;
-import pl.edu.agh.to.weatherapp.model.internal.InternalWeatherData;
+import pl.edu.agh.to.weatherapp.model.internal.*;
 import pl.edu.agh.to.weatherapp.presenters.WeatherPresenter;
 import pl.edu.agh.to.weatherapp.weather.WeatherService;
 
@@ -28,8 +28,9 @@ import static org.testfx.assertions.api.Assertions.assertThat;
 class GuiTestServiceErrorTestIT {
         private static final String LOCATION_VALID = "Tarnów";
         private static final String LOCATION_INVALID = "Kraków";
-        private static final int TEMPERATURE = 40;
-        private static final String TEMPERATURE_SUFFIX = "°C";
+        private static final int WIND = 1;
+        private static final int RAIN = 2;
+        private static final int TEMP = 3;
         private static final String ICON_URL = "https://cdn.weatherapi.com/weather/64x64/night/116.png";
 
         @Start
@@ -47,13 +48,21 @@ class GuiTestServiceErrorTestIT {
                         (Answer<InternalWeatherData>) invocation -> {
                                 InternalWeatherData weatherData = new InternalWeatherData();
                                 weatherData.getLocationNames().add(LOCATION_VALID);
+                                weatherData.setTemperatureLevel(TemperatureLevel.COLD);
+                                weatherData.setWindIntensity(WindIntensity.WINDY);
+                                weatherData.setPrecipitationIntensity(PrecipitationIntensity.WEAK);
+                                weatherData.setPrecipitationType(PrecipitationType.BOTH);
+                                weatherData.setTemperature(TEMP);
+                                weatherData.setWindInMps(WIND);
+                                weatherData.setPrecipitationInMm(RAIN);
+                                weatherData.setConditionIconUrl(ICON_URL);
                                 return weatherData;
                         });
 
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("/view/WeatherPresenter.fxml"));
                 loader.setControllerFactory(c -> new WeatherPresenter(weatherServiceMock));
-                AnchorPane rootLayout = loader.load();
+                GridPane rootLayout = loader.load();
 
                 Scene scene = new Scene(rootLayout);
                 stage.setScene(scene);
@@ -74,7 +83,7 @@ class GuiTestServiceErrorTestIT {
                 Assertions.assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
                         .hasText(LOCATION_VALID);
                 Assertions.assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
-                        .hasText(TEMPERATURE + TEMPERATURE_SUFFIX);
+                        .hasText(String.valueOf(TEMP));
         }
 
 }
