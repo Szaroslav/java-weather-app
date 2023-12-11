@@ -49,27 +49,27 @@ public class ExtremeWeatherService implements WeatherSummaryService {
                 .max(Comparator.comparing(Boolean::valueOf))
                 .orElseThrow();
 
-        InternalWeatherData extremeWeatherData = new InternalWeatherData();
-        extremeWeatherData.setTemperatureLevel(getTemperatureLevel((int) minApparentTemperature));
-        extremeWeatherData.setTemperature(minTemperature);
-        extremeWeatherData.setWindIntensity(getWindIntensity((int) maxWindInMps));
-        extremeWeatherData.setWindInMps((int) maxWindInMps);
+        PrecipitationType precipitationType = PrecipitationType.NONE;
+
         if (willRain && willSnow) {
-            extremeWeatherData.setPrecipitationType(PrecipitationType.BOTH);
+            precipitationType = PrecipitationType.BOTH;
         }
         else if (willRain) {
-            extremeWeatherData.setPrecipitationType(PrecipitationType.RAIN);
+            precipitationType = PrecipitationType.RAIN;
         }
         else if (willSnow) {
-            extremeWeatherData.setPrecipitationType(PrecipitationType.SNOW);
+            precipitationType = PrecipitationType.SNOW;
         }
-        else {
-            extremeWeatherData.setPrecipitationType(PrecipitationType.NONE);
-        }
-        extremeWeatherData.setPrecipitationIntensity(getPrecipitationIntensity((int) maxPrecipitationMm));
-        extremeWeatherData.setPrecipitationInMm((int) maxPrecipitationMm);
 
-        return extremeWeatherData;
+        return new InternalWeatherData()
+                .setTemperatureLevel(getTemperatureLevel((int) minApparentTemperature))
+                .setTemperature(minTemperature)
+                .setWindIntensity(getWindIntensity((int) maxWindInMps))
+                .setWindInMps((int) maxWindInMps)
+                .setPrecipitationType(precipitationType)
+                .setPrecipitationIntensity(getPrecipitationIntensity((int) maxPrecipitationMm))
+                .setPrecipitationInMm((int) maxPrecipitationMm);
+
     }
 
     private InternalWeatherData getExtremeWeather(List<InternalWeatherData> summarisedLocations) {
@@ -98,16 +98,14 @@ public class ExtremeWeatherService implements WeatherSummaryService {
                 .max(Comparator.comparing(PrecipitationType::ordinal))
                 .orElseThrow();
 
-        InternalWeatherData extremeWeatherData = new InternalWeatherData();
-        extremeWeatherData.setTemperatureLevel(temperatureLevel);
-        extremeWeatherData.setTemperature(minTemperature);
-        extremeWeatherData.setWindIntensity(getWindIntensity(maxWindInMps));
-        extremeWeatherData.setWindInMps(maxWindInMps);
-        extremeWeatherData.setPrecipitationType(precipitationType);
-        extremeWeatherData.setPrecipitationIntensity(getPrecipitationIntensity(maxPrecipitationMm));
-        extremeWeatherData.setPrecipitationInMm(maxPrecipitationMm);
-
-        return extremeWeatherData;
+        return new InternalWeatherData()
+                .setTemperatureLevel(temperatureLevel)
+                .setTemperature(minTemperature)
+                .setWindIntensity(getWindIntensity(maxWindInMps))
+                .setWindInMps(maxWindInMps)
+                .setPrecipitationType(precipitationType)
+                .setPrecipitationIntensity(getPrecipitationIntensity(maxPrecipitationMm))
+                .setPrecipitationInMm(maxPrecipitationMm);
     }
 
     private TemperatureLevel getTemperatureLevel(int minTemperature) {
