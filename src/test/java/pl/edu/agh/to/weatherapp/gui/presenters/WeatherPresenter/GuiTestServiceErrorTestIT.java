@@ -31,7 +31,12 @@ class GuiTestServiceErrorTestIT {
     private static final int WIND = 1;
     private static final int RAIN = 2;
     private static final int TEMP = 3;
-
+    private static final String INVALID_TIME = "intm";
+    private static final String VALID_EARLY_TIME = "12";
+    private static final String VALID_LATE_TIME = "15";
+    private static final String TIME_INVALID_MESSAGE = "Invalid time range";
+    private static final int START_HOUR = 0;
+    private static final int END_HOUR = 24;
     @Start
     private void start(Stage stage) throws IOException {
         stage.setTitle("Potezna wichura");
@@ -39,11 +44,24 @@ class GuiTestServiceErrorTestIT {
         stage.setMinHeight(400);
 
         WeatherService weatherServiceMock = Mockito.mock((WeatherService.class));
-        Mockito.when(weatherServiceMock.getWeatherData(LOCATION_INVALID)).thenAnswer(
+        Mockito.when(weatherServiceMock.getWeatherData(LOCATION_INVALID, START_HOUR, END_HOUR)).thenAnswer(
                 (Answer<InternalWeatherData>) invocation -> {
                     throw new CompletionException(new InvalidRequest("No matching location found."));
                 });
-        Mockito.when(weatherServiceMock.getWeatherData(LOCATION_VALID)).thenAnswer(
+        Mockito.when(weatherServiceMock.getWeatherData(LOCATION_VALID, START_HOUR, END_HOUR)).thenAnswer(
+                (Answer<InternalWeatherData>) invocation -> {
+                    InternalWeatherData weatherData = new InternalWeatherData();
+                    weatherData.getLocationNames().add(LOCATION_VALID);
+                    weatherData.setTemperatureLevel(TemperatureLevel.COLD);
+                    weatherData.setWindIntensity(WindIntensity.WINDY);
+                    weatherData.setPrecipitationIntensity(PrecipitationIntensity.WEAK);
+                    weatherData.setPrecipitationType(PrecipitationType.BOTH);
+                    weatherData.setTemperature(TEMP);
+                    weatherData.setWindInMps(WIND);
+                    weatherData.setPrecipitationInMm(RAIN);
+                    return weatherData;
+                });
+        Mockito.when(weatherServiceMock.getWeatherData(LOCATION_VALID, Integer.parseInt(VALID_EARLY_TIME), Integer.parseInt(VALID_LATE_TIME))).thenAnswer(
                 (Answer<InternalWeatherData>) invocation -> {
                     InternalWeatherData weatherData = new InternalWeatherData();
                     weatherData.getLocationNames().add(LOCATION_VALID);
@@ -82,6 +100,44 @@ class GuiTestServiceErrorTestIT {
                 .hasText(LOCATION_VALID);
         Assertions.assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
                 .hasText(String.valueOf(TEMP));
+    }
+
+    @Test
+    void handlingTimeErrors(FxRobot robot) {
+        robot.clickOn("#searchTextField");
+        robot.write(LOCATION_VALID);
+        robot.clickOn("#timeStartTextField");
+        robot.write(INVALID_TIME);
+        robot.clickOn("#timeEndTextField");
+        robot.write(INVALID_TIME);
+        robot.clickOn("#searchButton");
+        robot.clickOn("#timeEndTextField");
+        robot.type(KeyCode.BACK_SPACE, INVALID_TIME.length());
+        robot.clickOn("#timeStartTextField");
+        robot.type(KeyCode.BACK_SPACE, INVALID_TIME.length());
+        robot.write(VALID_EARLY_TIME);
+        robot.clickOn("#searchButton");
+        assertThat(robot.lookup("#errorLabel").queryAs(Label.class)).hasText(TIME_INVALID_MESSAGE);
+        robot.clickOn("#timeStartTextField");
+        robot.type(KeyCode.BACK_SPACE, VALID_EARLY_TIME.length());
+        robot.clickOn("#timeEndTextField");
+        robot.write(VALID_EARLY_TIME);
+        robot.clickOn("#searchButton");
+        assertThat(robot.lookup("#errorLabel").queryAs(Label.class)).hasText(TIME_INVALID_MESSAGE);
+        robot.clickOn("#timeStartTextField");
+        robot.write(VALID_LATE_TIME);
+        robot.clickOn("#searchButton");
+        assertThat(robot.lookup("#errorLabel").queryAs(Label.class)).hasText(TIME_INVALID_MESSAGE);
+        robot.clickOn("#timeStartTextField");
+        robot.type(KeyCode.BACK_SPACE, VALID_LATE_TIME.length());
+        robot.write(VALID_EARLY_TIME);
+        robot.clickOn("#timeEndTextField");
+        robot.type(KeyCode.BACK_SPACE, VALID_EARLY_TIME.length());
+        robot.write(VALID_LATE_TIME);
+        robot.clickOn("#searchButton");
+        assertThat(robot.lookup("#errorLabel").queryAs(Label.class)).hasText("");
+        Assertions.assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
+                .hasText(LOCATION_VALID);
     }
 
 }

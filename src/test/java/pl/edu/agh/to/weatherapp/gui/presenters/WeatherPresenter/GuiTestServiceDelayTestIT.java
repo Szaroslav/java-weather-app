@@ -34,6 +34,8 @@ class GuiTestServiceDelayTestIT {
     private static final int RAIN = 2;
     private static final int TEMP = 3;
     private static final String BUTTON_TEXT_AFTER_CLICK = "clicked!";
+    private static final int START_HOUR = 0;
+    private static final int END_HOUR = 24;
 
     @Start
     private void start(Stage stage) throws IOException {
@@ -42,7 +44,7 @@ class GuiTestServiceDelayTestIT {
         stage.setMinHeight(400);
 
         WeatherService weatherServiceMock = Mockito.mock((WeatherService.class));
-        Mockito.when(weatherServiceMock.getSummaryWeatherData(LOCATION_START, LOCATION_END)).thenAnswer(
+        Mockito.when(weatherServiceMock.getSummaryWeatherData(LOCATION_START, LOCATION_END, START_HOUR, END_HOUR)).thenAnswer(
                 (Answer<InternalWeatherData>) invocation -> {
                     await()
                             .pollDelay(Duration.ofSeconds(2))
