@@ -48,24 +48,26 @@ public class WeatherPresenter {
     @FXML
     private SVGPath rainSVGPath;
     @FXML
-    private Label rainLabel;
+    private Label precipitationLabel;
     @FXML
     private SVGPath snowSVGPath;
     @FXML
-    private Line noSnowBackLine;
+    private SVGPath snowRainSVGPath;
     @FXML
-    private Line noSnowLine;
+    private Line noPrecipitationBackLine;
+    @FXML
+    private Line noPrecipitationLine;
     @FXML
     private ImageView conditionIconImageView;
+
     private static final String FIELD_CANNOT_BE_EMPTY = "Search field cannot be empty";
     private static final String TEMP_SUFFIX = "°C";
     private static final String CITY_NAMES_SEPARATOR = " → ";
     private static final String WIND_SUFFIX = "m/s";
-    private static final String RAIN_SUFFIX = "mm";
+    private static final String PRECIPITATION_SUFFIX = "mm";
     private static final String COLOR_GREEN = "#77dd77";
     private static final String COLOR_ORANGE = "#FFB347";
     private static final String COLOR_RED = "#FF6961";
-    private static final String COLOR_GRAY = "#525252";
 
     public WeatherPresenter(WeatherService weatherService) {
         this.weatherService = weatherService;
@@ -91,20 +93,22 @@ public class WeatherPresenter {
             errorLabel.setText(FIELD_CANNOT_BE_EMPTY);
             return;
         }
+
+        toggleSearchButtonVisibility();
+
         Task<InternalWeatherData> executeAppTask = new Task<>() {
             @Override
             protected InternalWeatherData call() {
                 return weatherService.getWeatherData(searchTextField.getText());
             }
         };
-        toggleSearchButtonVisibility();
         executeAppTask.setOnSucceeded(e -> {
             InternalWeatherData weatherData = executeAppTask.getValue();
             clearErrorLabel();
             showLocation(weatherData.getLocationNames());
             showTemperature(String.valueOf(weatherData.getTemperature()), weatherData.getTemperatureLevel());
-            showRain(String.valueOf(weatherData.getPrecipitationInMm()), weatherData.getPrecipitationIntensity());
-            showSnow(weatherData.getPrecipitationType());
+            showPrecipitation(String.valueOf(weatherData.getPrecipitationInMm()), weatherData.getPrecipitationIntensity());
+            showPrecipitationType(weatherData.getPrecipitationType());
             showWind(String.valueOf(weatherData.getWindInMps()), weatherData.getWindIntensity());
             setConditionIconImage(weatherData.getConditionIconUrl());
             showWeatherInfo();
@@ -119,6 +123,7 @@ public class WeatherPresenter {
             toggleSearchButtonVisibility();
         });
         executeAppTask.setOnCancelled(e -> toggleSearchButtonVisibility());
+
         new Thread(executeAppTask).start();
     }
 
@@ -148,34 +153,47 @@ public class WeatherPresenter {
         windLabel.textFillProperty().setValue(Paint.valueOf(backgroundColor));
     }
 
-    private void showRain(String precipitationInMm, PrecipitationIntensity precipitationIntensity) {
+    private void showPrecipitation(String precipitationInMm, PrecipitationIntensity precipitationIntensity) {
         String backgroundColor = switch (precipitationIntensity) {
             case WEAK -> COLOR_GREEN;
             case MEDIUM -> COLOR_ORANGE;
             case STRONG -> COLOR_RED;
         };
-        rainSVGPath.setFill(Color.web(backgroundColor));
-        rainLabel.setText(precipitationInMm + RAIN_SUFFIX);
-        rainLabel.textFillProperty().setValue(Paint.valueOf(backgroundColor));
+        precipitationLabel.setText(precipitationInMm + PRECIPITATION_SUFFIX);
+        precipitationLabel.textFillProperty().setValue(Paint.valueOf(backgroundColor));
     }
 
-    private void showSnow(PrecipitationType precipitationType) {
-        String backgroundColor;
+    private void showPrecipitationType(PrecipitationType precipitationType) {
+        resetPrecipitationType();
         switch (precipitationType) {
-            case SNOW, BOTH -> {
-                backgroundColor = COLOR_RED;
-                noSnowBackLine.setVisible(false);
-                noSnowLine.setVisible(false);
+            case SNOW -> {
+                snowSVGPath.setVisible(true);
+                snowSVGPath.setFill(Color.web(COLOR_RED));
             }
-            case NONE, RAIN -> {
-                backgroundColor = COLOR_GREEN;
-                noSnowBackLine.setVisible(true);
-                noSnowLine.setVisible(true);
-                noSnowLine.setStroke(Color.web(backgroundColor));
+            case RAIN -> {
+                rainSVGPath.setVisible(true);
+                rainSVGPath.setFill(Color.web(COLOR_RED));
             }
-            default -> backgroundColor = COLOR_GRAY;
+            case BOTH -> {
+                snowRainSVGPath.setVisible(true);
+                snowRainSVGPath.setFill(Color.web(COLOR_RED));
+            }
+            case NONE -> {
+                snowRainSVGPath.setVisible(true);
+                snowRainSVGPath.setFill(Color.web(COLOR_GREEN));
+                noPrecipitationBackLine.setVisible(true);
+                noPrecipitationLine.setVisible(true);
+                noPrecipitationLine.setFill(Color.web(COLOR_GREEN));
+            }
         }
-        snowSVGPath.setFill(Color.web(backgroundColor));
+    }
+
+    private void resetPrecipitationType(){
+        snowSVGPath.setVisible(false);
+        rainSVGPath.setVisible(false);
+        snowRainSVGPath.setVisible(false);
+        noPrecipitationBackLine.setVisible(false);
+        noPrecipitationLine.setVisible(false);
     }
 
     private void hideWeatherInfo() {
