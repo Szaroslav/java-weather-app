@@ -1,6 +1,7 @@
 package pl.edu.agh.to.weatherapp.parser;
 
 import lombok.SneakyThrows;
+import org.assertj.core.data.Percentage;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import pl.edu.agh.to.weatherapp.exceptions.InvalidRequest;
@@ -24,7 +25,6 @@ public class JsonParserTest {
     @BeforeAll
     public static void init() {
         final ClassLoader classLoader = JsonParserTest.class.getClassLoader();
-
         validJsonContent = new String(
             Files.readAllBytes(
                 Paths.get(Objects.requireNonNull(
@@ -45,8 +45,15 @@ public class JsonParserTest {
     void parseValidResponse() {
         ForecastWeatherData forecast = jsonParser.parseForecast(validJsonContent);
         assertThat(forecast.getLocationName()).isEqualTo("Cracow, Poland");
-        assertThat(forecast.getHourlyWeatherForecasts().size()).isEqualTo(24);
-        // TODO: Verify a first forecast.
+        assertThat(forecast.getHourlyWeatherForecasts()).hasSize(24);
+        var weatherData = forecast.getHourlyWeatherForecasts().get(8);
+        assertThat(weatherData.getDate()).hasHourOfDay(8);
+        assertThat(weatherData.getWindKph()).isCloseTo(5.8F, Percentage.withPercentage(1));
+        assertThat(weatherData.getPrecipitationMm()).isCloseTo(0.24F, Percentage.withPercentage(1));
+        assertThat(weatherData.getTemperatureC()).isEqualTo(-5);
+        assertThat(weatherData.getConditionIconUrl()).isEqualTo("//cdn.weatherapi.com/weather/64x64/day/329.png");
+        assertThat(weatherData.isWillRain()).isFalse();
+        assertThat(weatherData.isWillSnow()).isFalse();
     }
 
     @Test
