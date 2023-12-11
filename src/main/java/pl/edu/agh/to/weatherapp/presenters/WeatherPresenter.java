@@ -116,9 +116,9 @@ public class WeatherPresenter {
         });
         executeAppTask.setOnFailed(e -> {
             if (executeAppTask.getException().getCause() != null) {
-                errorLabel.setText(executeAppTask.getException().getMessage());
-            } else {
                 errorLabel.setText(executeAppTask.getException().getCause().getMessage());
+            } else {
+                errorLabel.setText(executeAppTask.getException().getMessage());
             }
             toggleSearchButtonVisibility();
         });
