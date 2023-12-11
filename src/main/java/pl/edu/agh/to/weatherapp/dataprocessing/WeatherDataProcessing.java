@@ -1,4 +1,4 @@
-package dataprocessing;
+package pl.edu.agh.to.weatherapp.dataprocessing;
 
 public class WeatherDataProcessing {
     private WeatherDataProcessing() {}
