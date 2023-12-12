@@ -53,7 +53,7 @@ public class JsonParserTest {
         assertThat(weatherData.getTemperatureC()).isEqualTo(-5);
         assertThat(weatherData.getConditionIconUrl()).isEqualTo("//cdn.weatherapi.com/weather/64x64/day/329.png");
         assertThat(weatherData.isWillRain()).isFalse();
-        assertThat(weatherData.isWillSnow()).isFalse();
+        assertThat(weatherData.isWillSnow()).isTrue();
     }
 
     @Test

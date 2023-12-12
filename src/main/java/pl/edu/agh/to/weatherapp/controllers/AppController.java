@@ -19,8 +19,8 @@ public class AppController {
     @SneakyThrows
     public void initRootLayout() {
         primaryStage.setTitle(APP_TITLE);
-        primaryStage.setMinWidth(400);
-        primaryStage.setMinHeight(400);
+        primaryStage.setMinWidth(800);
+        primaryStage.setMinHeight(600);
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource(PRESENTER_RESOURCE));

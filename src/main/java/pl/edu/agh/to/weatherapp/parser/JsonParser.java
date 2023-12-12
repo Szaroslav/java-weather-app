@@ -21,8 +21,8 @@ public class JsonParser {
         int temperatureC = json.getAsJsonPrimitive("temp_c").getAsInt();
         float windKph = json.getAsJsonPrimitive("wind_kph").getAsFloat();
         float precipitationMm = json.getAsJsonPrimitive("precip_mm").getAsFloat();
-        boolean willRain = json.getAsJsonPrimitive("will_it_rain").getAsBoolean();
-        boolean willSnow = json.getAsJsonPrimitive("will_it_snow").getAsBoolean();
+        boolean willRain = Integer.parseInt(json.getAsJsonPrimitive("chance_of_rain").getAsString()) > 0;
+        boolean willSnow = Integer.parseInt(json.getAsJsonPrimitive("chance_of_snow").getAsString()) > 0;
         return new WeatherData(
                 date,
                 conditionIconUrl,

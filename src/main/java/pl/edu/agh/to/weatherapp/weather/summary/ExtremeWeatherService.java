@@ -109,8 +109,8 @@ public class ExtremeWeatherService implements WeatherSummaryService {
     }
 
     private TemperatureLevel getTemperatureLevel(int minTemperature) {
-        if (minTemperature <= 5) return TemperatureLevel.COLD;
-        else if (minTemperature <= 20) return TemperatureLevel.WARM;
+        if (minTemperature < 5) return TemperatureLevel.COLD;
+        else if (minTemperature < 20) return TemperatureLevel.WARM;
         else return TemperatureLevel.HOT;
     }
 

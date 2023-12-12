@@ -134,7 +134,7 @@ public class WeatherPresenter {
             InternalWeatherData weatherData = executeAppTask.getValue();
             clearErrorLabel();
             showLocation(weatherData.getLocationNames());
-            showTemperature(String.valueOf(weatherData.getTemperature()), weatherData.getTemperatureLevel());
+            showTemperature(String.valueOf(weatherData.getApparentTemperature()), weatherData.getTemperatureLevel());
             showPrecipitation(String.valueOf(weatherData.getPrecipitationInMm()), weatherData.getPrecipitationIntensity());
             showPrecipitationType(weatherData.getPrecipitationType());
             showWind(String.valueOf(weatherData.getWindInMps()), weatherData.getWindIntensity());
