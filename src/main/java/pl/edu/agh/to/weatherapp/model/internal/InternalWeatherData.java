@@ -14,6 +14,7 @@ public class InternalWeatherData {
     private final List<String> locationNames = new ArrayList<>();
     private TemperatureLevel temperatureLevel;
     private int temperature;
+    private int apparentTemperature;
     private String conditionIconUrl;
     private PrecipitationIntensity precipitationIntensity;
     private PrecipitationType precipitationType;
