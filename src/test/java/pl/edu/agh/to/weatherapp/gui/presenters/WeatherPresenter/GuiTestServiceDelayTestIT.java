@@ -12,7 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
 import org.testfx.api.FxRobot;
-import org.testfx.assertions.api.Assertions;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import pl.edu.agh.to.weatherapp.model.internal.InternalWeatherData;
@@ -88,13 +87,13 @@ class GuiTestServiceDelayTestIT {
         robot.clickOn("#searchDestinationTextField");
         robot.write(LOCATION_END);
         robot.clickOn("#searchButton");
-        Assertions.assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
+        assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
                 .hasText("");
-        Assertions.assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
+        assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
                 .hasText("");
 
         robot.clickOn("#myButton");
-        Assertions.assertThat(robot.lookup("#myButton").queryAs(Button.class))
+        assertThat(robot.lookup("#myButton").queryAs(Button.class))
                 .hasText(BUTTON_TEXT_AFTER_CLICK);
         await()
                 .pollDelay(Duration.ofSeconds(3))
@@ -103,7 +102,7 @@ class GuiTestServiceDelayTestIT {
                 .hasText(LOCATION_START + CITY_NAMES_SEPARATOR + LOCATION_END);
         assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
                 .hasText(String.valueOf(TEMP));
-        org.assertj.core.api.Assertions.assertThat(robot.lookup("#weatherInfoVBox").queryAs(VBox.class).isVisible()).isTrue();
+        assertThat(robot.lookup("#weatherInfoVBox").queryAs(VBox.class).isVisible()).isTrue();
     }
 
     @Test
@@ -114,10 +113,10 @@ class GuiTestServiceDelayTestIT {
         robot.write(LOCATION_END);
         robot.clickOn("#searchButton");
 
-        Assertions.assertThat(robot.lookup("#searchButton").queryAs(Button.class).isDisabled()).isTrue();
+        assertThat(robot.lookup("#searchButton").queryAs(Button.class).isDisabled()).isTrue();
         await()
                 .pollDelay(Duration.ofSeconds(3))
                 .until(() -> true);
-        Assertions.assertThat(robot.lookup("#searchButton").queryAs(Button.class).isDisabled()).isFalse();
+        assertThat(robot.lookup("#searchButton").queryAs(Button.class).isDisabled()).isFalse();
     }
 }
