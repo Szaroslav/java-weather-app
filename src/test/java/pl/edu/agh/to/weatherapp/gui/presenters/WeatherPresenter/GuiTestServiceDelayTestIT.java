@@ -15,7 +15,11 @@ import org.testfx.api.FxRobot;
 import org.testfx.assertions.api.Assertions;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
-import pl.edu.agh.to.weatherapp.model.internal.*;
+import pl.edu.agh.to.weatherapp.model.internal.InternalWeatherData;
+import pl.edu.agh.to.weatherapp.model.internal.PrecipitationIntensity;
+import pl.edu.agh.to.weatherapp.model.internal.PrecipitationType;
+import pl.edu.agh.to.weatherapp.model.internal.TemperatureLevel;
+import pl.edu.agh.to.weatherapp.model.internal.WindIntensity;
 import pl.edu.agh.to.weatherapp.presenters.WeatherPresenter;
 import pl.edu.agh.to.weatherapp.weather.WeatherService;
 
