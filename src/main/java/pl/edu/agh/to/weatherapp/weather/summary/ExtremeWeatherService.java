@@ -65,6 +65,7 @@ public class ExtremeWeatherService implements WeatherSummaryService {
         return new InternalWeatherData()
                 .setTemperatureLevel(getTemperatureLevel((int) minApparentTemperature))
                 .setTemperature(minTemperature)
+                .setApparentTemperature((int) minApparentTemperature)
                 .setWindIntensity(getWindIntensity((int) maxWindInMps))
                 .setWindInMps((int) maxWindInMps)
                 .setPrecipitationType(precipitationType)
@@ -78,6 +79,11 @@ public class ExtremeWeatherService implements WeatherSummaryService {
                 .min(Comparator.comparing(Integer::valueOf))
                 .orElseThrow();
 
+        int minApparentTemperature = summarisedLocations.stream()
+                .map(InternalWeatherData::getApparentTemperature)
+                .min(Comparator.comparing(Integer::valueOf))
+                .orElseThrow();
+
         int maxPrecipitationMm = summarisedLocations.stream()
                 .map(InternalWeatherData::getPrecipitationInMm)
                 .max(Comparator.comparing(Integer::valueOf))
@@ -88,17 +94,13 @@ public class ExtremeWeatherService implements WeatherSummaryService {
                 .max(Comparator.comparing(Integer::valueOf))
                 .orElseThrow();
 
-        TemperatureLevel temperatureLevel = summarisedLocations.stream()
-                .map(InternalWeatherData::getTemperatureLevel)
-                .max(Comparator.comparing(TemperatureLevel::ordinal))
-                .orElseThrow();
-
         PrecipitationType precipitationType = summarisePrecipitation(summarisedLocations.stream()
                 .map(InternalWeatherData::getPrecipitationType).toList());
 
         return new InternalWeatherData()
-                .setTemperatureLevel(temperatureLevel)
+                .setTemperatureLevel(getTemperatureLevel(minApparentTemperature))
                 .setTemperature(minTemperature)
+                .setApparentTemperature(minApparentTemperature)
                 .setWindIntensity(getWindIntensity(maxWindInMps))
                 .setWindInMps(maxWindInMps)
                 .setPrecipitationType(precipitationType)
@@ -107,9 +109,9 @@ public class ExtremeWeatherService implements WeatherSummaryService {
     }
 
     private TemperatureLevel getTemperatureLevel(int minTemperature) {
-        if (20 <= minTemperature) return TemperatureLevel.HOT;
-        else if (minTemperature <= 5) return TemperatureLevel.COLD;
-        else return TemperatureLevel.WARM;
+        if (minTemperature <= 5) return TemperatureLevel.COLD;
+        else if (minTemperature <= 20) return TemperatureLevel.WARM;
+        else return TemperatureLevel.HOT;
     }
 
     private PrecipitationIntensity getPrecipitationIntensity(int precipitationMm) {
