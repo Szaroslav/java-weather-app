@@ -98,7 +98,7 @@ class GuiTestServiceColorTestIT {
                     weatherData.getLocationNames().add(COLD_WINDY_WEAK_BOTH);
                     weatherData.setTemperatureLevel(TemperatureLevel.COLD);
                     weatherData.setWindIntensity(WindIntensity.WINDY);
-                    weatherData.setPrecipitationIntensity(PrecipitationIntensity.WEAK);
+                    weatherData.setPrecipitationIntensity(PrecipitationIntensity.MEDIUM);
                     weatherData.setPrecipitationType(PrecipitationType.BOTH);
                     weatherData.setTemperature(TEMP);
                     weatherData.setWindInMps(WIND);
@@ -209,7 +209,7 @@ class GuiTestServiceColorTestIT {
         assertThat(robot.lookup("#windLabel").queryAs(Label.class))
                 .hasText(WIND + WIND_SUFFIX);
         Assertions.assertThat(robot.lookup("#temperatureBox").queryAs(StackPane.class).getStyleClass()).contains(COLOR_CLASS_RED);
-        Assertions.assertThat(robot.lookup("#precipitationLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(COLOR_GREEN));
+        Assertions.assertThat(robot.lookup("#precipitationLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(COLOR_ORANGE));
         Assertions.assertThat(robot.lookup("#windLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(COLOR_ORANGE));
         Assertions.assertThat(robot.lookup("#windSVGPath").queryAs(SVGPath.class).getStroke()).isEqualTo(Color.web(COLOR_ORANGE));
         Assertions.assertThat(robot.lookup("#rainSVGPath").queryAs(SVGPath.class).isVisible()).isFalse();
