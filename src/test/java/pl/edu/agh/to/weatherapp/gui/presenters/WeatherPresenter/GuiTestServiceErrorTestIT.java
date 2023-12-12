@@ -11,7 +11,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
 import org.testfx.api.FxRobot;
-import org.testfx.assertions.api.Assertions;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import pl.edu.agh.to.weatherapp.exceptions.InvalidRequest;
@@ -102,9 +101,9 @@ class GuiTestServiceErrorTestIT {
         robot.write(LOCATION_VALID);
         robot.clickOn("#searchButton");
         assertThat(robot.lookup("#errorLabel").queryAs(Label.class)).hasText("");
-        Assertions.assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
+        assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
                 .hasText(LOCATION_VALID);
-        Assertions.assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
+        assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
                 .hasText(String.valueOf(TEMP));
     }
 
@@ -145,7 +144,7 @@ class GuiTestServiceErrorTestIT {
         robot.write(VALID_LATE_TIME);
         robot.clickOn("#searchButton");
         assertThat(robot.lookup("#errorLabel").queryAs(Label.class)).hasText("");
-        Assertions.assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
+        assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
                 .hasText(LOCATION_VALID);
     }
 
