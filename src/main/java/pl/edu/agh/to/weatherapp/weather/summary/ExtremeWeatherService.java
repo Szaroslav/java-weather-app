@@ -32,14 +32,16 @@ public class ExtremeWeatherService implements WeatherSummaryService {
                 .min(Comparator.comparing(Float::valueOf))
                 .orElseThrow();
 
-        float maxPrecipitationMm = weatherDataList.stream()
+        int maxPrecipitationMm = weatherDataList.stream()
                 .map(WeatherData::getPrecipitationMm)
                 .max(Comparator.comparing(Float::valueOf))
+                .map(data -> (int) Math.ceil(data))
                 .orElseThrow();
 
-        float maxWindInMps = weatherDataList.stream()
+        int maxWindInMps = weatherDataList.stream()
                 .map(data -> WeatherDataProcessing.kphToMps(data.getWindKph()))
                 .max(Comparator.comparing(Float::valueOf))
+                .map(data -> (int) Math.ceil(data))
                 .orElseThrow();
 
         boolean willRain = weatherDataList.stream()
@@ -66,11 +68,11 @@ public class ExtremeWeatherService implements WeatherSummaryService {
                 .setTemperatureLevel(getTemperatureLevel((int) minApparentTemperature))
                 .setTemperature(minTemperature)
                 .setApparentTemperature((int) minApparentTemperature)
-                .setWindIntensity(getWindIntensity((int) maxWindInMps))
-                .setWindInMps((int) maxWindInMps)
+                .setWindIntensity(getWindIntensity(maxWindInMps))
+                .setWindInMps(maxWindInMps)
                 .setPrecipitationType(precipitationType)
-                .setPrecipitationIntensity(getPrecipitationIntensity((int) maxPrecipitationMm))
-                .setPrecipitationInMm((int) maxPrecipitationMm);
+                .setPrecipitationIntensity(getPrecipitationIntensity(maxPrecipitationMm))
+                .setPrecipitationInMm(maxPrecipitationMm);
     }
 
     private InternalWeatherData getExtremeWeather(List<InternalWeatherData> summarisedLocations) {
