@@ -37,7 +37,7 @@ class ExtremeWeatherServiceTest {
         //then
         assertThat(internalWeatherData.getTemperatureLevel()).isEqualTo(TemperatureLevel.HOT);
         assertThat(internalWeatherData.getTemperature()).isEqualTo(30);
-        assertEquals(32, internalWeatherData.getApparentTemperature(),0.1);
+        assertEquals(32, internalWeatherData.getApparentTemperature(), 0.1);
         assertThat(internalWeatherData.getPrecipitationIntensity()).isEqualTo(PrecipitationIntensity.STRONG);
         assertThat(internalWeatherData.getPrecipitationType()).isEqualTo(PrecipitationType.BOTH);
         assertThat(internalWeatherData.getPrecipitationInMm()).isEqualTo(20);
@@ -67,7 +67,7 @@ class ExtremeWeatherServiceTest {
         //then
         assertThat(internalWeatherData.getTemperatureLevel()).isEqualTo(TemperatureLevel.WARM);
         assertThat(internalWeatherData.getTemperature()).isEqualTo(15);
-        assertEquals(13, internalWeatherData.getApparentTemperature(),0.1);
+        assertEquals(13, internalWeatherData.getApparentTemperature(), 0.1);
         assertThat(internalWeatherData.getPrecipitationIntensity()).isEqualTo(PrecipitationIntensity.MEDIUM);
         assertThat(internalWeatherData.getPrecipitationType()).isEqualTo(PrecipitationType.RAIN);
         assertThat(internalWeatherData.getPrecipitationInMm()).isEqualTo(10);
@@ -106,7 +106,7 @@ class ExtremeWeatherServiceTest {
         //then
         assertThat(internalWeatherData.getTemperatureLevel()).isEqualTo(TemperatureLevel.WARM);
         assertThat(internalWeatherData.getTemperature()).isEqualTo(5);
-        assertEquals(7, internalWeatherData.getApparentTemperature(),0.1);
+        assertEquals(7, internalWeatherData.getApparentTemperature(), 0.1);
         assertThat(internalWeatherData.getPrecipitationIntensity()).isEqualTo(PrecipitationIntensity.WEAK);
         assertThat(internalWeatherData.getPrecipitationType()).isEqualTo(PrecipitationType.BOTH);
         assertThat(internalWeatherData.getPrecipitationInMm()).isEqualTo(5);
