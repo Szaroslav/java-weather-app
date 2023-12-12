@@ -93,10 +93,8 @@ public class ExtremeWeatherService implements WeatherSummaryService {
                 .max(Comparator.comparing(TemperatureLevel::ordinal))
                 .orElseThrow();
 
-        PrecipitationType precipitationType = summarisedLocations.stream()
-                .map(InternalWeatherData::getPrecipitationType)
-                .max(Comparator.comparing(PrecipitationType::ordinal))
-                .orElseThrow();
+        PrecipitationType precipitationType = summarisePrecipitation(summarisedLocations.stream()
+                .map(InternalWeatherData::getPrecipitationType).toList());
 
         return new InternalWeatherData()
                 .setTemperatureLevel(temperatureLevel)
@@ -124,5 +122,18 @@ public class ExtremeWeatherService implements WeatherSummaryService {
         if (maxWindInMps <= 5) return WindIntensity.BREEZE;
         else if (maxWindInMps <= 10) return WindIntensity.WINDY;
         else return WindIntensity.STORM;
+    }
+
+    private PrecipitationType summarisePrecipitation(List<PrecipitationType> precipitationList) {
+        if (precipitationList.contains(PrecipitationType.BOTH))
+            return PrecipitationType.BOTH;
+        if (precipitationList.contains(PrecipitationType.RAIN)
+                && precipitationList.contains(PrecipitationType.SNOW))
+            return PrecipitationType.BOTH;
+        if (precipitationList.contains(PrecipitationType.SNOW))
+            return PrecipitationType.SNOW;
+        if (precipitationList.contains(PrecipitationType.RAIN))
+            return PrecipitationType.RAIN;
+        return PrecipitationType.NONE;
     }
 }

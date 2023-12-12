@@ -6,7 +6,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class WeatherDataProcessingTest {
-
     @Test
     void kphToMpsTest() {
         assertThat(WeatherDataProcessing.kphToMps(72)).isEqualTo(20);

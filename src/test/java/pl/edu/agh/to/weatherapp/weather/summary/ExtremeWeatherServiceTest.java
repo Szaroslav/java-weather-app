@@ -14,25 +14,26 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ExtremeWeatherServiceTest {
+    private final ExtremeWeatherService extremeWeatherService = new ExtremeWeatherService();
 
     @Test
     void oneLocationOneForecastTest() {
+        //given
         List<ForecastWeatherData> weatherDataList = new java.util.ArrayList<>();
         ForecastWeatherData forecastWeatherData = new ForecastWeatherData();
-
-        WeatherData weatherData = new WeatherData();
-        weatherData.setTemperatureC(30);
-        weatherData.setWindKph(72);
-        weatherData.setPrecipitationMm(20);
-        weatherData.setWillRain(true);
-        weatherData.setWillSnow(true);
-
+        WeatherData weatherData = new WeatherData()
+                .setTemperatureC(30)
+                .setWindKph(72)
+                .setPrecipitationMm(20)
+                .setWillRain(true)
+                .setWillSnow(true);
         forecastWeatherData.getHourlyWeatherForecasts().add(weatherData);
         weatherDataList.add(forecastWeatherData);
 
-        ExtremeWeatherService extremeWeatherService = new ExtremeWeatherService();
+        //when
         InternalWeatherData internalWeatherData = extremeWeatherService.getSummary(weatherDataList);
 
+        //then
         assertThat(internalWeatherData.getTemperatureLevel()).isEqualTo(TemperatureLevel.HOT);
         assertThat(internalWeatherData.getTemperature()).isEqualTo(30);
         assertThat(internalWeatherData.getPrecipitationIntensity()).isEqualTo(PrecipitationIntensity.STRONG);
@@ -44,23 +45,24 @@ class ExtremeWeatherServiceTest {
 
     @Test
     void oneLocationMultipleForecastsTest() {
+        //given
         List<ForecastWeatherData> weatherDataList = new java.util.ArrayList<>();
         ForecastWeatherData forecastWeatherData = new ForecastWeatherData();
-
-        for (int i=0;i<=10;i++) {
-            WeatherData weatherData = new WeatherData();
-            weatherData.setTemperatureC(15+i);
-            weatherData.setWindKph(26+i);
-            weatherData.setPrecipitationMm(i);
-            weatherData.setWillRain(true);
-            weatherData.setWillSnow(false);
+        for (int i = 0; i <= 10; i++) {
+            WeatherData weatherData = new WeatherData()
+                    .setTemperatureC(15 + i)
+                    .setWindKph(26 + i)
+                    .setPrecipitationMm(i)
+                    .setWillRain(true)
+                    .setWillSnow(false);
             forecastWeatherData.getHourlyWeatherForecasts().add(weatherData);
         }
         weatherDataList.add(forecastWeatherData);
 
-        ExtremeWeatherService extremeWeatherService = new ExtremeWeatherService();
+        //when
         InternalWeatherData internalWeatherData = extremeWeatherService.getSummary(weatherDataList);
 
+        //then
         assertThat(internalWeatherData.getTemperatureLevel()).isEqualTo(TemperatureLevel.WARM);
         assertThat(internalWeatherData.getTemperature()).isEqualTo(15);
         assertThat(internalWeatherData.getPrecipitationIntensity()).isEqualTo(PrecipitationIntensity.MEDIUM);
@@ -72,34 +74,37 @@ class ExtremeWeatherServiceTest {
 
     @Test
     void twoLocationsMultipleForecastsTest() {
+        //given
         List<ForecastWeatherData> weatherDataList = new java.util.ArrayList<>();
         ForecastWeatherData forecastWeatherData1 = new ForecastWeatherData();
         ForecastWeatherData forecastWeatherData2 = new ForecastWeatherData();
-
-        for (int i=0;i<=10;i++) {
-            WeatherData weatherData = new WeatherData();
-            WeatherData weatherData2 = new WeatherData();
-            weatherData.setTemperatureC(15+i);
-            weatherData2.setTemperatureC(15-i);
-            weatherData.setWindKph(8+i);
-            weatherData2.setWindKph(10-i);
-            weatherData.setPrecipitationMm((float)i/2);
-            weatherData2.setPrecipitationMm(0);
-            weatherData.setWillRain(false);
-            weatherData.setWillSnow(true);
+        for (int i = 0; i <= 10; i++) {
+            WeatherData weatherData = new WeatherData()
+                    .setTemperatureC(15 + i)
+                    .setWindKph(8 + i)
+                    .setPrecipitationMm((float) i / 2)
+                    .setWillRain(false)
+                    .setWillSnow(true);
+            WeatherData weatherData2 = new WeatherData()
+                    .setPrecipitationMm(0)
+                    .setWindKph(10 - i)
+                    .setTemperatureC(15 - i)
+                    .setWillRain(true)
+                    .setWillSnow(false);
             forecastWeatherData1.getHourlyWeatherForecasts().add(weatherData);
             forecastWeatherData2.getHourlyWeatherForecasts().add(weatherData2);
         }
         weatherDataList.add(forecastWeatherData1);
         weatherDataList.add(forecastWeatherData2);
 
-        ExtremeWeatherService extremeWeatherService = new ExtremeWeatherService();
+        //when
         InternalWeatherData internalWeatherData = extremeWeatherService.getSummary(weatherDataList);
 
+        //then
         assertThat(internalWeatherData.getTemperatureLevel()).isEqualTo(TemperatureLevel.WARM);
         assertThat(internalWeatherData.getTemperature()).isEqualTo(5);
         assertThat(internalWeatherData.getPrecipitationIntensity()).isEqualTo(PrecipitationIntensity.WEAK);
-        assertThat(internalWeatherData.getPrecipitationType()).isEqualTo(PrecipitationType.SNOW);
+        assertThat(internalWeatherData.getPrecipitationType()).isEqualTo(PrecipitationType.BOTH);
         assertThat(internalWeatherData.getPrecipitationInMm()).isEqualTo(5);
         assertThat(internalWeatherData.getWindIntensity()).isEqualTo(WindIntensity.BREEZE);
         assertThat(internalWeatherData.getWindInMps()).isEqualTo(5);
