@@ -99,6 +99,7 @@ class GuiTestServiceWithoutDelayTestIT {
         robot.clickOn("#searchDestinationTextField");
         robot.write(LOCATION_END);
         robot.type(KeyCode.ENTER);
+
         assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
                 .hasText(LOCATION_START + CITY_NAMES_SEPARATOR + LOCATION_END);
         assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
@@ -113,6 +114,7 @@ class GuiTestServiceWithoutDelayTestIT {
         robot.clickOn("#searchDestinationTextField");
         robot.write(LOCATION_END);
         robot.clickOn("#searchButton");
+
         assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
                 .hasText(LOCATION_START + CITY_NAMES_SEPARATOR + LOCATION_END);
         assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
@@ -131,6 +133,7 @@ class GuiTestServiceWithoutDelayTestIT {
         robot.clickOn("#timeEndTextField");
         robot.write(VALID_LATE_TIME);
         robot.type(KeyCode.ENTER);
+
         assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
                 .hasText(LOCATION_START + CITY_NAMES_SEPARATOR + LOCATION_END);
         assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
@@ -149,6 +152,7 @@ class GuiTestServiceWithoutDelayTestIT {
         robot.clickOn("#timeStartTextField");
         robot.write(VALID_EARLY_TIME);
         robot.type(KeyCode.ENTER);
+
         assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
                 .hasText(LOCATION_START + CITY_NAMES_SEPARATOR + LOCATION_END);
         assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
@@ -159,6 +163,7 @@ class GuiTestServiceWithoutDelayTestIT {
     @Test
     void noWeatherInformationOnEmptyPrompt(FxRobot robot) {
         robot.clickOn("#searchButton");
+
         assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
                 .hasText("");
         assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))

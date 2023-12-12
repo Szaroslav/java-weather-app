@@ -96,6 +96,7 @@ class GuiTestServiceErrorTestIT {
         robot.write(LOCATION_INVALID);
         robot.clickOn("#searchButton");
         assertThat(robot.lookup("#errorLabel").queryAs(Label.class)).hasText("No matching location found.");
+
         robot.clickOn("#searchTextField");
         robot.type(KeyCode.BACK_SPACE, LOCATION_INVALID.length());
         robot.write(LOCATION_VALID);
@@ -123,16 +124,19 @@ class GuiTestServiceErrorTestIT {
         robot.write(VALID_EARLY_TIME);
         robot.clickOn("#searchButton");
         assertThat(robot.lookup("#errorLabel").queryAs(Label.class)).hasText(TIME_INVALID_MESSAGE);
+
         robot.clickOn("#timeStartTextField");
         robot.type(KeyCode.BACK_SPACE, VALID_EARLY_TIME.length());
         robot.clickOn("#timeEndTextField");
         robot.write(VALID_EARLY_TIME);
         robot.clickOn("#searchButton");
         assertThat(robot.lookup("#errorLabel").queryAs(Label.class)).hasText(TIME_INVALID_MESSAGE);
+
         robot.clickOn("#timeStartTextField");
         robot.write(VALID_LATE_TIME);
         robot.clickOn("#searchButton");
         assertThat(robot.lookup("#errorLabel").queryAs(Label.class)).hasText(TIME_INVALID_MESSAGE);
+
         robot.clickOn("#timeStartTextField");
         robot.type(KeyCode.BACK_SPACE, VALID_LATE_TIME.length());
         robot.write(VALID_EARLY_TIME);
