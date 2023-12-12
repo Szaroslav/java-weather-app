@@ -61,7 +61,7 @@ class GuiTestServiceColorTestIT {
                     weatherData.setWindIntensity(WindIntensity.BREEZE);
                     weatherData.setPrecipitationIntensity(PrecipitationIntensity.WEAK);
                     weatherData.setPrecipitationType(PrecipitationType.NONE);
-                    weatherData.setTemperature(TEMP);
+                    weatherData.setApparentTemperature(TEMP);
                     weatherData.setWindInMps(WIND);
                     weatherData.setPrecipitationInMm(RAIN);
                     return weatherData;
@@ -74,7 +74,7 @@ class GuiTestServiceColorTestIT {
                     weatherData.setWindIntensity(WindIntensity.WINDY);
                     weatherData.setPrecipitationIntensity(PrecipitationIntensity.MEDIUM);
                     weatherData.setPrecipitationType(PrecipitationType.RAIN);
-                    weatherData.setTemperature(TEMP);
+                    weatherData.setApparentTemperature(TEMP);
                     weatherData.setWindInMps(WIND);
                     weatherData.setPrecipitationInMm(RAIN);
                     return weatherData;
@@ -87,7 +87,7 @@ class GuiTestServiceColorTestIT {
                     weatherData.setWindIntensity(WindIntensity.STORM);
                     weatherData.setPrecipitationIntensity(PrecipitationIntensity.STRONG);
                     weatherData.setPrecipitationType(PrecipitationType.SNOW);
-                    weatherData.setTemperature(TEMP);
+                    weatherData.setApparentTemperature(TEMP);
                     weatherData.setWindInMps(WIND);
                     weatherData.setPrecipitationInMm(RAIN);
                     return weatherData;
@@ -100,7 +100,7 @@ class GuiTestServiceColorTestIT {
                     weatherData.setWindIntensity(WindIntensity.WINDY);
                     weatherData.setPrecipitationIntensity(PrecipitationIntensity.MEDIUM);
                     weatherData.setPrecipitationType(PrecipitationType.BOTH);
-                    weatherData.setTemperature(TEMP);
+                    weatherData.setApparentTemperature(TEMP);
                     weatherData.setWindInMps(WIND);
                     weatherData.setPrecipitationInMm(RAIN);
                     return weatherData;

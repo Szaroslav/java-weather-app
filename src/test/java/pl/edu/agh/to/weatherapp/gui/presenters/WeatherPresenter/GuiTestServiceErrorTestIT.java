@@ -56,7 +56,7 @@ class GuiTestServiceErrorTestIT {
                     weatherData.setWindIntensity(WindIntensity.WINDY);
                     weatherData.setPrecipitationIntensity(PrecipitationIntensity.WEAK);
                     weatherData.setPrecipitationType(PrecipitationType.BOTH);
-                    weatherData.setTemperature(TEMP);
+                    weatherData.setApparentTemperature(TEMP);
                     weatherData.setWindInMps(WIND);
                     weatherData.setPrecipitationInMm(RAIN);
                     return weatherData;
@@ -69,7 +69,7 @@ class GuiTestServiceErrorTestIT {
                     weatherData.setWindIntensity(WindIntensity.WINDY);
                     weatherData.setPrecipitationIntensity(PrecipitationIntensity.WEAK);
                     weatherData.setPrecipitationType(PrecipitationType.BOTH);
-                    weatherData.setTemperature(TEMP);
+                    weatherData.setApparentTemperature(TEMP);
                     weatherData.setWindInMps(WIND);
                     weatherData.setPrecipitationInMm(RAIN);
                     return weatherData;
