@@ -128,6 +128,7 @@ class GuiTestServiceColorTestIT {
         robot.clickOn("#searchTextField");
         robot.write(HOT_BREEZE_WEAK_NONE);
         robot.type(KeyCode.ENTER);
+
         assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
                 .hasText(HOT_BREEZE_WEAK_NONE);
         assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
@@ -136,6 +137,7 @@ class GuiTestServiceColorTestIT {
                 .hasText(RAIN + RAIN_SUFFIX);
         assertThat(robot.lookup("#windLabel").queryAs(Label.class))
                 .hasText(WIND + WIND_SUFFIX);
+
         String color = COLOR_GREEN;
         Assertions.assertThat(robot.lookup("#temperatureBox").queryAs(StackPane.class).getStyleClass()).contains(COLOR_CLASS_GREEN);
         Assertions.assertThat(robot.lookup("#precipitationLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(color));
@@ -155,6 +157,7 @@ class GuiTestServiceColorTestIT {
         robot.clickOn("#searchTextField");
         robot.write(WARM_WINDY_MEDIUM_RAIN);
         robot.type(KeyCode.ENTER);
+
         assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
                 .hasText(WARM_WINDY_MEDIUM_RAIN);
         assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
@@ -163,6 +166,7 @@ class GuiTestServiceColorTestIT {
                 .hasText(RAIN + RAIN_SUFFIX);
         assertThat(robot.lookup("#windLabel").queryAs(Label.class))
                 .hasText(WIND + WIND_SUFFIX);
+
         Assertions.assertThat(robot.lookup("#temperatureBox").queryAs(StackPane.class).getStyleClass()).contains(COLOR_CLASS_ORANGE);
         Assertions.assertThat(robot.lookup("#precipitationLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(COLOR_ORANGE));
         Assertions.assertThat(robot.lookup("#windLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(COLOR_ORANGE));
@@ -180,6 +184,7 @@ class GuiTestServiceColorTestIT {
         robot.clickOn("#searchTextField");
         robot.write(COLD_STORM_STRONG_SNOW);
         robot.type(KeyCode.ENTER);
+
         assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
                 .hasText(COLD_STORM_STRONG_SNOW);
         assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
@@ -188,6 +193,7 @@ class GuiTestServiceColorTestIT {
                 .hasText(RAIN + RAIN_SUFFIX);
         assertThat(robot.lookup("#windLabel").queryAs(Label.class))
                 .hasText(WIND + WIND_SUFFIX);
+
         String color = COLOR_RED;
         Assertions.assertThat(robot.lookup("#temperatureBox").queryAs(StackPane.class).getStyleClass()).contains(COLOR_CLASS_RED);
         Assertions.assertThat(robot.lookup("#precipitationLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(color));
@@ -206,6 +212,7 @@ class GuiTestServiceColorTestIT {
         robot.clickOn("#searchTextField");
         robot.write(COLD_WINDY_WEAK_BOTH);
         robot.type(KeyCode.ENTER);
+
         assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
                 .hasText(COLD_WINDY_WEAK_BOTH);
         assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
@@ -214,6 +221,7 @@ class GuiTestServiceColorTestIT {
                 .hasText(RAIN + RAIN_SUFFIX);
         assertThat(robot.lookup("#windLabel").queryAs(Label.class))
                 .hasText(WIND + WIND_SUFFIX);
+
         Assertions.assertThat(robot.lookup("#temperatureBox").queryAs(StackPane.class).getStyleClass()).contains(COLOR_CLASS_RED);
         Assertions.assertThat(robot.lookup("#precipitationLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(COLOR_YELLOW));
         Assertions.assertThat(robot.lookup("#windLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(COLOR_ORANGE));
@@ -237,6 +245,7 @@ class GuiTestServiceColorTestIT {
         Assertions.assertThat(robot.lookup("#windSVGPath").queryAs(SVGPath.class).getStroke()).isEqualTo(Color.web(COLOR_GREEN));
         Assertions.assertThat(robot.lookup("#noPrecipitationBackLine").queryAs(Line.class).getStroke()).isEqualTo(Color.web(COLOR_BACKGROUND));
         Assertions.assertThat(robot.lookup("#noPrecipitationLine").queryAs(Line.class).getStroke()).isEqualTo(Color.web(COLOR_GREEN));
+
         robot.clickOn("#searchTextField");
         robot.type(KeyCode.BACK_SPACE, HOT_BREEZE_WEAK_NONE.length());
         robot.write(WARM_WINDY_MEDIUM_RAIN);
@@ -246,6 +255,7 @@ class GuiTestServiceColorTestIT {
         Assertions.assertThat(robot.lookup("#windLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(COLOR_ORANGE));
         Assertions.assertThat(robot.lookup("#windSVGPath").queryAs(SVGPath.class).getStroke()).isEqualTo(Color.web(COLOR_ORANGE));
         Assertions.assertThat(robot.lookup("#rainSVGPath").queryAs(SVGPath.class).getFill()).isEqualTo(Color.web(COLOR_ORANGE));
+
         robot.clickOn("#searchTextField");
         robot.type(KeyCode.BACK_SPACE, WARM_WINDY_MEDIUM_RAIN.length());
         robot.write(COLD_STORM_STRONG_SNOW);
@@ -281,6 +291,7 @@ class GuiTestServiceColorTestIT {
         Assertions.assertThat(robot.lookup("#windLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(COLOR_RED));
         Assertions.assertThat(robot.lookup("#windSVGPath").queryAs(SVGPath.class).getStroke()).isEqualTo(Color.web(COLOR_RED));
         Assertions.assertThat(robot.lookup("#snowSVGPath").queryAs(SVGPath.class).getFill()).isEqualTo(Color.web(COLOR_RED));
+
         robot.clickOn("#searchTextField");
         robot.type(KeyCode.BACK_SPACE, COLD_STORM_STRONG_SNOW.length());
         robot.write(WARM_WINDY_MEDIUM_RAIN);
@@ -290,6 +301,7 @@ class GuiTestServiceColorTestIT {
         Assertions.assertThat(robot.lookup("#windLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(COLOR_ORANGE));
         Assertions.assertThat(robot.lookup("#windSVGPath").queryAs(SVGPath.class).getStroke()).isEqualTo(Color.web(COLOR_ORANGE));
         Assertions.assertThat(robot.lookup("#rainSVGPath").queryAs(SVGPath.class).getFill()).isEqualTo(Color.web(COLOR_ORANGE));
+
         robot.clickOn("#searchTextField");
         robot.type(KeyCode.BACK_SPACE, WARM_WINDY_MEDIUM_RAIN.length());
         robot.write(HOT_BREEZE_WEAK_NONE);

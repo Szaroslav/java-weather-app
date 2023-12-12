@@ -92,6 +92,7 @@ class GuiTestServiceDelayTestIT {
                 .hasText("");
         Assertions.assertThat(robot.lookup("#temperatureLabel").queryAs(Label.class))
                 .hasText("");
+
         robot.clickOn("#myButton");
         Assertions.assertThat(robot.lookup("#myButton").queryAs(Button.class))
                 .hasText(BUTTON_TEXT_AFTER_CLICK);
