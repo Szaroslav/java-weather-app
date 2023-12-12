@@ -19,10 +19,16 @@ import org.mockito.stubbing.Answer;
 import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
-import pl.edu.agh.to.weatherapp.model.internal.*;
+import pl.edu.agh.to.weatherapp.model.internal.InternalWeatherData;
+import pl.edu.agh.to.weatherapp.model.internal.PrecipitationIntensity;
+import pl.edu.agh.to.weatherapp.model.internal.PrecipitationType;
+import pl.edu.agh.to.weatherapp.model.internal.TemperatureLevel;
+import pl.edu.agh.to.weatherapp.model.internal.WindIntensity;
 import pl.edu.agh.to.weatherapp.presenters.WeatherPresenter;
 import pl.edu.agh.to.weatherapp.weather.WeatherService;
+
 import java.io.IOException;
+
 import static org.testfx.assertions.api.Assertions.assertThat;
 
 @ExtendWith(ApplicationExtension.class)
@@ -30,6 +36,7 @@ class GuiTestServiceColorTestIT {
     private static final String WIND_SUFFIX = "m/s";
     private static final String RAIN_SUFFIX = "mm";
     private static final String COLOR_GREEN = "#77dd77";
+    private static final String COLOR_YELLOW = "#FFD500";
     private static final String COLOR_ORANGE = "#FFB347";
     private static final String COLOR_RED = "#FF6961";
     private static final String COLOR_BACKGROUND = "#f4f4f4";
@@ -98,7 +105,7 @@ class GuiTestServiceColorTestIT {
                     weatherData.getLocationNames().add(COLD_WINDY_WEAK_BOTH);
                     weatherData.setTemperatureLevel(TemperatureLevel.COLD);
                     weatherData.setWindIntensity(WindIntensity.WINDY);
-                    weatherData.setPrecipitationIntensity(PrecipitationIntensity.MEDIUM);
+                    weatherData.setPrecipitationIntensity(PrecipitationIntensity.WEAK);
                     weatherData.setPrecipitationType(PrecipitationType.BOTH);
                     weatherData.setApparentTemperature(TEMP);
                     weatherData.setWindInMps(WIND);
@@ -156,13 +163,12 @@ class GuiTestServiceColorTestIT {
                 .hasText(RAIN + RAIN_SUFFIX);
         assertThat(robot.lookup("#windLabel").queryAs(Label.class))
                 .hasText(WIND + WIND_SUFFIX);
-        String color = COLOR_ORANGE;
         Assertions.assertThat(robot.lookup("#temperatureBox").queryAs(StackPane.class).getStyleClass()).contains(COLOR_CLASS_ORANGE);
-        Assertions.assertThat(robot.lookup("#precipitationLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(color));
-        Assertions.assertThat(robot.lookup("#windLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(color));
-        Assertions.assertThat(robot.lookup("#windSVGPath").queryAs(SVGPath.class).getStroke()).isEqualTo(Color.web(color));
+        Assertions.assertThat(robot.lookup("#precipitationLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(COLOR_ORANGE));
+        Assertions.assertThat(robot.lookup("#windLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(COLOR_ORANGE));
+        Assertions.assertThat(robot.lookup("#windSVGPath").queryAs(SVGPath.class).getStroke()).isEqualTo(Color.web(COLOR_ORANGE));
         Assertions.assertThat(robot.lookup("#rainSVGPath").queryAs(SVGPath.class).isVisible()).isTrue();
-        Assertions.assertThat(robot.lookup("#rainSVGPath").queryAs(SVGPath.class).getFill()).isEqualTo(Color.web(COLOR_RED));
+        Assertions.assertThat(robot.lookup("#rainSVGPath").queryAs(SVGPath.class).getFill()).isEqualTo(Color.web(COLOR_ORANGE));
         Assertions.assertThat(robot.lookup("#snowSVGPath").queryAs(SVGPath.class).isVisible()).isFalse();
         Assertions.assertThat(robot.lookup("#snowRainSVGPath").queryAs(SVGPath.class).isVisible()).isFalse();
         Assertions.assertThat(robot.lookup("#noPrecipitationBackLine").queryAs(Line.class).isVisible()).isFalse();
@@ -209,13 +215,13 @@ class GuiTestServiceColorTestIT {
         assertThat(robot.lookup("#windLabel").queryAs(Label.class))
                 .hasText(WIND + WIND_SUFFIX);
         Assertions.assertThat(robot.lookup("#temperatureBox").queryAs(StackPane.class).getStyleClass()).contains(COLOR_CLASS_RED);
-        Assertions.assertThat(robot.lookup("#precipitationLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(COLOR_ORANGE));
+        Assertions.assertThat(robot.lookup("#precipitationLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(COLOR_YELLOW));
         Assertions.assertThat(robot.lookup("#windLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(COLOR_ORANGE));
         Assertions.assertThat(robot.lookup("#windSVGPath").queryAs(SVGPath.class).getStroke()).isEqualTo(Color.web(COLOR_ORANGE));
         Assertions.assertThat(robot.lookup("#rainSVGPath").queryAs(SVGPath.class).isVisible()).isFalse();
         Assertions.assertThat(robot.lookup("#snowSVGPath").queryAs(SVGPath.class).isVisible()).isFalse();
         Assertions.assertThat(robot.lookup("#snowRainSVGPath").queryAs(SVGPath.class).isVisible()).isTrue();
-        Assertions.assertThat(robot.lookup("#snowRainSVGPath").queryAs(SVGPath.class).getFill()).isEqualTo(Color.web(COLOR_RED));
+        Assertions.assertThat(robot.lookup("#snowRainSVGPath").queryAs(SVGPath.class).getFill()).isEqualTo(Color.web(COLOR_YELLOW));
         Assertions.assertThat(robot.lookup("#noPrecipitationBackLine").queryAs(Line.class).isVisible()).isFalse();
         Assertions.assertThat(robot.lookup("#noPrecipitationLine").queryAs(Line.class).isVisible()).isFalse();
     }
@@ -225,23 +231,21 @@ class GuiTestServiceColorTestIT {
         robot.clickOn("#searchTextField");
         robot.write(HOT_BREEZE_WEAK_NONE);
         robot.type(KeyCode.ENTER);
-        String color = COLOR_GREEN;
         Assertions.assertThat(robot.lookup("#temperatureBox").queryAs(StackPane.class).getStyleClass()).contains(COLOR_CLASS_GREEN);
-        Assertions.assertThat(robot.lookup("#precipitationLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(color));
-        Assertions.assertThat(robot.lookup("#windLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(color));
-        Assertions.assertThat(robot.lookup("#windSVGPath").queryAs(SVGPath.class).getStroke()).isEqualTo(Color.web(color));
+        Assertions.assertThat(robot.lookup("#precipitationLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(COLOR_GREEN));
+        Assertions.assertThat(robot.lookup("#windLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(COLOR_GREEN));
+        Assertions.assertThat(robot.lookup("#windSVGPath").queryAs(SVGPath.class).getStroke()).isEqualTo(Color.web(COLOR_GREEN));
         Assertions.assertThat(robot.lookup("#noPrecipitationBackLine").queryAs(Line.class).getStroke()).isEqualTo(Color.web(COLOR_BACKGROUND));
-        Assertions.assertThat(robot.lookup("#noPrecipitationLine").queryAs(Line.class).getStroke()).isEqualTo(Color.web(color));
+        Assertions.assertThat(robot.lookup("#noPrecipitationLine").queryAs(Line.class).getStroke()).isEqualTo(Color.web(COLOR_GREEN));
         robot.clickOn("#searchTextField");
         robot.type(KeyCode.BACK_SPACE, HOT_BREEZE_WEAK_NONE.length());
         robot.write(WARM_WINDY_MEDIUM_RAIN);
         robot.type(KeyCode.ENTER);
-        color = COLOR_ORANGE;
         Assertions.assertThat(robot.lookup("#temperatureBox").queryAs(StackPane.class).getStyleClass()).contains(COLOR_CLASS_ORANGE);
-        Assertions.assertThat(robot.lookup("#precipitationLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(color));
-        Assertions.assertThat(robot.lookup("#windLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(color));
-        Assertions.assertThat(robot.lookup("#windSVGPath").queryAs(SVGPath.class).getStroke()).isEqualTo(Color.web(color));
-        Assertions.assertThat(robot.lookup("#rainSVGPath").queryAs(SVGPath.class).getFill()).isEqualTo(Color.web(COLOR_RED));
+        Assertions.assertThat(robot.lookup("#precipitationLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(COLOR_ORANGE));
+        Assertions.assertThat(robot.lookup("#windLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(COLOR_ORANGE));
+        Assertions.assertThat(robot.lookup("#windSVGPath").queryAs(SVGPath.class).getStroke()).isEqualTo(Color.web(COLOR_ORANGE));
+        Assertions.assertThat(robot.lookup("#rainSVGPath").queryAs(SVGPath.class).getFill()).isEqualTo(Color.web(COLOR_ORANGE));
         robot.clickOn("#searchTextField");
         robot.type(KeyCode.BACK_SPACE, WARM_WINDY_MEDIUM_RAIN.length());
         robot.write(COLD_STORM_STRONG_SNOW);
@@ -254,11 +258,10 @@ class GuiTestServiceColorTestIT {
                 .hasText(RAIN + RAIN_SUFFIX);
         assertThat(robot.lookup("#windLabel").queryAs(Label.class))
                 .hasText(WIND + WIND_SUFFIX);
-        color = COLOR_RED;
         Assertions.assertThat(robot.lookup("#temperatureBox").queryAs(StackPane.class).getStyleClass()).contains(COLOR_CLASS_RED);
-        Assertions.assertThat(robot.lookup("#precipitationLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(color));
-        Assertions.assertThat(robot.lookup("#windLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(color));
-        Assertions.assertThat(robot.lookup("#windSVGPath").queryAs(SVGPath.class).getStroke()).isEqualTo(Color.web(color));
+        Assertions.assertThat(robot.lookup("#precipitationLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(COLOR_RED));
+        Assertions.assertThat(robot.lookup("#windLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(COLOR_RED));
+        Assertions.assertThat(robot.lookup("#windSVGPath").queryAs(SVGPath.class).getStroke()).isEqualTo(Color.web(COLOR_RED));
         Assertions.assertThat(robot.lookup("#rainSVGPath").queryAs(SVGPath.class).isVisible()).isFalse();
         Assertions.assertThat(robot.lookup("#snowSVGPath").queryAs(SVGPath.class).isVisible()).isTrue();
         Assertions.assertThat(robot.lookup("#snowSVGPath").queryAs(SVGPath.class).getFill()).isEqualTo(Color.web(COLOR_RED));
@@ -267,28 +270,26 @@ class GuiTestServiceColorTestIT {
         Assertions.assertThat(robot.lookup("#noPrecipitationLine").queryAs(Line.class).isVisible()).isFalse();
     }
 
+
     @Test
     void colorsChangeWithDataChangeReversed(FxRobot robot){
-        String color;
         robot.clickOn("#searchTextField");
         robot.write(COLD_STORM_STRONG_SNOW);
         robot.type(KeyCode.ENTER);
-        color = COLOR_RED;
         Assertions.assertThat(robot.lookup("#temperatureBox").queryAs(StackPane.class).getStyleClass()).contains(COLOR_CLASS_RED);
-        Assertions.assertThat(robot.lookup("#precipitationLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(color));
-        Assertions.assertThat(robot.lookup("#windLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(color));
-        Assertions.assertThat(robot.lookup("#windSVGPath").queryAs(SVGPath.class).getStroke()).isEqualTo(Color.web(color));
+        Assertions.assertThat(robot.lookup("#precipitationLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(COLOR_RED));
+        Assertions.assertThat(robot.lookup("#windLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(COLOR_RED));
+        Assertions.assertThat(robot.lookup("#windSVGPath").queryAs(SVGPath.class).getStroke()).isEqualTo(Color.web(COLOR_RED));
         Assertions.assertThat(robot.lookup("#snowSVGPath").queryAs(SVGPath.class).getFill()).isEqualTo(Color.web(COLOR_RED));
         robot.clickOn("#searchTextField");
         robot.type(KeyCode.BACK_SPACE, COLD_STORM_STRONG_SNOW.length());
         robot.write(WARM_WINDY_MEDIUM_RAIN);
         robot.type(KeyCode.ENTER);
-        color = COLOR_ORANGE;
         Assertions.assertThat(robot.lookup("#temperatureBox").queryAs(StackPane.class).getStyleClass()).contains(COLOR_CLASS_ORANGE);
-        Assertions.assertThat(robot.lookup("#precipitationLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(color));
-        Assertions.assertThat(robot.lookup("#windLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(color));
-        Assertions.assertThat(robot.lookup("#windSVGPath").queryAs(SVGPath.class).getStroke()).isEqualTo(Color.web(color));
-        Assertions.assertThat(robot.lookup("#rainSVGPath").queryAs(SVGPath.class).getFill()).isEqualTo(Color.web(COLOR_RED));
+        Assertions.assertThat(robot.lookup("#precipitationLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(COLOR_ORANGE));
+        Assertions.assertThat(robot.lookup("#windLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(COLOR_ORANGE));
+        Assertions.assertThat(robot.lookup("#windSVGPath").queryAs(SVGPath.class).getStroke()).isEqualTo(Color.web(COLOR_ORANGE));
+        Assertions.assertThat(robot.lookup("#rainSVGPath").queryAs(SVGPath.class).getFill()).isEqualTo(Color.web(COLOR_ORANGE));
         robot.clickOn("#searchTextField");
         robot.type(KeyCode.BACK_SPACE, WARM_WINDY_MEDIUM_RAIN.length());
         robot.write(HOT_BREEZE_WEAK_NONE);
@@ -301,17 +302,16 @@ class GuiTestServiceColorTestIT {
                 .hasText(RAIN + RAIN_SUFFIX);
         assertThat(robot.lookup("#windLabel").queryAs(Label.class))
                 .hasText(WIND + WIND_SUFFIX);
-        color = COLOR_GREEN;
         Assertions.assertThat(robot.lookup("#temperatureBox").queryAs(StackPane.class).getStyleClass()).contains(COLOR_CLASS_GREEN);
-        Assertions.assertThat(robot.lookup("#precipitationLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(color));
-        Assertions.assertThat(robot.lookup("#windLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(color));
-        Assertions.assertThat(robot.lookup("#windSVGPath").queryAs(SVGPath.class).getStroke()).isEqualTo(Color.web(color));
+        Assertions.assertThat(robot.lookup("#precipitationLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(COLOR_GREEN));
+        Assertions.assertThat(robot.lookup("#windLabel").queryAs(Label.class).getTextFill()).isEqualTo(Paint.valueOf(COLOR_GREEN));
+        Assertions.assertThat(robot.lookup("#windSVGPath").queryAs(SVGPath.class).getStroke()).isEqualTo(Color.web(COLOR_GREEN));
         Assertions.assertThat(robot.lookup("#rainSVGPath").queryAs(SVGPath.class).isVisible()).isFalse();
         Assertions.assertThat(robot.lookup("#snowSVGPath").queryAs(SVGPath.class).isVisible()).isFalse();
         Assertions.assertThat(robot.lookup("#snowRainSVGPath").queryAs(SVGPath.class).isVisible()).isTrue();
         Assertions.assertThat(robot.lookup("#noPrecipitationBackLine").queryAs(Line.class).isVisible()).isTrue();
         Assertions.assertThat(robot.lookup("#noPrecipitationLine").queryAs(Line.class).isVisible()).isTrue();
         Assertions.assertThat(robot.lookup("#noPrecipitationBackLine").queryAs(Line.class).getStroke()).isEqualTo(Color.web(COLOR_BACKGROUND));
-        Assertions.assertThat(robot.lookup("#noPrecipitationLine").queryAs(Line.class).getStroke()).isEqualTo(Color.web(color));
+        Assertions.assertThat(robot.lookup("#noPrecipitationLine").queryAs(Line.class).getStroke()).isEqualTo(Color.web(COLOR_GREEN));
     }
 }

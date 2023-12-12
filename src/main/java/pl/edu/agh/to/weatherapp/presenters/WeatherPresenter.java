@@ -71,6 +71,7 @@ public class WeatherPresenter {
     private static final String WIND_SUFFIX = "m/s";
     private static final String PRECIPITATION_SUFFIX = "mm";
     private static final String COLOR_GREEN = "#77dd77";
+    private static final String COLOR_YELLOW = "#FFD500";
     private static final String COLOR_ORANGE = "#FFB347";
     private static final String COLOR_RED = "#FF6961";
 
@@ -135,8 +136,9 @@ public class WeatherPresenter {
             clearErrorLabel();
             showLocation(weatherData.getLocationNames());
             showTemperature(String.valueOf(weatherData.getApparentTemperature()), weatherData.getTemperatureLevel());
-            showPrecipitation(String.valueOf(weatherData.getPrecipitationInMm()), weatherData.getPrecipitationIntensity());
-            showPrecipitationType(weatherData.getPrecipitationType());
+            showPrecipitation(weatherData.getPrecipitationType(),
+                    String.valueOf(weatherData.getPrecipitationInMm()),
+                    weatherData.getPrecipitationIntensity());
             showWind(String.valueOf(weatherData.getWindInMps()), weatherData.getWindIntensity());
             showWeatherInfo();
             toggleSearchButtonVisibility();
@@ -196,30 +198,31 @@ public class WeatherPresenter {
         windLabel.textFillProperty().setValue(Paint.valueOf(backgroundColor));
     }
 
-    private void showPrecipitation(String precipitationInMm, PrecipitationIntensity precipitationIntensity) {
+    private void showPrecipitation(PrecipitationType precipitationType, String precipitationInMm, PrecipitationIntensity precipitationIntensity) {
+        resetPrecipitationType();
         String backgroundColor = switch (precipitationIntensity) {
-            case WEAK -> COLOR_GREEN;
+            case WEAK -> COLOR_YELLOW;
             case MEDIUM -> COLOR_ORANGE;
             case STRONG -> COLOR_RED;
         };
-        precipitationLabel.setText(precipitationInMm + PRECIPITATION_SUFFIX);
-        precipitationLabel.textFillProperty().setValue(Paint.valueOf(backgroundColor));
-    }
-
-    private void showPrecipitationType(PrecipitationType precipitationType) {
-        resetPrecipitationType();
         switch (precipitationType) {
             case SNOW -> {
                 snowSVGPath.setVisible(true);
-                snowSVGPath.setFill(Color.web(COLOR_RED));
+                snowSVGPath.setFill(Color.web(backgroundColor));
+                precipitationLabel.setText(precipitationInMm + PRECIPITATION_SUFFIX);
+                precipitationLabel.textFillProperty().setValue(Paint.valueOf(backgroundColor));
             }
             case RAIN -> {
                 rainSVGPath.setVisible(true);
-                rainSVGPath.setFill(Color.web(COLOR_RED));
+                rainSVGPath.setFill(Color.web(backgroundColor));
+                precipitationLabel.setText(precipitationInMm + PRECIPITATION_SUFFIX);
+                precipitationLabel.textFillProperty().setValue(Paint.valueOf(backgroundColor));
             }
             case BOTH -> {
                 snowRainSVGPath.setVisible(true);
-                snowRainSVGPath.setFill(Color.web(COLOR_RED));
+                snowRainSVGPath.setFill(Color.web(backgroundColor));
+                precipitationLabel.setText(precipitationInMm + PRECIPITATION_SUFFIX);
+                precipitationLabel.textFillProperty().setValue(Paint.valueOf(backgroundColor));
             }
             case NONE -> {
                 snowRainSVGPath.setVisible(true);
@@ -227,6 +230,8 @@ public class WeatherPresenter {
                 noPrecipitationBackLine.setVisible(true);
                 noPrecipitationLine.setVisible(true);
                 noPrecipitationLine.setFill(Color.web(COLOR_GREEN));
+                precipitationLabel.setText(precipitationInMm + PRECIPITATION_SUFFIX);
+                precipitationLabel.textFillProperty().setValue(Paint.valueOf(COLOR_GREEN));
             }
         }
     }

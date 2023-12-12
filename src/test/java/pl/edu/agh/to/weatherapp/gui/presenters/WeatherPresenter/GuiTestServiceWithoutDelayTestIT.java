@@ -15,13 +15,17 @@ import org.mockito.stubbing.Answer;
 import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
-import pl.edu.agh.to.weatherapp.model.internal.*;
+import pl.edu.agh.to.weatherapp.model.internal.InternalWeatherData;
+import pl.edu.agh.to.weatherapp.model.internal.PrecipitationIntensity;
+import pl.edu.agh.to.weatherapp.model.internal.PrecipitationType;
+import pl.edu.agh.to.weatherapp.model.internal.TemperatureLevel;
+import pl.edu.agh.to.weatherapp.model.internal.WindIntensity;
 import pl.edu.agh.to.weatherapp.presenters.WeatherPresenter;
 import pl.edu.agh.to.weatherapp.weather.WeatherService;
 
 import java.io.IOException;
 
-import static org.testfx.assertions.api.Assertions.*;
+import static org.testfx.assertions.api.Assertions.assertThat;
 
 @ExtendWith(ApplicationExtension.class)
 class GuiTestServiceWithoutDelayTestIT {
@@ -35,6 +39,7 @@ class GuiTestServiceWithoutDelayTestIT {
     private static final int END_HOUR = 24;
     private static final String VALID_EARLY_TIME = "12";
     private static final String VALID_LATE_TIME = "15";
+
     @Start
     private void start(Stage stage) throws IOException {
         stage.setTitle("Potezna wichura");
