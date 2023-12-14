@@ -112,20 +112,20 @@ public class ExtremeWeatherService implements WeatherSummaryService {
 
     private TemperatureLevel getTemperatureLevel(int minTemperature) {
         if (minTemperature < 5) return TemperatureLevel.COLD;
-        else if (minTemperature < 20) return TemperatureLevel.WARM;
-        else return TemperatureLevel.HOT;
+        if (minTemperature < 20) return TemperatureLevel.WARM;
+        return TemperatureLevel.HOT;
     }
 
     private PrecipitationIntensity getPrecipitationIntensity(int precipitationMm) {
         if (precipitationMm <= 5) return PrecipitationIntensity.WEAK;
-        else if (precipitationMm <= 10) return PrecipitationIntensity.MEDIUM;
-        else return PrecipitationIntensity.STRONG;
+        if (precipitationMm <= 10) return PrecipitationIntensity.MEDIUM;
+        return PrecipitationIntensity.STRONG;
     }
 
     private WindIntensity getWindIntensity(int maxWindInMps) {
         if (maxWindInMps <= 5) return WindIntensity.BREEZE;
-        else if (maxWindInMps <= 10) return WindIntensity.WINDY;
-        else return WindIntensity.STORM;
+        if (maxWindInMps <= 10) return WindIntensity.WINDY;
+        return WindIntensity.STORM;
     }
 
     private PrecipitationType summarisePrecipitation(List<PrecipitationType> precipitationList) {
