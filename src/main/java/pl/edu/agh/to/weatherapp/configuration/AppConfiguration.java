@@ -10,6 +10,8 @@ import pl.edu.agh.to.weatherapp.parser.JsonParser;
 import pl.edu.agh.to.weatherapp.presenters.WeatherPresenter;
 import pl.edu.agh.to.weatherapp.weather.WeatherService;
 import pl.edu.agh.to.weatherapp.weather.WeatherApiService;
+import pl.edu.agh.to.weatherapp.weather.summary.ExtremeWeatherService;
+import pl.edu.agh.to.weatherapp.weather.summary.WeatherSummaryService;
 
 import java.net.http.HttpClient;
 
@@ -19,14 +21,26 @@ public class AppConfiguration {
     @Value("${weather.apiKey}")
     private String apiKey;
 
+    @Bean(name = "apiKey")
+    public String apiKey() {
+        return apiKey;
+    }
+
     @Bean
     public WeatherPresenter weatherPresenter(WeatherService weatherService) {
         return new WeatherPresenter(weatherService);
     }
 
     @Bean
-    public WeatherService weatherService(WeatherFetcher weatherFetcher, JsonParser responseParser) {
-        return new WeatherApiService(weatherFetcher, responseParser);
+    public WeatherService weatherService(WeatherFetcher weatherFetcher,
+                                         JsonParser responseParser,
+                                         WeatherSummaryService weatherSummaryService) {
+        return new WeatherApiService(weatherFetcher, responseParser, weatherSummaryService);
+    }
+
+    @Bean
+    public WeatherSummaryService weatherSummaryService() {
+        return new ExtremeWeatherService();
     }
 
     @Bean

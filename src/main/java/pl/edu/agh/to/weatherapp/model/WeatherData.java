@@ -1,31 +1,23 @@
 package pl.edu.agh.to.weatherapp.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+import org.joda.time.DateTime;
+
+@Getter
+@Setter
+@Accessors(chain = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class WeatherData {
-    private int temp;
-    private String locationName;
+    private DateTime date;
     private String conditionIconUrl;
-
-    public int getTemp() {
-        return temp;
-    }
-
-    public void setTemp(int temp) {
-        this.temp = temp;
-    }
-
-    public String getLocationName() {
-        return locationName;
-    }
-
-    public void setLocationName(String locationName) {
-        this.locationName = locationName;
-    }
-
-    public String getConditionIconUrl() {
-        return conditionIconUrl;
-    }
-
-    public void setConditionIconUrl(String conditionIconUrl) {
-        this.conditionIconUrl = conditionIconUrl;
-    }
+    private int temperatureC;
+    private float windKph;
+    private float precipitationMm;
+    private boolean willRain;
+    private boolean willSnow;
 }
