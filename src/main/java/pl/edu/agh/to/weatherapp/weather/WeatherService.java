@@ -1,6 +1,6 @@
 package pl.edu.agh.to.weatherapp.weather;
 
-import pl.edu.agh.to.weatherapp.model.internal.InternalWeatherData;
+import pl.edu.agh.to.weatherapp.model.InternalWeatherData;
 
 public interface WeatherService {
     InternalWeatherData getWeatherData(String location);

@@ -9,7 +9,7 @@ import org.mockito.Mockito;
 import pl.edu.agh.to.weatherapp.api.WeatherApiFetcher;
 import pl.edu.agh.to.weatherapp.dto.ForecastWeatherApiDto;
 import pl.edu.agh.to.weatherapp.dto.WeatherApiDto;
-import pl.edu.agh.to.weatherapp.model.internal.InternalWeatherData;
+import pl.edu.agh.to.weatherapp.model.InternalWeatherData;
 import pl.edu.agh.to.weatherapp.parser.JsonParser;
 import pl.edu.agh.to.weatherapp.weather.summary.ExtremeWeatherService;
 

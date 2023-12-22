@@ -3,11 +3,11 @@ package pl.edu.agh.to.weatherapp.weather.summary;
 import org.junit.jupiter.api.Test;
 import pl.edu.agh.to.weatherapp.dto.ForecastWeatherApiDto;
 import pl.edu.agh.to.weatherapp.dto.WeatherApiDto;
-import pl.edu.agh.to.weatherapp.model.internal.InternalWeatherData;
-import pl.edu.agh.to.weatherapp.model.internal.PrecipitationIntensity;
-import pl.edu.agh.to.weatherapp.model.internal.PrecipitationType;
-import pl.edu.agh.to.weatherapp.model.internal.TemperatureLevel;
-import pl.edu.agh.to.weatherapp.model.internal.WindIntensity;
+import pl.edu.agh.to.weatherapp.model.InternalWeatherData;
+import pl.edu.agh.to.weatherapp.model.enums.PrecipitationIntensity;
+import pl.edu.agh.to.weatherapp.model.enums.PrecipitationType;
+import pl.edu.agh.to.weatherapp.model.enums.TemperatureLevel;
+import pl.edu.agh.to.weatherapp.model.enums.WindIntensity;
 
 import java.util.List;
 

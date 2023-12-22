@@ -3,7 +3,7 @@ package pl.edu.agh.to.weatherapp.weather;
 import org.springframework.stereotype.Service;
 import pl.edu.agh.to.weatherapp.api.WeatherFetcher;
 import pl.edu.agh.to.weatherapp.dto.ForecastWeatherApiDto;
-import pl.edu.agh.to.weatherapp.model.internal.InternalWeatherData;
+import pl.edu.agh.to.weatherapp.model.InternalWeatherData;
 import pl.edu.agh.to.weatherapp.parser.JsonParser;
 import pl.edu.agh.to.weatherapp.weather.summary.WeatherSummaryService;
 
