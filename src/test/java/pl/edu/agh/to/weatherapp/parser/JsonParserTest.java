@@ -5,7 +5,7 @@ import org.assertj.core.data.Percentage;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import pl.edu.agh.to.weatherapp.exceptions.InvalidRequest;
-import pl.edu.agh.to.weatherapp.model.ForecastWeatherData;
+import pl.edu.agh.to.weatherapp.dto.ForecastWeatherApiDto;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -43,7 +43,7 @@ public class JsonParserTest {
 
     @Test
     void parseValidResponse() {
-        ForecastWeatherData forecast = jsonParser.parseForecast(validJsonContent);
+        ForecastWeatherApiDto forecast = jsonParser.parseForecast(validJsonContent);
         assertThat(forecast.getLocationName()).isEqualTo("Cracow, Poland");
         assertThat(forecast.getHourlyWeatherForecasts()).hasSize(24);
         var weatherData = forecast.getHourlyWeatherForecasts().get(8);

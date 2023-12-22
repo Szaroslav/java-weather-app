@@ -1,8 +1,8 @@
 package pl.edu.agh.to.weatherapp.weather.summary;
 
 import org.junit.jupiter.api.Test;
-import pl.edu.agh.to.weatherapp.model.ForecastWeatherData;
-import pl.edu.agh.to.weatherapp.model.WeatherData;
+import pl.edu.agh.to.weatherapp.dto.ForecastWeatherApiDto;
+import pl.edu.agh.to.weatherapp.dto.WeatherApiDto;
 import pl.edu.agh.to.weatherapp.model.internal.InternalWeatherData;
 import pl.edu.agh.to.weatherapp.model.internal.PrecipitationIntensity;
 import pl.edu.agh.to.weatherapp.model.internal.PrecipitationType;
@@ -19,16 +19,16 @@ class ExtremeWeatherServiceTest {
     @Test
     void oneLocationOneForecastTest() {
         //given
-        List<ForecastWeatherData> weatherDataList = new java.util.ArrayList<>();
-        ForecastWeatherData forecastWeatherData = new ForecastWeatherData();
-        WeatherData weatherData = new WeatherData()
+        List<ForecastWeatherApiDto> weatherDataList = new java.util.ArrayList<>();
+        ForecastWeatherApiDto forecastWeatherDto = new ForecastWeatherApiDto();
+        WeatherApiDto weatherDto = new WeatherApiDto()
                 .setTemperatureC(30)
                 .setWindKph(72)
                 .setPrecipitationMm(20)
                 .setWillRain(true)
                 .setWillSnow(true);
-        forecastWeatherData.getHourlyWeatherForecasts().add(weatherData);
-        weatherDataList.add(forecastWeatherData);
+        forecastWeatherDto.getHourlyWeatherForecasts().add(weatherDto);
+        weatherDataList.add(forecastWeatherDto);
 
         //when
         InternalWeatherData internalWeatherData = extremeWeatherService.getSummary(weatherDataList);
@@ -47,18 +47,18 @@ class ExtremeWeatherServiceTest {
     @Test
     void oneLocationMultipleForecastsTest() {
         //given
-        List<ForecastWeatherData> weatherDataList = new java.util.ArrayList<>();
-        ForecastWeatherData forecastWeatherData = new ForecastWeatherData();
+        List<ForecastWeatherApiDto> weatherDataList = new java.util.ArrayList<>();
+        ForecastWeatherApiDto forecastWeatherDto = new ForecastWeatherApiDto();
         for (int i = 0; i <= 10; i++) {
-            WeatherData weatherData = new WeatherData()
+            WeatherApiDto weatherDto = new WeatherApiDto()
                     .setTemperatureC(15 + i)
                     .setWindKph(26 + i)
                     .setPrecipitationMm(i)
                     .setWillRain(true)
                     .setWillSnow(false);
-            forecastWeatherData.getHourlyWeatherForecasts().add(weatherData);
+            forecastWeatherDto.getHourlyWeatherForecasts().add(weatherDto);
         }
-        weatherDataList.add(forecastWeatherData);
+        weatherDataList.add(forecastWeatherDto);
 
         //when
         InternalWeatherData internalWeatherData = extremeWeatherService.getSummary(weatherDataList);
@@ -77,27 +77,27 @@ class ExtremeWeatherServiceTest {
     @Test
     void twoLocationsMultipleForecastsTest() {
         //given
-        List<ForecastWeatherData> weatherDataList = new java.util.ArrayList<>();
-        ForecastWeatherData forecastWeatherData1 = new ForecastWeatherData();
-        ForecastWeatherData forecastWeatherData2 = new ForecastWeatherData();
+        List<ForecastWeatherApiDto> weatherDataList = new java.util.ArrayList<>();
+        ForecastWeatherApiDto forecastWeatherDto1 = new ForecastWeatherApiDto();
+        ForecastWeatherApiDto forecastWeatherDto2 = new ForecastWeatherApiDto();
         for (int i = 0; i <= 10; i++) {
-            WeatherData weatherData = new WeatherData()
+            WeatherApiDto weatherDto = new WeatherApiDto()
                     .setTemperatureC(15 + i)
                     .setWindKph(8 + i)
                     .setPrecipitationMm((float) i / 2)
                     .setWillRain(false)
                     .setWillSnow(true);
-            WeatherData weatherData2 = new WeatherData()
+            WeatherApiDto weatherDto2 = new WeatherApiDto()
                     .setPrecipitationMm(0)
                     .setWindKph(10 - i)
                     .setTemperatureC(15 - i)
                     .setWillRain(true)
                     .setWillSnow(false);
-            forecastWeatherData1.getHourlyWeatherForecasts().add(weatherData);
-            forecastWeatherData2.getHourlyWeatherForecasts().add(weatherData2);
+            forecastWeatherDto1.getHourlyWeatherForecasts().add(weatherDto);
+            forecastWeatherDto2.getHourlyWeatherForecasts().add(weatherDto2);
         }
-        weatherDataList.add(forecastWeatherData1);
-        weatherDataList.add(forecastWeatherData2);
+        weatherDataList.add(forecastWeatherDto1);
+        weatherDataList.add(forecastWeatherDto2);
 
         //when
         InternalWeatherData internalWeatherData = extremeWeatherService.getSummary(weatherDataList);

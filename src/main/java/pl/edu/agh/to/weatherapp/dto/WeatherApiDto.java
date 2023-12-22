@@ -1,4 +1,4 @@
-package pl.edu.agh.to.weatherapp.model;
+package pl.edu.agh.to.weatherapp.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import org.joda.time.DateTime;
 @Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class WeatherData {
+public class WeatherApiDto {
     private DateTime date;
     private String conditionIconUrl;
     private int temperatureC;
