@@ -3,7 +3,7 @@ package pl.edu.agh.to.weatherapp.weather;
 import org.springframework.stereotype.Service;
 import pl.edu.agh.to.weatherapp.api.WeatherFetcher;
 import pl.edu.agh.to.weatherapp.dto.ForecastWeatherApiDto;
-import pl.edu.agh.to.weatherapp.model.InternalWeatherData;
+import pl.edu.agh.to.weatherapp.model.Weather;
 import pl.edu.agh.to.weatherapp.parser.JsonParser;
 import pl.edu.agh.to.weatherapp.weather.summary.WeatherSummaryService;
 
@@ -42,29 +42,29 @@ public class WeatherApiService implements WeatherService {
     }
 
     @Override
-    public InternalWeatherData getWeatherData(String location) {
+    public Weather getWeatherData(String location) {
         return getWeatherData(location, 0, 24);
     }
 
     @Override
-    public InternalWeatherData getWeatherData(String location, int startHour, int endHour) {
+    public Weather getWeatherData(String location, int startHour, int endHour) {
         ForecastWeatherApiDto forecast = getForecastWeatherData(location, startHour, endHour);
-        InternalWeatherData weather = weatherSummaryService.getSummary(Collections.singletonList(forecast));
+        Weather weather = weatherSummaryService.getSummary(Collections.singletonList(forecast));
         weather.getLocationNames().add(location);
         return weather;
     }
 
     @Override
-    public InternalWeatherData getSummaryWeatherData(String startLocation, String endLocation) {
+    public Weather getSummaryWeatherData(String startLocation, String endLocation) {
         return getSummaryWeatherData(startLocation, endLocation, 0, 24);
     }
 
     @Override
-    public InternalWeatherData getSummaryWeatherData(String startLocation, String endLocation, int startHour, int endHour) {
+    public Weather getSummaryWeatherData(String startLocation, String endLocation, int startHour, int endHour) {
         List<ForecastWeatherApiDto> weatherList = new ArrayList<>();
         weatherList.add(getForecastWeatherData(startLocation, startHour, endHour));
         weatherList.add(getForecastWeatherData(endLocation, startHour, endHour));
-        InternalWeatherData summary = weatherSummaryService.getSummary(weatherList);
+        Weather summary = weatherSummaryService.getSummary(weatherList);
         summary.getLocationNames().add(startLocation);
         summary.getLocationNames().add(endLocation);
         return summary;

@@ -3,7 +3,7 @@ package pl.edu.agh.to.weatherapp.weather.summary;
 import org.junit.jupiter.api.Test;
 import pl.edu.agh.to.weatherapp.dto.ForecastWeatherApiDto;
 import pl.edu.agh.to.weatherapp.dto.WeatherApiDto;
-import pl.edu.agh.to.weatherapp.model.InternalWeatherData;
+import pl.edu.agh.to.weatherapp.model.Weather;
 import pl.edu.agh.to.weatherapp.model.enums.PrecipitationIntensity;
 import pl.edu.agh.to.weatherapp.model.enums.PrecipitationType;
 import pl.edu.agh.to.weatherapp.model.enums.TemperatureLevel;
@@ -31,17 +31,17 @@ class ExtremeWeatherServiceTest {
         weatherDataList.add(forecastWeatherDto);
 
         //when
-        InternalWeatherData internalWeatherData = extremeWeatherService.getSummary(weatherDataList);
+        Weather weather = extremeWeatherService.getSummary(weatherDataList);
 
         //then
-        assertThat(internalWeatherData.getTemperatureLevel()).isEqualTo(TemperatureLevel.HOT);
-        assertThat(internalWeatherData.getTemperature()).isEqualTo(30);
-        assertThat(internalWeatherData.getApparentTemperature()).isEqualTo(32);
-        assertThat(internalWeatherData.getPrecipitationIntensity()).isEqualTo(PrecipitationIntensity.STRONG);
-        assertThat(internalWeatherData.getPrecipitationType()).isEqualTo(PrecipitationType.BOTH);
-        assertThat(internalWeatherData.getPrecipitationInMm()).isEqualTo(20);
-        assertThat(internalWeatherData.getWindIntensity()).isEqualTo(WindIntensity.STORM);
-        assertThat(internalWeatherData.getWindInMps()).isEqualTo(20);
+        assertThat(weather.getTemperatureLevel()).isEqualTo(TemperatureLevel.HOT);
+        assertThat(weather.getTemperature()).isEqualTo(30);
+        assertThat(weather.getApparentTemperature()).isEqualTo(32);
+        assertThat(weather.getPrecipitationIntensity()).isEqualTo(PrecipitationIntensity.STRONG);
+        assertThat(weather.getPrecipitationType()).isEqualTo(PrecipitationType.BOTH);
+        assertThat(weather.getPrecipitationInMm()).isEqualTo(20);
+        assertThat(weather.getWindIntensity()).isEqualTo(WindIntensity.STORM);
+        assertThat(weather.getWindInMps()).isEqualTo(20);
     }
 
     @Test
@@ -61,17 +61,17 @@ class ExtremeWeatherServiceTest {
         weatherDataList.add(forecastWeatherDto);
 
         //when
-        InternalWeatherData internalWeatherData = extremeWeatherService.getSummary(weatherDataList);
+        Weather weather = extremeWeatherService.getSummary(weatherDataList);
 
         //then
-        assertThat(internalWeatherData.getTemperatureLevel()).isEqualTo(TemperatureLevel.WARM);
-        assertThat(internalWeatherData.getTemperature()).isEqualTo(15);
-        assertThat(internalWeatherData.getApparentTemperature()).isEqualTo(13);
-        assertThat(internalWeatherData.getPrecipitationIntensity()).isEqualTo(PrecipitationIntensity.MEDIUM);
-        assertThat(internalWeatherData.getPrecipitationType()).isEqualTo(PrecipitationType.RAIN);
-        assertThat(internalWeatherData.getPrecipitationInMm()).isEqualTo(10);
-        assertThat(internalWeatherData.getWindIntensity()).isEqualTo(WindIntensity.WINDY);
-        assertThat(internalWeatherData.getWindInMps()).isEqualTo(10);
+        assertThat(weather.getTemperatureLevel()).isEqualTo(TemperatureLevel.WARM);
+        assertThat(weather.getTemperature()).isEqualTo(15);
+        assertThat(weather.getApparentTemperature()).isEqualTo(13);
+        assertThat(weather.getPrecipitationIntensity()).isEqualTo(PrecipitationIntensity.MEDIUM);
+        assertThat(weather.getPrecipitationType()).isEqualTo(PrecipitationType.RAIN);
+        assertThat(weather.getPrecipitationInMm()).isEqualTo(10);
+        assertThat(weather.getWindIntensity()).isEqualTo(WindIntensity.WINDY);
+        assertThat(weather.getWindInMps()).isEqualTo(10);
     }
 
     @Test
@@ -100,16 +100,16 @@ class ExtremeWeatherServiceTest {
         weatherDataList.add(forecastWeatherDto2);
 
         //when
-        InternalWeatherData internalWeatherData = extremeWeatherService.getSummary(weatherDataList);
+        Weather weather = extremeWeatherService.getSummary(weatherDataList);
 
         //then
-        assertThat(internalWeatherData.getTemperatureLevel()).isEqualTo(TemperatureLevel.WARM);
-        assertThat(internalWeatherData.getTemperature()).isEqualTo(5);
-        assertThat(internalWeatherData.getApparentTemperature()).isEqualTo(7);
-        assertThat(internalWeatherData.getPrecipitationIntensity()).isEqualTo(PrecipitationIntensity.WEAK);
-        assertThat(internalWeatherData.getPrecipitationType()).isEqualTo(PrecipitationType.BOTH);
-        assertThat(internalWeatherData.getPrecipitationInMm()).isEqualTo(5);
-        assertThat(internalWeatherData.getWindIntensity()).isEqualTo(WindIntensity.BREEZE);
-        assertThat(internalWeatherData.getWindInMps()).isEqualTo(5);
+        assertThat(weather.getTemperatureLevel()).isEqualTo(TemperatureLevel.WARM);
+        assertThat(weather.getTemperature()).isEqualTo(5);
+        assertThat(weather.getApparentTemperature()).isEqualTo(7);
+        assertThat(weather.getPrecipitationIntensity()).isEqualTo(PrecipitationIntensity.WEAK);
+        assertThat(weather.getPrecipitationType()).isEqualTo(PrecipitationType.BOTH);
+        assertThat(weather.getPrecipitationInMm()).isEqualTo(5);
+        assertThat(weather.getWindIntensity()).isEqualTo(WindIntensity.BREEZE);
+        assertThat(weather.getWindInMps()).isEqualTo(5);
     }
 }

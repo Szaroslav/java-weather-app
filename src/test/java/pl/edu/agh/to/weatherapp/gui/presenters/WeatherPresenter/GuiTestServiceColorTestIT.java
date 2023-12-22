@@ -18,7 +18,7 @@ import org.mockito.stubbing.Answer;
 import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
-import pl.edu.agh.to.weatherapp.model.InternalWeatherData;
+import pl.edu.agh.to.weatherapp.model.Weather;
 import pl.edu.agh.to.weatherapp.model.enums.PrecipitationIntensity;
 import pl.edu.agh.to.weatherapp.model.enums.PrecipitationType;
 import pl.edu.agh.to.weatherapp.model.enums.TemperatureLevel;
@@ -60,8 +60,8 @@ class GuiTestServiceColorTestIT {
 
         WeatherService weatherServiceMock = Mockito.mock((WeatherService.class));
         Mockito.when(weatherServiceMock.getWeatherData(HOT_BREEZE_WEAK_NONE, START_HOUR, END_HOUR)).thenAnswer(
-                (Answer<InternalWeatherData>) invocation -> {
-                    InternalWeatherData weatherData = new InternalWeatherData();
+                (Answer<Weather>) invocation -> {
+                    Weather weatherData = new Weather();
                     weatherData.getLocationNames().add(HOT_BREEZE_WEAK_NONE);
                     weatherData.setTemperatureLevel(TemperatureLevel.HOT);
                     weatherData.setWindIntensity(WindIntensity.BREEZE);
@@ -73,8 +73,8 @@ class GuiTestServiceColorTestIT {
                     return weatherData;
                 });
         Mockito.when(weatherServiceMock.getWeatherData(WARM_WINDY_MEDIUM_RAIN, START_HOUR, END_HOUR)).thenAnswer(
-                (Answer<InternalWeatherData>) invocation -> {
-                    InternalWeatherData weatherData = new InternalWeatherData();
+                (Answer<Weather>) invocation -> {
+                    Weather weatherData = new Weather();
                     weatherData.getLocationNames().add(WARM_WINDY_MEDIUM_RAIN);
                     weatherData.setTemperatureLevel(TemperatureLevel.WARM);
                     weatherData.setWindIntensity(WindIntensity.WINDY);
@@ -86,8 +86,8 @@ class GuiTestServiceColorTestIT {
                     return weatherData;
                 });
         Mockito.when(weatherServiceMock.getWeatherData(COLD_STORM_STRONG_SNOW, START_HOUR, END_HOUR)).thenAnswer(
-                (Answer<InternalWeatherData>) invocation -> {
-                    InternalWeatherData weatherData = new InternalWeatherData();
+                (Answer<Weather>) invocation -> {
+                    Weather weatherData = new Weather();
                     weatherData.getLocationNames().add(COLD_STORM_STRONG_SNOW);
                     weatherData.setTemperatureLevel(TemperatureLevel.COLD);
                     weatherData.setWindIntensity(WindIntensity.STORM);
@@ -99,8 +99,8 @@ class GuiTestServiceColorTestIT {
                     return weatherData;
                 });
         Mockito.when(weatherServiceMock.getWeatherData(COLD_WINDY_WEAK_BOTH, START_HOUR, END_HOUR)).thenAnswer(
-                (Answer<InternalWeatherData>) invocation -> {
-                    InternalWeatherData weatherData = new InternalWeatherData();
+                (Answer<Weather>) invocation -> {
+                    Weather weatherData = new Weather();
                     weatherData.getLocationNames().add(COLD_WINDY_WEAK_BOTH);
                     weatherData.setTemperatureLevel(TemperatureLevel.COLD);
                     weatherData.setWindIntensity(WindIntensity.WINDY);

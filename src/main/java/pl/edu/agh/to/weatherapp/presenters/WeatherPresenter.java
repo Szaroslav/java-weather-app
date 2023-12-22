@@ -13,7 +13,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.SVGPath;
 import org.springframework.stereotype.Component;
-import pl.edu.agh.to.weatherapp.model.InternalWeatherData;
+import pl.edu.agh.to.weatherapp.model.Weather;
 import pl.edu.agh.to.weatherapp.model.enums.PrecipitationIntensity;
 import pl.edu.agh.to.weatherapp.model.enums.PrecipitationType;
 import pl.edu.agh.to.weatherapp.model.enums.TemperatureLevel;
@@ -118,9 +118,9 @@ public class WeatherPresenter {
             return;
         }
         toggleSearchButtonVisibility();
-        Task<InternalWeatherData> executeAppTask = new Task<>() {
+        Task<Weather> executeAppTask = new Task<>() {
             @Override
-            protected InternalWeatherData call() {
+            protected Weather call() {
                 int startTime = timeStartTextField.getText().isEmpty() ? 0 : Integer.parseInt(timeStartTextField.getText());
                 int endTime = timeEndTextField.getText().isEmpty() ? 24 : Integer.parseInt(timeEndTextField.getText());
 
@@ -132,7 +132,7 @@ public class WeatherPresenter {
             }
         };
         executeAppTask.setOnSucceeded(e -> {
-            InternalWeatherData weatherData = executeAppTask.getValue();
+            Weather weatherData = executeAppTask.getValue();
             clearErrorLabel();
             showLocation(weatherData.getLocationNames());
             showTemperature(String.valueOf(weatherData.getApparentTemperature()), weatherData.getTemperatureLevel());

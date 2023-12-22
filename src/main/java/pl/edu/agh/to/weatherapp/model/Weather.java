@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class InternalWeatherData {
+public class Weather {
     private final List<String> locationNames = new ArrayList<>();
     private TemperatureLevel temperatureLevel;
     private int temperature;
