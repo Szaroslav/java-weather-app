@@ -14,11 +14,11 @@ import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import pl.edu.agh.to.weatherapp.exceptions.InvalidRequest;
-import pl.edu.agh.to.weatherapp.model.internal.InternalWeatherData;
-import pl.edu.agh.to.weatherapp.model.internal.PrecipitationIntensity;
-import pl.edu.agh.to.weatherapp.model.internal.PrecipitationType;
-import pl.edu.agh.to.weatherapp.model.internal.TemperatureLevel;
-import pl.edu.agh.to.weatherapp.model.internal.WindIntensity;
+import pl.edu.agh.to.weatherapp.model.Weather;
+import pl.edu.agh.to.weatherapp.model.enums.PrecipitationIntensity;
+import pl.edu.agh.to.weatherapp.model.enums.PrecipitationType;
+import pl.edu.agh.to.weatherapp.model.enums.TemperatureLevel;
+import pl.edu.agh.to.weatherapp.model.enums.WindIntensity;
 import pl.edu.agh.to.weatherapp.presenters.WeatherPresenter;
 import pl.edu.agh.to.weatherapp.weather.WeatherService;
 
@@ -49,12 +49,12 @@ class GuiTestServiceErrorTestIT {
 
         WeatherService weatherServiceMock = Mockito.mock((WeatherService.class));
         Mockito.when(weatherServiceMock.getWeatherData(LOCATION_INVALID, START_HOUR, END_HOUR)).thenAnswer(
-                (Answer<InternalWeatherData>) invocation -> {
+                (Answer<Weather>) invocation -> {
                     throw new CompletionException(new InvalidRequest("No matching location found."));
                 });
         Mockito.when(weatherServiceMock.getWeatherData(LOCATION_VALID, START_HOUR, END_HOUR)).thenAnswer(
-                (Answer<InternalWeatherData>) invocation -> {
-                    InternalWeatherData weatherData = new InternalWeatherData();
+                (Answer<Weather>) invocation -> {
+                    Weather weatherData = new Weather();
                     weatherData.getLocationNames().add(LOCATION_VALID);
                     weatherData.setTemperatureLevel(TemperatureLevel.COLD);
                     weatherData.setWindIntensity(WindIntensity.WINDY);
@@ -66,8 +66,8 @@ class GuiTestServiceErrorTestIT {
                     return weatherData;
                 });
         Mockito.when(weatherServiceMock.getWeatherData(LOCATION_VALID, Integer.parseInt(VALID_EARLY_TIME), Integer.parseInt(VALID_LATE_TIME))).thenAnswer(
-                (Answer<InternalWeatherData>) invocation -> {
-                    InternalWeatherData weatherData = new InternalWeatherData();
+                (Answer<Weather>) invocation -> {
+                    Weather weatherData = new Weather();
                     weatherData.getLocationNames().add(LOCATION_VALID);
                     weatherData.setTemperatureLevel(TemperatureLevel.COLD);
                     weatherData.setWindIntensity(WindIntensity.WINDY);

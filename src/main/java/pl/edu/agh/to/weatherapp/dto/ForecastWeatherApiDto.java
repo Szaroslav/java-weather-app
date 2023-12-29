@@ -1,4 +1,4 @@
-package pl.edu.agh.to.weatherapp.model;
+package pl.edu.agh.to.weatherapp.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class ForecastWeatherData {
+public class ForecastWeatherApiDto {
     private String locationName;
-    private final List<WeatherData> hourlyWeatherForecasts = new ArrayList<>();
+    private final List<WeatherApiDto> hourlyWeatherForecasts = new ArrayList<>();
 }

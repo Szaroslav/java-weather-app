@@ -1,8 +1,12 @@
-package pl.edu.agh.to.weatherapp.model.internal;
+package pl.edu.agh.to.weatherapp.model;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import pl.edu.agh.to.weatherapp.model.enums.PrecipitationIntensity;
+import pl.edu.agh.to.weatherapp.model.enums.PrecipitationType;
+import pl.edu.agh.to.weatherapp.model.enums.TemperatureLevel;
+import pl.edu.agh.to.weatherapp.model.enums.WindIntensity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class InternalWeatherData {
+public class Weather {
     private final List<String> locationNames = new ArrayList<>();
     private TemperatureLevel temperatureLevel;
     private int temperature;
