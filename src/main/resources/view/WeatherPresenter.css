@@ -18,6 +18,10 @@
     -fx-background-color: #FF6961;
 }
 
+.yellow{
+    -fx-background-color: #FFD500;
+}
+
 #errorLabel{
     -fx-text-fill: #FF6961;
 }
