@@ -1,5 +1,7 @@
 package pl.edu.agh.to.weatherapp.presenters;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -88,7 +90,8 @@ public class WeatherPresenter {
     private static final String COLOR_RED = "#FF6961";
 
     private Trip lastSearch = null;
-    private boolean favourite = false;
+    //private boolean favourite = false;
+    private BooleanProperty favourite = new SimpleBooleanProperty(false);
 
     public WeatherPresenter(WeatherService weatherService) {
         this.weatherService = weatherService;
@@ -114,15 +117,18 @@ public class WeatherPresenter {
                 insertTripToSearchField(newValue);
             }
         });
+        favourite.bindBidirectional(trips.getCurrentTripFavourite());
+        favourite.addListener((observable, oldValue, newValue) -> {
+            System.out.println("Changed");
+            updateStarSVG();
+        });
         favouritesListView.setItems(trips.getTrips());
         starSVGPath.setOnMouseClicked(event -> {
-            if(favourite){
+            if(favourite.get()){
                 trips.deleteTrip(lastSearch);
             }else{
                 trips.addTrip(lastSearch);
             }
-            favourite = !favourite;
-            updateStarSVG();
         });
         searchStartTextField.setOnKeyPressed(key -> {
             if (key.getCode().equals(KeyCode.ENTER)) {
@@ -191,10 +197,8 @@ public class WeatherPresenter {
             Trip checkedTrip = trips.checkIfTripPresent(tmpLastSearch);
             if(checkedTrip != null){
                 lastSearch = checkedTrip;
-                favourite = true;
             }else{
                 lastSearch = tmpLastSearch;
-                favourite = false;
             }
             updateStarSVG();
 
@@ -255,7 +259,7 @@ public class WeatherPresenter {
         locationLabel.setText(locationNames.size() == 1 ? locationNames.get(0) : locationNames.get(0) + CITY_NAMES_SEPARATOR + locationNames.get(1));
     }
     private void updateStarSVG(){
-        if(favourite){
+        if(favourite.get()){
             starSVGPath.setFill(Color.web(COLOR_ORANGE));
         }else{
             starSVGPath.setFill(Color.web(COLOR_ORANGE, 0));
