@@ -7,24 +7,28 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import pl.edu.agh.to.weatherapp.model.Trip;
-import pl.edu.agh.to.weatherapp.model.TripMemory;
+
+import java.util.List;
 
 public class TripCell extends ListCell<Trip> {
+    private static final String CITY_NAMES_SEPARATOR = " → ";
     HBox hbox = new HBox();
     Label label = new Label("(empty)");
     Pane pane = new Pane();
     Button button = new Button("Delete");
     Trip lastItem;
 
-    public TripCell(TripMemory trips) {
+    public TripCell() {
         super();
         hbox.getChildren().addAll(label, pane, button);
         HBox.setHgrow(pane, Priority.ALWAYS);
-        button.setOnAction(event ->{
-            if (lastItem != null) {
-                trips.deleteTrip(lastItem);
-            }
-        });
+        button.setOnAction(event ->
+                pressDeleteButtonHandler()
+        );
+    }
+
+    protected void pressDeleteButtonHandler() {
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -36,8 +40,20 @@ public class TripCell extends ListCell<Trip> {
             setGraphic(null);
         } else {
             lastItem = item;
-            label.setText(item != null ? item.toString() : "<null>");
+            label.setText(item != null ? tripToString(item) : "<null>");
             setGraphic(hbox);
         }
+    }
+
+    private String tripToString(Trip trip) {
+        StringBuilder nameString = new StringBuilder();
+        List<String> locationNames = trip.getLocationNames();
+        for (int i = 0; i < locationNames.size(); i++) {
+            if (i != 0) {
+                nameString.append(CITY_NAMES_SEPARATOR);
+            }
+            nameString.append(locationNames.get(i));
+        }
+        return nameString.toString();
     }
 }
