@@ -1,6 +1,6 @@
-package pl.edu.agh.to.weatherapp.weather;
+package pl.edu.agh.to.weatherapp.service.weather;
 
-import pl.edu.agh.to.weatherapp.model.Weather;
+import pl.edu.agh.to.weatherapp.model.internal.Weather;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package pl.edu.agh.to.weatherapp.api;
+package pl.edu.agh.to.weatherapp.service.api;
 
 import java.util.concurrent.CompletableFuture;
 

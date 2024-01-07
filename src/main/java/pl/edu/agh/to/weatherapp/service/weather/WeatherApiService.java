@@ -1,11 +1,11 @@
-package pl.edu.agh.to.weatherapp.weather;
+package pl.edu.agh.to.weatherapp.service.weather;
 
 import org.springframework.stereotype.Service;
-import pl.edu.agh.to.weatherapp.api.WeatherFetcher;
-import pl.edu.agh.to.weatherapp.dto.ForecastWeatherApiDto;
-import pl.edu.agh.to.weatherapp.model.Weather;
+import pl.edu.agh.to.weatherapp.service.api.WeatherFetcher;
+import pl.edu.agh.to.weatherapp.model.dto.ForecastWeatherApiDto;
+import pl.edu.agh.to.weatherapp.model.internal.Weather;
 import pl.edu.agh.to.weatherapp.parser.JsonParser;
-import pl.edu.agh.to.weatherapp.weather.summary.WeatherSummaryService;
+import pl.edu.agh.to.weatherapp.service.weather.summary.WeatherSummaryService;
 
 import java.util.List;
 

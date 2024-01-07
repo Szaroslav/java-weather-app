@@ -1,13 +1,13 @@
-package pl.edu.agh.to.weatherapp.weather.summary;
+package pl.edu.agh.to.weatherapp.service.weather.summary;
 
-import pl.edu.agh.to.weatherapp.dataprocessing.WeatherDataProcessing;
-import pl.edu.agh.to.weatherapp.dto.ForecastWeatherApiDto;
-import pl.edu.agh.to.weatherapp.dto.WeatherApiDto;
-import pl.edu.agh.to.weatherapp.model.Weather;
-import pl.edu.agh.to.weatherapp.model.enums.PrecipitationIntensity;
-import pl.edu.agh.to.weatherapp.model.enums.PrecipitationType;
-import pl.edu.agh.to.weatherapp.model.enums.TemperatureLevel;
-import pl.edu.agh.to.weatherapp.model.enums.WindIntensity;
+import pl.edu.agh.to.weatherapp.service.weather.summary.dataprocessing.WeatherDataProcessing;
+import pl.edu.agh.to.weatherapp.model.dto.ForecastWeatherApiDto;
+import pl.edu.agh.to.weatherapp.model.dto.WeatherApiDto;
+import pl.edu.agh.to.weatherapp.model.internal.Weather;
+import pl.edu.agh.to.weatherapp.model.internal.enums.PrecipitationIntensity;
+import pl.edu.agh.to.weatherapp.model.internal.enums.PrecipitationType;
+import pl.edu.agh.to.weatherapp.model.internal.enums.TemperatureLevel;
+import pl.edu.agh.to.weatherapp.model.internal.enums.WindIntensity;
 
 import java.util.Comparator;
 import java.util.List;

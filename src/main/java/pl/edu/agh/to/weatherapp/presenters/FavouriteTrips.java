@@ -2,8 +2,8 @@ package pl.edu.agh.to.weatherapp.presenters;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import pl.edu.agh.to.weatherapp.model.Trip;
-import pl.edu.agh.to.weatherapp.service.TripPersistenceService;
+import pl.edu.agh.to.weatherapp.model.internal.Trip;
+import pl.edu.agh.to.weatherapp.service.persistence.TripPersistenceService;
 
 public class FavouriteTrips {
     private final TripPersistenceService tripPersistenceService;

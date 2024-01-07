@@ -1,6 +1,6 @@
-package pl.edu.agh.to.weatherapp.service;
+package pl.edu.agh.to.weatherapp.service.persistence;
 
-import pl.edu.agh.to.weatherapp.model.Trip;
+import pl.edu.agh.to.weatherapp.model.internal.Trip;
 
 import java.util.List;
 

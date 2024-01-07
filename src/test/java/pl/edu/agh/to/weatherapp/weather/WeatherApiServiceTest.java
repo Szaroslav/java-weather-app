@@ -6,12 +6,13 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import pl.edu.agh.to.weatherapp.api.WeatherApiFetcher;
-import pl.edu.agh.to.weatherapp.dto.ForecastWeatherApiDto;
-import pl.edu.agh.to.weatherapp.dto.WeatherApiDto;
-import pl.edu.agh.to.weatherapp.model.Weather;
+import pl.edu.agh.to.weatherapp.service.api.WeatherApiFetcher;
+import pl.edu.agh.to.weatherapp.model.dto.ForecastWeatherApiDto;
+import pl.edu.agh.to.weatherapp.model.dto.WeatherApiDto;
+import pl.edu.agh.to.weatherapp.model.internal.Weather;
 import pl.edu.agh.to.weatherapp.parser.JsonParser;
-import pl.edu.agh.to.weatherapp.weather.summary.ExtremeWeatherService;
+import pl.edu.agh.to.weatherapp.service.weather.WeatherApiService;
+import pl.edu.agh.to.weatherapp.service.weather.summary.ExtremeWeatherService;
 
 import java.util.Collections;
 import java.util.List;

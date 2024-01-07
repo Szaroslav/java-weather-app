@@ -1,6 +1,7 @@
 package pl.edu.agh.to.weatherapp.dataprocessing;
 
 import org.junit.jupiter.api.Test;
+import pl.edu.agh.to.weatherapp.service.weather.summary.dataprocessing.WeatherDataProcessing;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;

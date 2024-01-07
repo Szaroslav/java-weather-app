@@ -1,4 +1,4 @@
-package pl.edu.agh.to.weatherapp.dto;
+package pl.edu.agh.to.weatherapp.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -6,7 +6,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
-import pl.edu.agh.to.weatherapp.model.Trip;
+import pl.edu.agh.to.weatherapp.model.internal.Trip;
 
 public class TripCell extends ListCell<Trip> {
     private static final String CITY_NAMES_SEPARATOR = " → ";

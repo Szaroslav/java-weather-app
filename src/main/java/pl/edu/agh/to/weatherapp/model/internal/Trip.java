@@ -1,4 +1,4 @@
-package pl.edu.agh.to.weatherapp.model;
+package pl.edu.agh.to.weatherapp.model.internal;
 
 import java.util.HashSet;
 import java.util.List;

@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import pl.edu.agh.to.weatherapp.service.api.WeatherApiFetcher;
 
 import java.net.URI;
 import java.net.http.HttpClient;

@@ -1,12 +1,12 @@
-package pl.edu.agh.to.weatherapp.model;
+package pl.edu.agh.to.weatherapp.model.internal;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import pl.edu.agh.to.weatherapp.model.enums.PrecipitationIntensity;
-import pl.edu.agh.to.weatherapp.model.enums.PrecipitationType;
-import pl.edu.agh.to.weatherapp.model.enums.TemperatureLevel;
-import pl.edu.agh.to.weatherapp.model.enums.WindIntensity;
+import pl.edu.agh.to.weatherapp.model.internal.enums.PrecipitationIntensity;
+import pl.edu.agh.to.weatherapp.model.internal.enums.PrecipitationType;
+import pl.edu.agh.to.weatherapp.model.internal.enums.TemperatureLevel;
+import pl.edu.agh.to.weatherapp.model.internal.enums.WindIntensity;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -5,7 +5,7 @@ import org.assertj.core.data.Percentage;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import pl.edu.agh.to.weatherapp.exceptions.InvalidRequest;
-import pl.edu.agh.to.weatherapp.dto.ForecastWeatherApiDto;
+import pl.edu.agh.to.weatherapp.model.dto.ForecastWeatherApiDto;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;

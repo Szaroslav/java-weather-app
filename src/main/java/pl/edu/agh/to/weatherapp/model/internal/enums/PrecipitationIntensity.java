@@ -1,4 +1,4 @@
-package pl.edu.agh.to.weatherapp.model.enums;
+package pl.edu.agh.to.weatherapp.model.internal.enums;
 
 public enum PrecipitationIntensity {
     WEAK,

@@ -6,8 +6,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.joda.time.DateTime;
 import pl.edu.agh.to.weatherapp.exceptions.InvalidRequest;
-import pl.edu.agh.to.weatherapp.dto.ForecastWeatherApiDto;
-import pl.edu.agh.to.weatherapp.dto.WeatherApiDto;
+import pl.edu.agh.to.weatherapp.model.dto.ForecastWeatherApiDto;
+import pl.edu.agh.to.weatherapp.model.dto.WeatherApiDto;
 
 import java.nio.charset.StandardCharsets;
 
