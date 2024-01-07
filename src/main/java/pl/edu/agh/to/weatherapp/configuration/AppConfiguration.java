@@ -4,16 +4,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import pl.edu.agh.to.weatherapp.api.WeatherFetcher;
-import pl.edu.agh.to.weatherapp.api.WeatherApiFetcher;
-import pl.edu.agh.to.weatherapp.parser.JsonParser;
-import pl.edu.agh.to.weatherapp.presenters.FavouriteTrips;
-import pl.edu.agh.to.weatherapp.presenters.WeatherPresenter;
-import pl.edu.agh.to.weatherapp.service.TripPersistenceService;
-import pl.edu.agh.to.weatherapp.weather.WeatherService;
-import pl.edu.agh.to.weatherapp.weather.WeatherApiService;
-import pl.edu.agh.to.weatherapp.weather.summary.ExtremeWeatherService;
-import pl.edu.agh.to.weatherapp.weather.summary.WeatherSummaryService;
+import pl.edu.agh.to.weatherapp.service.api.WeatherFetcher;
+import pl.edu.agh.to.weatherapp.service.api.WeatherApiFetcher;
+import pl.edu.agh.to.weatherapp.service.parser.JsonParser;
+import pl.edu.agh.to.weatherapp.gui.presenters.FavouriteTrips;
+import pl.edu.agh.to.weatherapp.gui.presenters.WeatherPresenter;
+import pl.edu.agh.to.weatherapp.service.persistence.TripPersistenceService;
+import pl.edu.agh.to.weatherapp.service.weather.WeatherService;
+import pl.edu.agh.to.weatherapp.service.weather.WeatherApiService;
+import pl.edu.agh.to.weatherapp.service.weather.summary.ExtremeWeatherService;
+import pl.edu.agh.to.weatherapp.service.weather.summary.WeatherSummaryService;
 
 import java.net.http.HttpClient;
 

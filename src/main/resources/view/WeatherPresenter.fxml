@@ -15,7 +15,7 @@
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.text.Font?>
 
-<GridPane prefHeight="600.0" prefWidth="900.0" stylesheets="@WeatherPresenter.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.edu.agh.to.weatherapp.presenters.WeatherPresenter">
+<GridPane prefHeight="600.0" prefWidth="900.0" stylesheets="@WeatherPresenter.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.edu.agh.to.weatherapp.gui.presenters.WeatherPresenter">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
