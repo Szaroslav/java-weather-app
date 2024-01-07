@@ -8,6 +8,7 @@ import pl.edu.agh.to.weatherapp.service.parser.JsonParser;
 import pl.edu.agh.to.weatherapp.service.weather.summary.WeatherSummaryService;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class WeatherApiService implements WeatherService {
@@ -51,6 +52,7 @@ public class WeatherApiService implements WeatherService {
                 .toList();
         Weather summary = weatherSummaryService.getSummary(weatherList);
         summary.getLocationNames().addAll(locations);
-        return summary;
+        //TODO: implement + test
+        return summary.setMud(ThreadLocalRandom.current().nextBoolean());
     }
 }

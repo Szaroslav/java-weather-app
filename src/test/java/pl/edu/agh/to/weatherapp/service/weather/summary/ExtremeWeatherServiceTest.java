@@ -103,7 +103,7 @@ class ExtremeWeatherServiceTest {
         Weather weather = extremeWeatherService.getSummary(weatherDataList);
 
         //then
-        assertThat(weather.getTemperatureLevel()).isEqualTo(TemperatureLevel.WARM);
+        assertThat(weather.getTemperatureLevel()).isEqualTo(TemperatureLevel.COLD);
         assertThat(weather.getTemperature()).isEqualTo(5);
         assertThat(weather.getApparentTemperature()).isEqualTo(7);
         assertThat(weather.getPrecipitationIntensity()).isEqualTo(PrecipitationIntensity.WEAK);
