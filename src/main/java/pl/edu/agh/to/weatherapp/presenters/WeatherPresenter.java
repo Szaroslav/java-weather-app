@@ -28,12 +28,13 @@ import pl.edu.agh.to.weatherapp.model.enums.TemperatureLevel;
 import pl.edu.agh.to.weatherapp.model.enums.WindIntensity;
 import pl.edu.agh.to.weatherapp.weather.WeatherService;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Component
 public class WeatherPresenter {
     private final WeatherService weatherService;
+
+    private final TripMemory trips;
     @FXML
     private VBox weatherInfoVBox;
     @FXML
@@ -84,7 +85,6 @@ public class WeatherPresenter {
     private ListView<Trip> favouritesListView;
     @FXML
     private SVGPath starSVGPath;
-    private TripMemory trips;
 
     private static final String FIELD_CANNOT_BE_EMPTY = "Search field cannot be empty";
     private static final String TIME_INVALID = "Invalid time range";
@@ -101,9 +101,9 @@ public class WeatherPresenter {
     final ObservableObjectValue<Color> paintProperty = Bindings.when(isCurrentTripInFavourites).then(Color.web(COLOR_ORANGE)).otherwise(Color.web(COLOR_ORANGE, 0));
     private Trip currentTrip = null;
 
-    public WeatherPresenter(WeatherService weatherService) {
+    public WeatherPresenter(WeatherService weatherService, TripMemory trips) {
         this.weatherService = weatherService;
-        this.trips = new TripMemory();
+        this.trips = trips;
     }
 
     public void initialize() {
@@ -129,10 +129,6 @@ public class WeatherPresenter {
             }
         });
         favouritesListView.setItems(trips.getTrips());
-        Trip sampleTrip = new Trip(Arrays.asList("Tarnów", "Ryglice"));
-        this.trips.addTrip(sampleTrip);
-        Trip sampleTrip2 = new Trip(Arrays.asList("Tarnów", "Bistuszowa"));
-        this.trips.addTrip(sampleTrip2);
         hideWeatherInfo();
         clearErrorLabel();
         locationLabel.setText("");
