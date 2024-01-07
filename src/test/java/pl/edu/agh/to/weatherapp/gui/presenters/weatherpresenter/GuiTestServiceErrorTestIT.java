@@ -1,5 +1,7 @@
-package pl.edu.agh.to.weatherapp.gui.presenters.WeatherPresenter;
+package pl.edu.agh.to.weatherapp.gui.presenters.weatherpresenter;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -14,17 +16,18 @@ import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import pl.edu.agh.to.weatherapp.exceptions.InvalidRequest;
+import pl.edu.agh.to.weatherapp.gui.presenters.FavouriteTrips;
+import pl.edu.agh.to.weatherapp.gui.presenters.WeatherPresenter;
+import pl.edu.agh.to.weatherapp.model.internal.Trip;
 import pl.edu.agh.to.weatherapp.model.internal.Weather;
 import pl.edu.agh.to.weatherapp.model.internal.enums.PrecipitationIntensity;
 import pl.edu.agh.to.weatherapp.model.internal.enums.PrecipitationType;
 import pl.edu.agh.to.weatherapp.model.internal.enums.TemperatureLevel;
 import pl.edu.agh.to.weatherapp.model.internal.enums.WindIntensity;
-import pl.edu.agh.to.weatherapp.gui.presenters.FavouriteTrips;
-import pl.edu.agh.to.weatherapp.gui.presenters.WeatherPresenter;
-import pl.edu.agh.to.weatherapp.service.persistence.TripPersistenceService;
 import pl.edu.agh.to.weatherapp.service.weather.WeatherService;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.CompletionException;
 
 import static org.testfx.assertions.api.Assertions.assertThat;
@@ -48,13 +51,15 @@ class GuiTestServiceErrorTestIT {
         stage.setTitle("Potezna wichura");
         stage.setMinWidth(400);
         stage.setMinHeight(400);
-
+        ObservableList<Trip> trips = FXCollections.observableArrayList();
+        FavouriteTrips favouriteTripsMock = Mockito.mock(FavouriteTrips.class);
+        Mockito.when(favouriteTripsMock.getTrips()).thenAnswer((Answer<ObservableList<Trip>>) invocation -> trips);
         WeatherService weatherServiceMock = Mockito.mock((WeatherService.class));
-        Mockito.when(weatherServiceMock.getWeatherData(LOCATION_INVALID, START_HOUR, END_HOUR)).thenAnswer(
+        Mockito.when(weatherServiceMock.getForecastSummaryWeatherData(List.of(LOCATION_INVALID), START_HOUR, END_HOUR)).thenAnswer(
                 (Answer<Weather>) invocation -> {
                     throw new CompletionException(new InvalidRequest("No matching location found."));
                 });
-        Mockito.when(weatherServiceMock.getWeatherData(LOCATION_VALID, START_HOUR, END_HOUR)).thenAnswer(
+        Mockito.when(weatherServiceMock.getForecastSummaryWeatherData(List.of(LOCATION_VALID), START_HOUR, END_HOUR)).thenAnswer(
                 (Answer<Weather>) invocation -> {
                     Weather weatherData = new Weather();
                     weatherData.getLocationNames().add(LOCATION_VALID);
@@ -67,7 +72,7 @@ class GuiTestServiceErrorTestIT {
                     weatherData.setPrecipitationInMm(RAIN);
                     return weatherData;
                 });
-        Mockito.when(weatherServiceMock.getWeatherData(LOCATION_VALID, Integer.parseInt(VALID_EARLY_TIME), Integer.parseInt(VALID_LATE_TIME))).thenAnswer(
+        Mockito.when(weatherServiceMock.getForecastSummaryWeatherData(List.of(LOCATION_VALID), Integer.parseInt(VALID_EARLY_TIME), Integer.parseInt(VALID_LATE_TIME))).thenAnswer(
                 (Answer<Weather>) invocation -> {
                     Weather weatherData = new Weather();
                     weatherData.getLocationNames().add(LOCATION_VALID);
@@ -84,8 +89,7 @@ class GuiTestServiceErrorTestIT {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/view/WeatherPresenter.fxml"));
         loader.setControllerFactory(c ->
-                //TODO: create mock for FavouriteTrips
-                new WeatherPresenter(weatherServiceMock, new FavouriteTrips(new TripPersistenceService())));
+                new WeatherPresenter(weatherServiceMock, favouriteTripsMock));
         GridPane rootLayout = loader.load();
 
         Scene scene = new Scene(rootLayout);
@@ -95,12 +99,12 @@ class GuiTestServiceErrorTestIT {
 
     @Test
     void handlingErrorsFromService(FxRobot robot) {
-        robot.clickOn("#searchTextField");
+        robot.clickOn("#searchStartTextField");
         robot.write(LOCATION_INVALID);
         robot.clickOn("#searchButton");
         assertThat(robot.lookup("#errorLabel").queryAs(Label.class)).hasText("No matching location found.");
 
-        robot.clickOn("#searchTextField");
+        robot.clickOn("#searchStartTextField");
         robot.type(KeyCode.BACK_SPACE, LOCATION_INVALID.length());
         robot.write(LOCATION_VALID);
         robot.clickOn("#searchButton");
@@ -113,7 +117,7 @@ class GuiTestServiceErrorTestIT {
 
     @Test
     void handlingTimeErrors(FxRobot robot) {
-        robot.clickOn("#searchTextField");
+        robot.clickOn("#searchStartTextField");
         robot.write(LOCATION_VALID);
         robot.clickOn("#timeStartTextField");
         robot.write(INVALID_TIME);

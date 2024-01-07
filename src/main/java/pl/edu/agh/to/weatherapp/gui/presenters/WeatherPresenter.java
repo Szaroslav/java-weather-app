@@ -12,7 +12,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -142,7 +141,7 @@ public class WeatherPresenter {
     }
 
     @FXML
-    private void onClickStarSVGPath(MouseEvent event) {
+    private void onClickStarSVGPath() {
         if (isCurrentTripInFavourites.get()) {
             trips.deleteTrip(currentTrip);
         } else {
@@ -216,14 +215,15 @@ public class WeatherPresenter {
     }
 
     public Trip getTripObject(ObservableList<Trip> trips, List<String> locationNames) {
-        for (int i = 0; i < trips.size(); i++) {
-            if (trips.get(i).getLocationNames().equals(locationNames)) {
+        Trip tmpTrip = new Trip(locationNames);
+        for (Trip trip : trips) {
+            if (trip.equals(tmpTrip)) {
                 isCurrentTripInFavourites.set(true);
-                return trips.get(i);
+                return trip;
             }
         }
         isCurrentTripInFavourites.set(false);
-        return new Trip(locationNames);
+        return tmpTrip;
     }
 
     private boolean isTimeValid(String timeStart, String timeEnd) {
@@ -257,7 +257,7 @@ public class WeatherPresenter {
     }
 
     private void showLocation(List<String> locationNames) {
-        locationLabel.setText(locationNames.size() == 1 ? locationNames.get(0) : locationNames.get(0) + CITY_NAMES_SEPARATOR + locationNames.get(1));
+        locationLabel.setText(String.join(CITY_NAMES_SEPARATOR, locationNames));
     }
 
     private void showTemperature(String temperature, TemperatureLevel temperatureLevel) {
