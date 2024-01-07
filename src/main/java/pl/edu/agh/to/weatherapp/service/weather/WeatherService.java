@@ -7,4 +7,5 @@ import java.util.List;
 public interface WeatherService {
     Weather getForecastSummaryWeatherData(List<String> locations);
     Weather getForecastSummaryWeatherData(List<String> locations, int startHour, int endHour);
+    boolean wasPrecipitationDaysBefore(String locationName, int daysNumber);
 }

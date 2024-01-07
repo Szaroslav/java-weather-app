@@ -1,6 +1,8 @@
 package pl.edu.agh.to.weatherapp.service.weather;
 
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
+import pl.edu.agh.to.weatherapp.model.dto.HourlyWeatherApiDto;
 import pl.edu.agh.to.weatherapp.service.api.WeatherFetcher;
 import pl.edu.agh.to.weatherapp.model.dto.DailyWeatherApiDto;
 import pl.edu.agh.to.weatherapp.model.internal.Weather;
@@ -40,6 +42,12 @@ public class WeatherApiService implements WeatherService {
         return val >= start && val <= end;
     }
 
+    private DailyWeatherApiDto getHistoryWeatherData(String location, DateTime date) {
+        return weatherFetcher.fetchHistory(location, date)
+            .thenApply(responseParser::parseForecast)
+            .join();
+    }
+
     @Override
     public Weather getForecastSummaryWeatherData(List<String> locations) {
         return getForecastSummaryWeatherData(locations, 0, 24);
@@ -54,5 +62,23 @@ public class WeatherApiService implements WeatherService {
         summary.getLocationNames().addAll(locations);
         //TODO: implement + test
         return summary.setMud(ThreadLocalRandom.current().nextBoolean());
+    }
+
+    @Override
+    public boolean wasPrecipitationDaysBefore(String locationName, int daysNumber) {
+        DateTime now = DateTime.now();
+
+        for (int i = 1; i <= daysNumber; i++) {
+            DailyWeatherApiDto dailyWeatherDto = getHistoryWeatherData(locationName, now.minusDays(1));
+            long hoursWithPrecipitation = dailyWeatherDto.getHourlyWeatherForecasts()
+                .stream()
+                .filter(hourlyWeather -> hourlyWeather.getPrecipitationMm() > 0)
+                .count();
+            if (hoursWithPrecipitation > 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
