@@ -3,7 +3,6 @@ package pl.edu.agh.to.weatherapp.gui.presenters;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableObjectValue;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -19,6 +18,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.SVGPath;
 import org.springframework.stereotype.Component;
+import pl.edu.agh.to.weatherapp.gui.customcontrols.LocationLabel;
 import pl.edu.agh.to.weatherapp.model.internal.Trip;
 import pl.edu.agh.to.weatherapp.model.internal.Weather;
 import pl.edu.agh.to.weatherapp.model.internal.enums.PrecipitationIntensity;
@@ -29,11 +29,11 @@ import pl.edu.agh.to.weatherapp.service.weather.WeatherService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class WeatherPresenter {
     private final WeatherService weatherService;
-
     private final FavouriteTrips trips;
     @FXML
     private VBox weatherInfoVBox;
@@ -52,7 +52,7 @@ public class WeatherPresenter {
     @FXML
     private Label errorLabel;
     @FXML
-    private Label locationLabel;
+    private LocationLabel locationLabel;
     @FXML
     private StackPane temperatureBox;
     @FXML
@@ -89,7 +89,6 @@ public class WeatherPresenter {
     private static final String FIELD_CANNOT_BE_EMPTY = "Search field cannot be empty";
     private static final String TIME_INVALID = "Invalid time range";
     private static final String TEMP_SUFFIX = "°C";
-    private static final String CITY_NAMES_SEPARATOR = " → ";
     private static final String WIND_SUFFIX = "m/s";
     private static final String PRECIPITATION_SUFFIX = "mm";
     private static final String COLOR_GREEN = "#77dd77";
@@ -101,7 +100,6 @@ public class WeatherPresenter {
     final ObservableObjectValue<Color> paintProperty = Bindings.when(isCurrentTripInFavourites)
             .then(Color.web(COLOR_ORANGE))
             .otherwise(Color.web(COLOR_ORANGE, 0));
-    private Trip currentTrip = null;
 
     public WeatherPresenter(WeatherService weatherService, FavouriteTrips trips) {
         this.weatherService = weatherService;
@@ -113,9 +111,9 @@ public class WeatherPresenter {
         favouritesListView.setCellFactory(param -> new TripCell() {
             @Override
             protected void pressDeleteButtonHandler() {
-                if (getItem() != null && currentTrip != null) {
+                if (getItem() != null && !Objects.equals(locationLabel.getText(), "")) {
                     Trip item = getItem();
-                    if (currentTrip.getLocationNames().equals(item.getLocationNames())) {
+                    if (item.equals(new Trip(locationLabel.getNames()))) {
                         isCurrentTripInFavourites.set(false);
                     }
                     trips.deleteTrip(item);
@@ -143,9 +141,9 @@ public class WeatherPresenter {
     @FXML
     private void onClickStarSVGPath() {
         if (isCurrentTripInFavourites.get()) {
-            trips.deleteTrip(currentTrip);
+            trips.deleteTrip(new Trip(locationLabel.getNames()));
         } else {
-            trips.addTrip(currentTrip);
+            trips.addTrip(new Trip(locationLabel.getNames()));
         }
         isCurrentTripInFavourites.set(!isCurrentTripInFavourites.get());
     }
@@ -189,8 +187,7 @@ public class WeatherPresenter {
         };
         executeAppTask.setOnSucceeded(e -> {
             Weather weatherData = executeAppTask.getValue();
-            currentTrip = getTripObject(trips.getTrips(), weatherData.getLocationNames());
-
+            isCurrentTripInFavourites.set(trips.getTrips().contains(new Trip(weatherData.getLocationNames())));
             clearErrorLabel();
             showLocation(weatherData.getLocationNames());
             showTemperature(String.valueOf(weatherData.getApparentTemperature()), weatherData.getTemperatureLevel());
@@ -212,18 +209,6 @@ public class WeatherPresenter {
         });
         executeAppTask.setOnCancelled(e -> toggleSearchButtonVisibility());
         new Thread(executeAppTask).start();
-    }
-
-    public Trip getTripObject(ObservableList<Trip> trips, List<String> locationNames) {
-        Trip tmpTrip = new Trip(locationNames);
-        for (Trip trip : trips) {
-            if (trip.equals(tmpTrip)) {
-                isCurrentTripInFavourites.set(true);
-                return trip;
-            }
-        }
-        isCurrentTripInFavourites.set(false);
-        return tmpTrip;
     }
 
     private boolean isTimeValid(String timeStart, String timeEnd) {
@@ -257,7 +242,7 @@ public class WeatherPresenter {
     }
 
     private void showLocation(List<String> locationNames) {
-        locationLabel.setText(String.join(CITY_NAMES_SEPARATOR, locationNames));
+        locationLabel.setNames(locationNames);
     }
 
     private void showTemperature(String temperature, TemperatureLevel temperatureLevel) {
