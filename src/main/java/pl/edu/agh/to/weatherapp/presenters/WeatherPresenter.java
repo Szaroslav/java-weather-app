@@ -28,6 +28,7 @@ import pl.edu.agh.to.weatherapp.model.enums.TemperatureLevel;
 import pl.edu.agh.to.weatherapp.model.enums.WindIntensity;
 import pl.edu.agh.to.weatherapp.weather.WeatherService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -174,16 +175,17 @@ public class WeatherPresenter {
                         timeStartTextField.getText().isEmpty() ? 0 : Integer.parseInt(timeStartTextField.getText());
                 int endTime = timeEndTextField.getText().isEmpty() ? 24 : Integer.parseInt(timeEndTextField.getText());
 
-                if (searchMiddleTextField.getText().isEmpty()) {
-                    return weatherService.getWeatherData(searchStartTextField.getText(), startTime, endTime);
+                List<String> locationsToSearch = new ArrayList<>();
+                if (!searchStartTextField.getText().isEmpty()) {
+                    locationsToSearch.add(searchStartTextField.getText());
                 }
-                if (searchDestinationTextField.getText().isEmpty()) {
-                    return weatherService.getSummaryWeatherData(searchStartTextField.getText(),
-                            searchMiddleTextField.getText(), startTime, endTime);
+                if (!searchMiddleTextField.getText().isEmpty()) {
+                    locationsToSearch.add(searchMiddleTextField.getText());
                 }
-                //TODO: Add third destination
-                return weatherService.getSummaryWeatherData(searchStartTextField.getText(),
-                        searchMiddleTextField.getText(), startTime, endTime);
+                if (!searchDestinationTextField.getText().isEmpty()) {
+                    locationsToSearch.add(searchDestinationTextField.getText());
+                }
+                return weatherService.getForecastSummaryWeatherData(locationsToSearch, startTime, endTime);
             }
         };
         executeAppTask.setOnSucceeded(e -> {

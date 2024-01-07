@@ -7,8 +7,6 @@ import pl.edu.agh.to.weatherapp.model.Weather;
 import pl.edu.agh.to.weatherapp.parser.JsonParser;
 import pl.edu.agh.to.weatherapp.weather.summary.WeatherSummaryService;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -42,31 +40,17 @@ public class WeatherApiService implements WeatherService {
     }
 
     @Override
-    public Weather getWeatherData(String location) {
-        return getWeatherData(location, 0, 24);
+    public Weather getForecastSummaryWeatherData(List<String> locations) {
+        return getForecastSummaryWeatherData(locations, 0, 24);
     }
 
     @Override
-    public Weather getWeatherData(String location, int startHour, int endHour) {
-        ForecastWeatherApiDto forecast = getForecastWeatherData(location, startHour, endHour);
-        Weather weather = weatherSummaryService.getSummary(Collections.singletonList(forecast));
-        weather.getLocationNames().add(location);
-        return weather;
-    }
-
-    @Override
-    public Weather getSummaryWeatherData(String startLocation, String endLocation) {
-        return getSummaryWeatherData(startLocation, endLocation, 0, 24);
-    }
-
-    @Override
-    public Weather getSummaryWeatherData(String startLocation, String endLocation, int startHour, int endHour) {
-        List<ForecastWeatherApiDto> weatherList = new ArrayList<>();
-        weatherList.add(getForecastWeatherData(startLocation, startHour, endHour));
-        weatherList.add(getForecastWeatherData(endLocation, startHour, endHour));
+    public Weather getForecastSummaryWeatherData(List<String> locations, int startHour, int endHour) {
+        List<ForecastWeatherApiDto> weatherList = locations.stream()
+                .map(x->getForecastWeatherData(x,startHour,endHour))
+                .toList();
         Weather summary = weatherSummaryService.getSummary(weatherList);
-        summary.getLocationNames().add(startLocation);
-        summary.getLocationNames().add(endLocation);
+        summary.getLocationNames().addAll(locations);
         return summary;
     }
 }
