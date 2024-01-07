@@ -20,7 +20,7 @@ import pl.edu.agh.to.weatherapp.model.enums.PrecipitationIntensity;
 import pl.edu.agh.to.weatherapp.model.enums.PrecipitationType;
 import pl.edu.agh.to.weatherapp.model.enums.TemperatureLevel;
 import pl.edu.agh.to.weatherapp.model.enums.WindIntensity;
-import pl.edu.agh.to.weatherapp.presenters.TripMemory;
+import pl.edu.agh.to.weatherapp.presenters.FavouriteTrips;
 import pl.edu.agh.to.weatherapp.presenters.WeatherPresenter;
 import pl.edu.agh.to.weatherapp.service.TripPersistenceService;
 import pl.edu.agh.to.weatherapp.weather.WeatherService;
@@ -82,8 +82,8 @@ class GuiTestServiceWithoutDelayTestIT {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/view/WeatherPresenter.fxml"));
         loader.setControllerFactory(c ->
-                //TODO: create mock for TripMemory
-                new WeatherPresenter(weatherServiceMock, new TripMemory(new TripPersistenceService())));
+                //TODO: create mock for FavouriteTrips
+                new WeatherPresenter(weatherServiceMock, new FavouriteTrips(new TripPersistenceService())));
         GridPane rootLayout = loader.load();
 
         Scene scene = new Scene(rootLayout);

@@ -7,7 +7,7 @@ import org.springframework.context.annotation.PropertySource;
 import pl.edu.agh.to.weatherapp.api.WeatherFetcher;
 import pl.edu.agh.to.weatherapp.api.WeatherApiFetcher;
 import pl.edu.agh.to.weatherapp.parser.JsonParser;
-import pl.edu.agh.to.weatherapp.presenters.TripMemory;
+import pl.edu.agh.to.weatherapp.presenters.FavouriteTrips;
 import pl.edu.agh.to.weatherapp.presenters.WeatherPresenter;
 import pl.edu.agh.to.weatherapp.service.TripPersistenceService;
 import pl.edu.agh.to.weatherapp.weather.WeatherService;
@@ -29,7 +29,7 @@ public class AppConfiguration {
     }
 
     @Bean
-    public WeatherPresenter weatherPresenter(WeatherService weatherService, TripMemory tripMemory) {
+    public WeatherPresenter weatherPresenter(WeatherService weatherService, FavouriteTrips tripMemory) {
         return new WeatherPresenter(weatherService,tripMemory);
     }
 
@@ -66,7 +66,7 @@ public class AppConfiguration {
     }
 
     @Bean
-    public TripMemory tripMemory() {
-        return new TripMemory(tripPersistenceService());
+    public FavouriteTrips tripMemory() {
+        return new FavouriteTrips(tripPersistenceService());
     }
 }

@@ -5,11 +5,11 @@ import javafx.collections.ObservableList;
 import pl.edu.agh.to.weatherapp.model.Trip;
 import pl.edu.agh.to.weatherapp.service.TripPersistenceService;
 
-public class TripMemory {
+public class FavouriteTrips {
     private final TripPersistenceService tripPersistenceService;
     private final ObservableList<Trip> trips = FXCollections.observableArrayList();
 
-    public TripMemory(TripPersistenceService tripPersistenceService) {
+    public FavouriteTrips(TripPersistenceService tripPersistenceService) {
         this.tripPersistenceService = tripPersistenceService;
         trips.addAll(this.tripPersistenceService.load());
     }

@@ -34,7 +34,7 @@ import java.util.List;
 public class WeatherPresenter {
     private final WeatherService weatherService;
 
-    private final TripMemory trips;
+    private final FavouriteTrips trips;
     @FXML
     private VBox weatherInfoVBox;
     @FXML
@@ -98,10 +98,12 @@ public class WeatherPresenter {
     private static final String COLOR_RED = "#FF6961";
 
     private final SimpleBooleanProperty isCurrentTripInFavourites = new SimpleBooleanProperty(false);
-    final ObservableObjectValue<Color> paintProperty = Bindings.when(isCurrentTripInFavourites).then(Color.web(COLOR_ORANGE)).otherwise(Color.web(COLOR_ORANGE, 0));
+    final ObservableObjectValue<Color> paintProperty = Bindings.when(isCurrentTripInFavourites)
+            .then(Color.web(COLOR_ORANGE))
+            .otherwise(Color.web(COLOR_ORANGE, 0));
     private Trip currentTrip = null;
 
-    public WeatherPresenter(WeatherService weatherService, TripMemory trips) {
+    public WeatherPresenter(WeatherService weatherService, FavouriteTrips trips) {
         this.weatherService = weatherService;
         this.trips = trips;
     }
@@ -111,11 +113,12 @@ public class WeatherPresenter {
         favouritesListView.setCellFactory(param -> new TripCell() {
             @Override
             protected void pressDeleteButtonHandler() {
-                if (lastItem != null && currentTrip != null) {
-                    if (currentTrip.getLocationNames().equals(lastItem.getLocationNames())) {
-                        isCurrentTripInFavourites.set(!isCurrentTripInFavourites.getValue());
+                if (getItem() != null && currentTrip != null) {
+                    Trip item = getItem();
+                    if (currentTrip.getLocationNames().equals(item.getLocationNames())) {
+                        isCurrentTripInFavourites.set(false);
                     }
-                    trips.deleteTrip(lastItem);
+                    trips.deleteTrip(item);
                 }
             }
         });
@@ -167,17 +170,20 @@ public class WeatherPresenter {
         Task<Weather> executeAppTask = new Task<>() {
             @Override
             protected Weather call() {
-                int startTime = timeStartTextField.getText().isEmpty() ? 0 : Integer.parseInt(timeStartTextField.getText());
+                int startTime =
+                        timeStartTextField.getText().isEmpty() ? 0 : Integer.parseInt(timeStartTextField.getText());
                 int endTime = timeEndTextField.getText().isEmpty() ? 24 : Integer.parseInt(timeEndTextField.getText());
 
                 if (searchMiddleTextField.getText().isEmpty()) {
                     return weatherService.getWeatherData(searchStartTextField.getText(), startTime, endTime);
                 }
                 if (searchDestinationTextField.getText().isEmpty()) {
-                    return weatherService.getSummaryWeatherData(searchStartTextField.getText(), searchMiddleTextField.getText(), startTime, endTime);
+                    return weatherService.getSummaryWeatherData(searchStartTextField.getText(),
+                            searchMiddleTextField.getText(), startTime, endTime);
                 }
                 //TODO: Add third destination
-                return weatherService.getSummaryWeatherData(searchStartTextField.getText(), searchMiddleTextField.getText(), startTime, endTime);
+                return weatherService.getSummaryWeatherData(searchStartTextField.getText(),
+                        searchMiddleTextField.getText(), startTime, endTime);
             }
         };
         executeAppTask.setOnSucceeded(e -> {
