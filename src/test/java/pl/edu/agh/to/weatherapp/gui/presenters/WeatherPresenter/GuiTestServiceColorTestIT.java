@@ -23,8 +23,8 @@ import pl.edu.agh.to.weatherapp.model.internal.enums.PrecipitationIntensity;
 import pl.edu.agh.to.weatherapp.model.internal.enums.PrecipitationType;
 import pl.edu.agh.to.weatherapp.model.internal.enums.TemperatureLevel;
 import pl.edu.agh.to.weatherapp.model.internal.enums.WindIntensity;
-import pl.edu.agh.to.weatherapp.presenters.FavouriteTrips;
-import pl.edu.agh.to.weatherapp.presenters.WeatherPresenter;
+import pl.edu.agh.to.weatherapp.gui.presenters.FavouriteTrips;
+import pl.edu.agh.to.weatherapp.gui.presenters.WeatherPresenter;
 import pl.edu.agh.to.weatherapp.service.persistence.TripPersistenceService;
 import pl.edu.agh.to.weatherapp.service.weather.WeatherService;
 

@@ -1,11 +1,11 @@
-package pl.edu.agh.to.weatherapp.controllers;
+package pl.edu.agh.to.weatherapp.gui.controllers;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import lombok.SneakyThrows;
-import pl.edu.agh.to.weatherapp.App;
+import pl.edu.agh.to.weatherapp.gui.App;
 
 public class AppController {
     private final Stage primaryStage;

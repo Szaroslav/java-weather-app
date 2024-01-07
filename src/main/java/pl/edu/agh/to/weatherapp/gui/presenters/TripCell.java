@@ -1,4 +1,4 @@
-package pl.edu.agh.to.weatherapp.presenters;
+package pl.edu.agh.to.weatherapp.gui.presenters;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;

@@ -1,4 +1,4 @@
-package pl.edu.agh.to.weatherapp.weather.summary;
+package pl.edu.agh.to.weatherapp.service.weather.summary;
 
 import org.junit.jupiter.api.Test;
 import pl.edu.agh.to.weatherapp.model.dto.ForecastWeatherApiDto;
@@ -8,7 +8,6 @@ import pl.edu.agh.to.weatherapp.model.internal.enums.PrecipitationIntensity;
 import pl.edu.agh.to.weatherapp.model.internal.enums.PrecipitationType;
 import pl.edu.agh.to.weatherapp.model.internal.enums.TemperatureLevel;
 import pl.edu.agh.to.weatherapp.model.internal.enums.WindIntensity;
-import pl.edu.agh.to.weatherapp.service.weather.summary.ExtremeWeatherService;
 
 import java.util.List;
 

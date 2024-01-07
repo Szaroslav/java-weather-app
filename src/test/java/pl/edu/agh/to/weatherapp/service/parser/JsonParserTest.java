@@ -1,4 +1,4 @@
-package pl.edu.agh.to.weatherapp.parser;
+package pl.edu.agh.to.weatherapp.service.parser;
 
 import lombok.SneakyThrows;
 import org.assertj.core.data.Percentage;

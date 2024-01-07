@@ -1,4 +1,4 @@
-package pl.edu.agh.to.weatherapp;
+package pl.edu.agh.to.weatherapp.gui;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 import lombok.Getter;
 
 import pl.edu.agh.to.weatherapp.configuration.AppConfiguration;
-import pl.edu.agh.to.weatherapp.controllers.AppController;
+import pl.edu.agh.to.weatherapp.gui.controllers.AppController;
 
 
 @Configuration

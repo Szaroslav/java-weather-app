@@ -1,4 +1,4 @@
-package pl.edu.agh.to.weatherapp.parser;
+package pl.edu.agh.to.weatherapp.service.parser;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;

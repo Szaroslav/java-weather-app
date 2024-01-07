@@ -1,4 +1,4 @@
-package pl.edu.agh.to.weatherapp.presenters;
+package pl.edu.agh.to.weatherapp.gui.presenters;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
