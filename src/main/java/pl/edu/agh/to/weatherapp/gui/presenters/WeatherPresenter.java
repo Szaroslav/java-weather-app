@@ -199,8 +199,7 @@ public class WeatherPresenter {
                     String.valueOf(weatherData.getPrecipitationInMm()),
                     weatherData.getPrecipitationIntensity());
             showWind(String.valueOf(weatherData.getWindInMps()), weatherData.getWindIntensity());
-            //TODO: Change to value from weatherData
-            showMud(true);
+            showMud(weatherData.isMud());
             showWeatherInfo();
             toggleSearchButtonVisibility();
         });
@@ -262,11 +261,11 @@ public class WeatherPresenter {
     }
 
     private void showTemperature(String temperature, TemperatureLevel temperatureLevel) {
-        //TODO: add fourth color
         String backgroundColorClass = switch (temperatureLevel) {
             case HOT -> "green";
-            case WARM -> "orange";
-            case COLD -> "red";
+            case WARM -> "yellow";
+            case COLD -> "orange";
+            case FREEZING -> "red";
         };
         temperatureBox.getStyleClass().clear();
         temperatureBox.getStyleClass().add(backgroundColorClass);

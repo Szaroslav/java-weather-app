@@ -24,5 +24,5 @@ public class Weather {
     private int precipitationInMm;
     private WindIntensity windIntensity;
     private int windInMps;
-    private boolean isMud;
+    private boolean mud;
 }
