@@ -2,7 +2,7 @@ package pl.edu.agh.to.weatherapp.service.weather;
 
 import org.springframework.stereotype.Service;
 import pl.edu.agh.to.weatherapp.service.api.WeatherFetcher;
-import pl.edu.agh.to.weatherapp.model.dto.ForecastWeatherApiDto;
+import pl.edu.agh.to.weatherapp.model.dto.DailyWeatherApiDto;
 import pl.edu.agh.to.weatherapp.model.internal.Weather;
 import pl.edu.agh.to.weatherapp.service.parser.JsonParser;
 import pl.edu.agh.to.weatherapp.service.weather.summary.WeatherSummaryService;
@@ -22,14 +22,14 @@ public class WeatherApiService implements WeatherService {
         this.weatherSummaryService = weatherSummaryService;
     }
 
-    private ForecastWeatherApiDto getForecastWeatherData(String location) {
+    private DailyWeatherApiDto getForecastWeatherData(String location) {
         final int daysNumber = 1;
         return weatherFetcher.fetchForecast(location, daysNumber)
                 .thenApply(responseParser::parseForecast)
                 .join();
     }
 
-    private ForecastWeatherApiDto getForecastWeatherData(String location, int startHour, int endHour) {
+    private DailyWeatherApiDto getForecastWeatherData(String location, int startHour, int endHour) {
         var forecastWeatherData = getForecastWeatherData(location);
         forecastWeatherData.getHourlyWeatherForecasts()
                 .removeIf(weatherData -> !between(weatherData.getDate().getHourOfDay(), startHour, endHour));
@@ -47,7 +47,7 @@ public class WeatherApiService implements WeatherService {
 
     @Override
     public Weather getForecastSummaryWeatherData(List<String> locations, int startHour, int endHour) {
-        List<ForecastWeatherApiDto> weatherList = locations.stream()
+        List<DailyWeatherApiDto> weatherList = locations.stream()
                 .map(x->getForecastWeatherData(x,startHour,endHour))
                 .toList();
         Weather summary = weatherSummaryService.getSummary(weatherList);

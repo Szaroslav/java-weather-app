@@ -1,8 +1,8 @@
 package pl.edu.agh.to.weatherapp.service.weather.summary;
 
 import org.junit.jupiter.api.Test;
-import pl.edu.agh.to.weatherapp.model.dto.ForecastWeatherApiDto;
-import pl.edu.agh.to.weatherapp.model.dto.WeatherApiDto;
+import pl.edu.agh.to.weatherapp.model.dto.DailyWeatherApiDto;
+import pl.edu.agh.to.weatherapp.model.dto.HourlyWeatherApiDto;
 import pl.edu.agh.to.weatherapp.model.internal.Weather;
 import pl.edu.agh.to.weatherapp.model.internal.enums.PrecipitationIntensity;
 import pl.edu.agh.to.weatherapp.model.internal.enums.PrecipitationType;
@@ -19,9 +19,9 @@ class ExtremeWeatherServiceTest {
     @Test
     void oneLocationOneForecastTest() {
         //given
-        List<ForecastWeatherApiDto> weatherDataList = new java.util.ArrayList<>();
-        ForecastWeatherApiDto forecastWeatherDto = new ForecastWeatherApiDto();
-        WeatherApiDto weatherDto = new WeatherApiDto()
+        List<DailyWeatherApiDto> weatherDataList = new java.util.ArrayList<>();
+        DailyWeatherApiDto forecastWeatherDto = new DailyWeatherApiDto();
+        HourlyWeatherApiDto weatherDto = new HourlyWeatherApiDto()
                 .setTemperatureC(30)
                 .setWindKph(72)
                 .setPrecipitationMm(20)
@@ -47,10 +47,10 @@ class ExtremeWeatherServiceTest {
     @Test
     void oneLocationMultipleForecastsTest() {
         //given
-        List<ForecastWeatherApiDto> weatherDataList = new java.util.ArrayList<>();
-        ForecastWeatherApiDto forecastWeatherDto = new ForecastWeatherApiDto();
+        List<DailyWeatherApiDto> weatherDataList = new java.util.ArrayList<>();
+        DailyWeatherApiDto forecastWeatherDto = new DailyWeatherApiDto();
         for (int i = 0; i <= 10; i++) {
-            WeatherApiDto weatherDto = new WeatherApiDto()
+            HourlyWeatherApiDto weatherDto = new HourlyWeatherApiDto()
                     .setTemperatureC(15 + i)
                     .setWindKph(26 + i)
                     .setPrecipitationMm(i)
@@ -77,17 +77,17 @@ class ExtremeWeatherServiceTest {
     @Test
     void twoLocationsMultipleForecastsTest() {
         //given
-        List<ForecastWeatherApiDto> weatherDataList = new java.util.ArrayList<>();
-        ForecastWeatherApiDto forecastWeatherDto1 = new ForecastWeatherApiDto();
-        ForecastWeatherApiDto forecastWeatherDto2 = new ForecastWeatherApiDto();
+        List<DailyWeatherApiDto> weatherDataList = new java.util.ArrayList<>();
+        DailyWeatherApiDto forecastWeatherDto1 = new DailyWeatherApiDto();
+        DailyWeatherApiDto forecastWeatherDto2 = new DailyWeatherApiDto();
         for (int i = 0; i <= 10; i++) {
-            WeatherApiDto weatherDto = new WeatherApiDto()
+            HourlyWeatherApiDto weatherDto = new HourlyWeatherApiDto()
                     .setTemperatureC(15 + i)
                     .setWindKph(8 + i)
                     .setPrecipitationMm((float) i / 2)
                     .setWillRain(false)
                     .setWillSnow(true);
-            WeatherApiDto weatherDto2 = new WeatherApiDto()
+            HourlyWeatherApiDto weatherDto2 = new HourlyWeatherApiDto()
                     .setPrecipitationMm(0)
                     .setWindKph(10 - i)
                     .setTemperatureC(15 - i)

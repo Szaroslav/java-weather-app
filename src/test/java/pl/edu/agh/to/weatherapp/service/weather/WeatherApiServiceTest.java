@@ -7,8 +7,8 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import pl.edu.agh.to.weatherapp.service.api.WeatherApiFetcher;
-import pl.edu.agh.to.weatherapp.model.dto.ForecastWeatherApiDto;
-import pl.edu.agh.to.weatherapp.model.dto.WeatherApiDto;
+import pl.edu.agh.to.weatherapp.model.dto.DailyWeatherApiDto;
+import pl.edu.agh.to.weatherapp.model.dto.HourlyWeatherApiDto;
 import pl.edu.agh.to.weatherapp.model.internal.Weather;
 import pl.edu.agh.to.weatherapp.service.parser.JsonParser;
 import pl.edu.agh.to.weatherapp.service.weather.summary.ExtremeWeatherService;
@@ -27,7 +27,7 @@ class WeatherApiServiceTest {
     private static final int START_TIME = 8;
     private static final int END_TIME = 20;
     @Captor
-    private final ArgumentCaptor<List<ForecastWeatherApiDto>> captor = ArgumentCaptor.captor();
+    private final ArgumentCaptor<List<DailyWeatherApiDto>> captor = ArgumentCaptor.captor();
     @Mock
     private final WeatherApiFetcher weatherApiFetcher = Mockito.mock(WeatherApiFetcher.class);
     @Mock
@@ -47,8 +47,8 @@ class WeatherApiServiceTest {
         Weather expectedWeather = new Weather();
         expectedWeather.getLocationNames().add(LOCATION_1);
         expectedWeather.getLocationNames().add(LOCATION_2);
-        ForecastWeatherApiDto forecastWeatherDto1 = prepareMockForecast(LOCATION_1);
-        ForecastWeatherApiDto forecastWeatherDto2 = prepareMockForecast(LOCATION_2);
+        DailyWeatherApiDto forecastWeatherDto1 = prepareMockForecast(LOCATION_1);
+        DailyWeatherApiDto forecastWeatherDto2 = prepareMockForecast(LOCATION_2);
 
         //when
         Mockito.when(weatherApiFetcher.fetchForecast(LOCATION_1, DAYS))
@@ -80,8 +80,8 @@ class WeatherApiServiceTest {
         Weather expectedWeather = new Weather();
         expectedWeather.getLocationNames().add(LOCATION_1);
         expectedWeather.getLocationNames().add(LOCATION_2);
-        ForecastWeatherApiDto forecastWeatherDto1 = prepareMockForecast(LOCATION_1);
-        ForecastWeatherApiDto forecastWeatherDto2 = prepareMockForecast(LOCATION_2);
+        DailyWeatherApiDto forecastWeatherDto1 = prepareMockForecast(LOCATION_1);
+        DailyWeatherApiDto forecastWeatherDto2 = prepareMockForecast(LOCATION_2);
 
         //when
         Mockito.when(weatherApiFetcher.fetchForecast(LOCATION_1, DAYS))
@@ -108,11 +108,11 @@ class WeatherApiServiceTest {
                 .hasSize(END_TIME - START_TIME + 1);
     }
 
-    private ForecastWeatherApiDto prepareMockForecast(String location) {
-        ForecastWeatherApiDto forecastWeatherDto = new ForecastWeatherApiDto()
+    private DailyWeatherApiDto prepareMockForecast(String location) {
+        DailyWeatherApiDto forecastWeatherDto = new DailyWeatherApiDto()
                 .setLocationName(location);
         for (int i = 0; i < 24; i++) {
-            var weatherData = Mockito.mock(WeatherApiDto.class);
+            var weatherData = Mockito.mock(HourlyWeatherApiDto.class);
             Mockito.when(weatherData.getDate()).thenReturn(new DateTime().plusHours(i));
             forecastWeatherDto.getHourlyWeatherForecasts().add(weatherData);
         }
