@@ -41,7 +41,6 @@ import static org.testfx.assertions.api.Assertions.assertThat;
 
 @ExtendWith(ApplicationExtension.class)
 class GuiTestFavouritesTestIT {
-
     private static final String LOCATION_START = "Ryglice";
     private static final String LOCATION_END = "Kraków";
     private static final String LOCATION_MIDDLE = "Tarnów";
