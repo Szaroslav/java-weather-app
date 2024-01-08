@@ -61,28 +61,28 @@ class GuiTestServiceErrorTestIT {
                 });
         Mockito.when(weatherServiceMock.getForecastSummaryWeatherData(List.of(LOCATION_VALID), START_HOUR, END_HOUR)).thenAnswer(
                 (Answer<Weather>) invocation -> {
-                    Weather weatherData = new Weather();
+                    Weather weatherData = new Weather()
+                    .setTemperatureLevel(TemperatureLevel.COLD)
+                    .setWindIntensity(WindIntensity.WINDY)
+                    .setPrecipitationIntensity(PrecipitationIntensity.WEAK)
+                    .setPrecipitationType(PrecipitationType.BOTH)
+                    .setApparentTemperature(TEMP)
+                    .setWindInMps(WIND)
+                    .setPrecipitationInMm(RAIN);
                     weatherData.getLocationNames().add(LOCATION_VALID);
-                    weatherData.setTemperatureLevel(TemperatureLevel.COLD);
-                    weatherData.setWindIntensity(WindIntensity.WINDY);
-                    weatherData.setPrecipitationIntensity(PrecipitationIntensity.WEAK);
-                    weatherData.setPrecipitationType(PrecipitationType.BOTH);
-                    weatherData.setApparentTemperature(TEMP);
-                    weatherData.setWindInMps(WIND);
-                    weatherData.setPrecipitationInMm(RAIN);
                     return weatherData;
                 });
         Mockito.when(weatherServiceMock.getForecastSummaryWeatherData(List.of(LOCATION_VALID), Integer.parseInt(VALID_EARLY_TIME), Integer.parseInt(VALID_LATE_TIME))).thenAnswer(
                 (Answer<Weather>) invocation -> {
-                    Weather weatherData = new Weather();
+                    Weather weatherData = new Weather()
+                    .setTemperatureLevel(TemperatureLevel.COLD)
+                    .setWindIntensity(WindIntensity.WINDY)
+                    .setPrecipitationIntensity(PrecipitationIntensity.WEAK)
+                    .setPrecipitationType(PrecipitationType.BOTH)
+                    .setApparentTemperature(TEMP)
+                    .setWindInMps(WIND)
+                    .setPrecipitationInMm(RAIN);
                     weatherData.getLocationNames().add(LOCATION_VALID);
-                    weatherData.setTemperatureLevel(TemperatureLevel.COLD);
-                    weatherData.setWindIntensity(WindIntensity.WINDY);
-                    weatherData.setPrecipitationIntensity(PrecipitationIntensity.WEAK);
-                    weatherData.setPrecipitationType(PrecipitationType.BOTH);
-                    weatherData.setApparentTemperature(TEMP);
-                    weatherData.setWindInMps(WIND);
-                    weatherData.setPrecipitationInMm(RAIN);
                     return weatherData;
                 });
 
