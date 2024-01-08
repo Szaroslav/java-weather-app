@@ -60,16 +60,15 @@ class GuiTestServiceDelayTestIT {
                     await()
                             .pollDelay(Duration.ofSeconds(2))
                             .until(() -> true);
-                    Weather weatherData = new Weather()
-                    .setTemperatureLevel(TemperatureLevel.COLD)
-                    .setWindIntensity(WindIntensity.WINDY)
-                    .setPrecipitationIntensity(PrecipitationIntensity.WEAK)
-                    .setPrecipitationType(PrecipitationType.BOTH)
-                    .setApparentTemperature(TEMP)
-                    .setWindInMps(WIND)
-                    .setPrecipitationInMm(RAIN);
-                    weatherData.getLocationNames().addAll(List.of(LOCATION_START, LOCATION_END));
-                    return weatherData;
+                    return new Weather()
+                            .setTemperatureLevel(TemperatureLevel.COLD)
+                            .setWindIntensity(WindIntensity.WINDY)
+                            .setPrecipitationIntensity(PrecipitationIntensity.WEAK)
+                            .setPrecipitationType(PrecipitationType.BOTH)
+                            .setApparentTemperature(TEMP)
+                            .setWindInMps(WIND)
+                            .setPrecipitationInMm(RAIN)
+                            .setLocationNames(List.of(LOCATION_START, LOCATION_END));
                 });
 
 

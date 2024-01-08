@@ -69,42 +69,34 @@ class GuiTestFavouritesTestIT {
         stage.setMinWidth(400);
         stage.setMinHeight(400);
 
-
         WeatherService weatherServiceMock = Mockito.mock((WeatherService.class));
         FavouriteTrips favouriteTripsMock = Mockito.mock(FavouriteTrips.class);
         Mockito.when(favouriteTripsMock.getTrips()).thenAnswer((Answer<ObservableList<Trip>>) invocation -> trips);
-
 
         doNothing().when(favouriteTripsMock).addTrip(valueCapture.capture());
         doNothing().when(favouriteTripsMock).deleteTrip(valueCaptureDelete.capture());
 
         Mockito.when(weatherServiceMock.getForecastSummaryWeatherData(List.of(LOCATION_START, LOCATION_MIDDLE), START_HOUR, END_HOUR)).thenAnswer(
-                (Answer<Weather>) invocation -> {
-                    Weather weatherData = new Weather()
-                    .setTemperatureLevel(TemperatureLevel.COLD)
-                    .setWindIntensity(WindIntensity.WINDY)
-                    .setPrecipitationIntensity(PrecipitationIntensity.WEAK)
-                    .setPrecipitationType(PrecipitationType.BOTH)
-                    .setApparentTemperature(TEMP)
-                    .setWindInMps(WIND)
-                    .setPrecipitationInMm(RAIN);
-                    weatherData.getLocationNames().addAll(List.of(LOCATION_START, LOCATION_MIDDLE));
-                    return weatherData;
-                });
+                (Answer<Weather>) invocation -> new Weather()
+                        .setTemperatureLevel(TemperatureLevel.COLD)
+                        .setWindIntensity(WindIntensity.WINDY)
+                        .setPrecipitationIntensity(PrecipitationIntensity.WEAK)
+                        .setPrecipitationType(PrecipitationType.BOTH)
+                        .setApparentTemperature(TEMP)
+                        .setWindInMps(WIND)
+                        .setPrecipitationInMm(RAIN)
+                        .setLocationNames(List.of(LOCATION_START, LOCATION_MIDDLE)));
 
         Mockito.when(weatherServiceMock.getForecastSummaryWeatherData(List.of(LOCATION_START, LOCATION_END), START_HOUR, END_HOUR)).thenAnswer(
-                (Answer<Weather>) invocation -> {
-                    Weather weatherData = new Weather()
-                    .setTemperatureLevel(TemperatureLevel.COLD)
-                    .setWindIntensity(WindIntensity.WINDY)
-                    .setPrecipitationIntensity(PrecipitationIntensity.WEAK)
-                    .setPrecipitationType(PrecipitationType.BOTH)
-                    .setApparentTemperature(TEMP)
-                    .setWindInMps(WIND)
-                    .setPrecipitationInMm(RAIN);
-                    weatherData.getLocationNames().addAll(List.of(LOCATION_START, LOCATION_END));
-                    return weatherData;
-                });
+                (Answer<Weather>) invocation -> new Weather()
+                        .setTemperatureLevel(TemperatureLevel.COLD)
+                        .setWindIntensity(WindIntensity.WINDY)
+                        .setPrecipitationIntensity(PrecipitationIntensity.WEAK)
+                        .setPrecipitationType(PrecipitationType.BOTH)
+                        .setApparentTemperature(TEMP)
+                        .setWindInMps(WIND)
+                        .setPrecipitationInMm(RAIN)
+                        .setLocationNames(List.of(LOCATION_START, LOCATION_END)));
 
 
         FXMLLoader loader = new FXMLLoader();
@@ -156,7 +148,7 @@ class GuiTestFavouritesTestIT {
         Assertions.assertEquals(trip2, valueCaptureDelete.getValue());
 
         Platform.runLater(() ->
-            trips.remove(valueCaptureDelete.getValue())
+                trips.remove(valueCaptureDelete.getValue())
         );
 
     }
@@ -184,7 +176,7 @@ class GuiTestFavouritesTestIT {
         robot.clickOn("Delete");
         Assertions.assertEquals(trip2, valueCaptureDelete.getValue());
         Platform.runLater(() ->
-            trips.remove(valueCaptureDelete.getValue())
+                trips.remove(valueCaptureDelete.getValue())
         );
 
         assertThat(robot.lookup("#starSVGPath").queryAs(SVGPath.class).getFill()).isEqualTo(Color.web(COLOR_ORANGE, 0));

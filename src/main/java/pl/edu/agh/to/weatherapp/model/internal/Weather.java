@@ -25,4 +25,9 @@ public class Weather {
     private WindIntensity windIntensity;
     private int windInMps;
     private boolean mud;
+    public Weather setLocationNames(List<String> names) {
+        this.getLocationNames().clear();
+        this.getLocationNames().addAll(names);
+        return this;
+    }
 }

@@ -60,31 +60,24 @@ class GuiTestServiceErrorTestIT {
                     throw new CompletionException(new InvalidRequest("No matching location found."));
                 });
         Mockito.when(weatherServiceMock.getForecastSummaryWeatherData(List.of(LOCATION_VALID), START_HOUR, END_HOUR)).thenAnswer(
-                (Answer<Weather>) invocation -> {
-                    Weather weatherData = new Weather()
-                    .setTemperatureLevel(TemperatureLevel.COLD)
-                    .setWindIntensity(WindIntensity.WINDY)
-                    .setPrecipitationIntensity(PrecipitationIntensity.WEAK)
-                    .setPrecipitationType(PrecipitationType.BOTH)
-                    .setApparentTemperature(TEMP)
-                    .setWindInMps(WIND)
-                    .setPrecipitationInMm(RAIN);
-                    weatherData.getLocationNames().add(LOCATION_VALID);
-                    return weatherData;
-                });
+                (Answer<Weather>) invocation -> new Weather()
+                        .setTemperatureLevel(TemperatureLevel.COLD)
+                        .setWindIntensity(WindIntensity.WINDY)
+                        .setPrecipitationIntensity(PrecipitationIntensity.WEAK)
+                        .setPrecipitationType(PrecipitationType.BOTH)
+                        .setApparentTemperature(TEMP)
+                        .setWindInMps(WIND)
+                        .setPrecipitationInMm(RAIN).setLocationNames(List.of(LOCATION_VALID)));
         Mockito.when(weatherServiceMock.getForecastSummaryWeatherData(List.of(LOCATION_VALID), Integer.parseInt(VALID_EARLY_TIME), Integer.parseInt(VALID_LATE_TIME))).thenAnswer(
-                (Answer<Weather>) invocation -> {
-                    Weather weatherData = new Weather()
-                    .setTemperatureLevel(TemperatureLevel.COLD)
-                    .setWindIntensity(WindIntensity.WINDY)
-                    .setPrecipitationIntensity(PrecipitationIntensity.WEAK)
-                    .setPrecipitationType(PrecipitationType.BOTH)
-                    .setApparentTemperature(TEMP)
-                    .setWindInMps(WIND)
-                    .setPrecipitationInMm(RAIN);
-                    weatherData.getLocationNames().add(LOCATION_VALID);
-                    return weatherData;
-                });
+                (Answer<Weather>) invocation -> new Weather()
+                        .setTemperatureLevel(TemperatureLevel.COLD)
+                        .setWindIntensity(WindIntensity.WINDY)
+                        .setPrecipitationIntensity(PrecipitationIntensity.WEAK)
+                        .setPrecipitationType(PrecipitationType.BOTH)
+                        .setApparentTemperature(TEMP)
+                        .setWindInMps(WIND)
+                        .setPrecipitationInMm(RAIN)
+                        .setLocationNames(List.of(LOCATION_VALID)));
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/view/WeatherPresenter.fxml"));
