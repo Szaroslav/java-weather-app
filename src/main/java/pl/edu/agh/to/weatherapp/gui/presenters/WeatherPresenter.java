@@ -114,9 +114,9 @@ public class WeatherPresenter {
         favouritesListView.setCellFactory(param -> new TripCell() {
             @Override
             protected void pressDeleteButtonHandler() {
-                if (getItem() != null && currentTrip != null) {
+                if (getItem() != null) {
                     Trip item = getItem();
-                    if (currentTrip.getLocationNames().equals(item.getLocationNames())) {
+                    if (currentTrip != null && currentTrip.getLocationNames().equals(item.getLocationNames())) {
                         isCurrentTripInFavourites.set(false);
                     }
                     trips.deleteTrip(item);
@@ -216,10 +216,10 @@ public class WeatherPresenter {
     }
 
     public Trip getTripObject(ObservableList<Trip> trips, List<String> locationNames) {
-        for (int i = 0; i < trips.size(); i++) {
-            if (trips.get(i).getLocationNames().equals(locationNames)) {
+        for (Trip trip : trips) {
+            if (trip.getLocationNames().equals(locationNames)) {
                 isCurrentTripInFavourites.set(true);
-                return trips.get(i);
+                return trip;
             }
         }
         isCurrentTripInFavourites.set(false);
