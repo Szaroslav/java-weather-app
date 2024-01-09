@@ -23,10 +23,17 @@ import java.net.http.HttpClient;
 public class AppConfiguration {
     @Value("${weather.apiKey}")
     private String apiKey;
+    @Value("${weather.noDaysToCheckPrecipitation}")
+    private int noDaysToCheckPrecipitation;
 
     @Bean(name = "apiKey")
     public String apiKey() {
         return apiKey;
+    }
+
+    @Bean(name = "noDaysToCheckPrecipitation")
+    public int noDaysToCheckPrecipitation() {
+        return noDaysToCheckPrecipitation;
     }
 
     @Bean
@@ -35,10 +42,17 @@ public class AppConfiguration {
     }
 
     @Bean
-    public WeatherService weatherService(WeatherFetcher weatherFetcher,
-                                         JsonParser responseParser,
-                                         WeatherSummaryService weatherSummaryService) {
-        return new WeatherApiService(weatherFetcher, responseParser, weatherSummaryService);
+    public WeatherService weatherService(
+        WeatherFetcher weatherFetcher,
+        JsonParser responseParser,
+        WeatherSummaryService weatherSummaryService
+    ) {
+        return new WeatherApiService(
+            noDaysToCheckPrecipitation,
+            weatherFetcher,
+            responseParser,
+            weatherSummaryService
+        );
     }
 
     @Bean

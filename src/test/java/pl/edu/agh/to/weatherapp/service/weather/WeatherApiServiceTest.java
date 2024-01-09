@@ -6,6 +6,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import pl.edu.agh.to.weatherapp.configuration.AppConfiguration;
 import pl.edu.agh.to.weatherapp.service.api.WeatherApiFetcher;
 import pl.edu.agh.to.weatherapp.model.dto.DailyWeatherApiDto;
 import pl.edu.agh.to.weatherapp.model.dto.HourlyWeatherApiDto;
@@ -37,6 +38,7 @@ class WeatherApiServiceTest {
     private final ExtremeWeatherService extremeWeatherService = Mockito.mock(ExtremeWeatherService.class);
     @Mock
     private final WeatherApiService weatherApiService = new WeatherApiService(
+        1,
         weatherApiFetcher,
         jsonParser,
         extremeWeatherService

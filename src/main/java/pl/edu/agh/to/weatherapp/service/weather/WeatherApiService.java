@@ -14,11 +14,18 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class WeatherApiService implements WeatherService {
+    private final int noDaysToCheckPrecipitation;
     private final WeatherFetcher weatherFetcher;
     private final JsonParser responseParser;
     private final WeatherSummaryService weatherSummaryService;
 
-    public WeatherApiService(WeatherFetcher weatherFetcher, JsonParser responseParser, WeatherSummaryService weatherSummaryService) {
+    public WeatherApiService(
+        int noDaysToCheckPrecipitation,
+        WeatherFetcher weatherFetcher,
+        JsonParser responseParser,
+        WeatherSummaryService weatherSummaryService
+    ) {
+        this.noDaysToCheckPrecipitation = noDaysToCheckPrecipitation;
         this.weatherFetcher = weatherFetcher;
         this.responseParser = responseParser;
         this.weatherSummaryService = weatherSummaryService;
@@ -62,7 +69,7 @@ public class WeatherApiService implements WeatherService {
         Weather summary = weatherSummaryService.getSummary(weatherList);
         summary.getLocationNames().addAll(locations);
         return summary
-            .setMud(wasMudDaysBefore(locations.get(0), 2));
+            .setMud(wasMudDaysBefore(locations.get(0), noDaysToCheckPrecipitation));
     }
 
     public boolean wasMudDaysBefore(String locationName, int daysNumber) {
