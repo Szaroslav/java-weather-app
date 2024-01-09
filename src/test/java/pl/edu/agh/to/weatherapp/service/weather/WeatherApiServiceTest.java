@@ -26,8 +26,6 @@ class WeatherApiServiceTest {
     private static final int DAYS = 1;
     private static final int START_TIME = 8;
     private static final int END_TIME = 20;
-    private static final DateTime DATE = new DateTime(
-        2137, 4, 2, 21, 37);
 
     @Captor
     private final ArgumentCaptor<List<DailyWeatherApiDto>> captor = ArgumentCaptor.captor();
@@ -55,6 +53,10 @@ class WeatherApiServiceTest {
 
         //when
         Mockito.when(weatherApiFetcher.fetchForecast(LOCATION_1, DAYS))
+            .thenReturn(CompletableFuture.completedFuture(RESPONSE_1));
+        Mockito.when(weatherApiFetcher.fetchHistory(
+                Mockito.eq(LOCATION_1),
+                Mockito.any(DateTime.class)))
             .thenReturn(CompletableFuture.completedFuture(RESPONSE_1));
         Mockito.when(jsonParser.parseForecast(RESPONSE_1))
             .thenReturn(forecastWeatherDto1);
@@ -89,6 +91,10 @@ class WeatherApiServiceTest {
         //when
         Mockito.when(weatherApiFetcher.fetchForecast(LOCATION_1, DAYS))
             .thenReturn(CompletableFuture.completedFuture(RESPONSE_1));
+        Mockito.when(weatherApiFetcher.fetchHistory(
+                Mockito.eq(LOCATION_1),
+                Mockito.any(DateTime.class)))
+            .thenReturn(CompletableFuture.completedFuture(RESPONSE_1));
         Mockito.when(jsonParser.parseForecast(RESPONSE_1))
             .thenReturn(forecastWeatherDto1);
         Mockito.when(weatherApiFetcher.fetchForecast(LOCATION_2, DAYS))
@@ -112,7 +118,7 @@ class WeatherApiServiceTest {
     }
 
     @Test
-    void testWasPrecipitationDaysBefore() {
+    void testWasMudDaysBefore() {
         //given
         DailyWeatherApiDto dailyWeatherDto = prepareMockForecast(LOCATION_1);
 
@@ -124,8 +130,7 @@ class WeatherApiServiceTest {
         Mockito.when(jsonParser.parseForecast(RESPONSE_1))
             .thenReturn(dailyWeatherDto);
 
-        boolean result =
-            weatherApiService.wasPrecipitationDaysBefore(LOCATION_1, DAYS);
+        boolean result = weatherApiService.wasMudDaysBefore(LOCATION_1, DAYS);
 
         //then
         assertThat(result).isFalse();
