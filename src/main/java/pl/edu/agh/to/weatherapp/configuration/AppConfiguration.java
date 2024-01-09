@@ -63,7 +63,7 @@ public class AppConfiguration {
 
     @Bean
     public TripPersistenceService tripPersistenceService() {
-        return new SqlitePersistenceService();
+        return new SqlitePersistenceService("trips.db");
     }
 
     @Bean
