@@ -40,6 +40,6 @@ public class TripCell extends ListCell<Trip> {
     }
 
     private String tripToString(Trip trip) {
-        return String.join(CITY_NAMES_SEPARATOR, trip.getLocationNames());
+        return String.join(CITY_NAMES_SEPARATOR, trip.locationNames());
     }
 }

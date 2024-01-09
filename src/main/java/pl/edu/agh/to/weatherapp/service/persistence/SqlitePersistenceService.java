@@ -86,7 +86,7 @@ public class SqlitePersistenceService implements TripPersistenceService {
         try (Connection conn = this.connect();
              PreparedStatement statement = conn.prepareStatement(sql)) {
 
-            List<String> locationNames = trip.getLocationNames();
+            List<String> locationNames = trip.locationNames();
             int paramCount = Math.min(locationNames.size(), 3);
 
             for (int i = 0; i < paramCount; i++) {

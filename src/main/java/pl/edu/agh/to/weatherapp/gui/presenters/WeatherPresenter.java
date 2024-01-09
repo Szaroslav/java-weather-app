@@ -228,7 +228,7 @@ public class WeatherPresenter {
     }
 
     private void insertTripToSearchField(Trip trip) {
-        List<String> tripLocations = trip.getLocationNames();
+        List<String> tripLocations = trip.locationNames();
         clearTextFields();
         if (!tripLocations.isEmpty()) {
             searchStartTextField.setText(tripLocations.get(0));
