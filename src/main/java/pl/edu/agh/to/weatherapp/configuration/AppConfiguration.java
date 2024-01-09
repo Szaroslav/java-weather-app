@@ -23,12 +23,19 @@ import java.net.http.HttpClient;
 public class AppConfiguration {
     @Value("${weather.apiKey}")
     private String apiKey;
+    @Value("${weather.dbName}")
+    private String dbName;
     @Value("${weather.noDaysToCheckPrecipitation}")
     private int noDaysToCheckPrecipitation;
 
     @Bean(name = "apiKey")
     public String apiKey() {
         return apiKey;
+    }
+
+    @Bean(name = "dbName")
+    public String dbName() {
+        return dbName;
     }
 
     @Bean(name = "noDaysToCheckPrecipitation")
@@ -42,16 +49,14 @@ public class AppConfiguration {
     }
 
     @Bean
-    public WeatherService weatherService(
-        WeatherFetcher weatherFetcher,
-        JsonParser responseParser,
-        WeatherSummaryService weatherSummaryService
-    ) {
+    public WeatherService weatherService(WeatherFetcher weatherFetcher,
+                                         JsonParser responseParser,
+                                         WeatherSummaryService weatherSummaryService) {
         return new WeatherApiService(
-            noDaysToCheckPrecipitation,
-            weatherFetcher,
-            responseParser,
-            weatherSummaryService
+                noDaysToCheckPrecipitation(),
+                weatherFetcher,
+                responseParser,
+                weatherSummaryService
         );
     }
 
@@ -77,7 +82,7 @@ public class AppConfiguration {
 
     @Bean
     public TripPersistenceService tripPersistenceService() {
-        return new SqlitePersistenceService("trips.db");
+        return new SqlitePersistenceService(dbName());
     }
 
     @Bean
