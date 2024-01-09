@@ -4,12 +4,10 @@ import pl.edu.agh.to.weatherapp.model.internal.Trip;
 
 import java.util.List;
 
-public class TripPersistenceService {
-    public Trip[] load() {
-        return new Trip[]{new Trip(List.of("Tarnów", "Ryglice")), new Trip(List.of("Tarnów", "Bistuszowa"))};
-    }
+public interface TripPersistenceService {
+    List<Trip> load();
 
-    public void save(List<Trip> tripList) {
-        //TODO
-    }
+    void add(Trip trip);
+
+    void delete(Trip trip);
 }

@@ -111,9 +111,9 @@ public class WeatherPresenter {
         favouritesListView.setCellFactory(param -> new TripCell() {
             @Override
             protected void pressDeleteButtonHandler() {
-                if (getItem() != null && !Objects.equals(locationLabel.getText(), "")) {
+                if (getItem() != null) {
                     Trip item = getItem();
-                    if (item.equals(new Trip(locationLabel.getNames()))) {
+                    if (!Objects.equals(locationLabel.getText(), "") && item.equals(new Trip(locationLabel.getNames()))) {
                         isCurrentTripInFavourites.set(false);
                     }
                     trips.deleteTrip(item);
