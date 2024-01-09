@@ -189,7 +189,7 @@ class GuiTestFavouritesTestIT {
                 .pollDelay(Duration.ofMillis(300))
                 .until(() -> true);
 
-        robot.clickOn(String.join(CITY_NAMES_SEPARATOR, trip3.getLocationNames()));
+        robot.clickOn(String.join(CITY_NAMES_SEPARATOR, trip3.locationNames()));
 
         assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
                 .hasText(LOCATION_START + CITY_NAMES_SEPARATOR + LOCATION_MIDDLE);
