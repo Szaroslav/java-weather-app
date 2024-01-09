@@ -15,12 +15,13 @@ public class FavouriteTrips {
     }
     public void addTrip(Trip trip) {
         trips.add(trip);
-        tripPersistenceService.save(trips);
+        tripPersistenceService.add(trip);
     }
 
     public void deleteTrip(Trip trip) {
         trips.remove(trip);
-        tripPersistenceService.save(trips);
+        // TODO: delete trip
+        // tripPersistenceService.save(trips);
     }
 
     public ObservableList<Trip> getTrips() {
