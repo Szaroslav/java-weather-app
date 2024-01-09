@@ -21,15 +21,19 @@ public class SqlitePersistenceServiceTest {
     private static final String DB_FILENAME = "test.db";
     private static final List<Trip> DB_TRIPS_LOAD = List.of();
     private static final List<Trip> DB_TRIPS_ADD_1 = List.of(new Trip(List.of("Krakow")));
-    private static final List<Trip> DB_TRIPS_ADD_2 = List.of(new Trip(List.of("Krakow")), new Trip(List.of("Krakow", "Tarnow")));
-    private static final List<Trip> DB_TRIPS_ADD_3 = List.of(new Trip(List.of("Krakow")), new Trip(List.of("Krakow", "Tarnow")), new Trip(List.of("Krakow", "Tarnow", "Rzeszow")));
-    private static final List<Trip> DB_TRIPS_DELETE_1 = List.of(new Trip(List.of("Krakow", "Tarnow")), new Trip(List.of("Krakow", "Tarnow", "Rzeszow")));
+    private static final List<Trip> DB_TRIPS_ADD_2 = List.of(new Trip(List.of("Krakow")),
+                                                        new Trip(List.of("Krakow", "Tarnow")));
+    private static final List<Trip> DB_TRIPS_ADD_3 = List.of(new Trip(List.of("Krakow")),
+                                                        new Trip(List.of("Krakow", "Tarnow")),
+                                                        new Trip(List.of("Krakow", "Tarnow", "Rzeszow")));
+    private static final List<Trip> DB_TRIPS_DELETE_1 = List.of(new Trip(List.of("Krakow", "Tarnow")),
+                                                            new Trip(List.of("Krakow", "Tarnow", "Rzeszow")));
     private static final List<Trip> DB_TRIPS_DELETE_2 = List.of(new Trip(List.of("Krakow", "Tarnow", "Rzeszow")));
     private static final List<Trip> DB_TRIPS_DELETE_3 = List.of();
     private static SqlitePersistenceService service;
 
     @BeforeAll
-    public static void init() {
+    public static void setup() {
         service = new SqlitePersistenceService(DB_FILENAME);
     }
 
@@ -96,7 +100,7 @@ public class SqlitePersistenceServiceTest {
 
     @AfterAll
     @SneakyThrows
-    public static void deinit() {
+    public static void teardown() {
         Path path = Paths.get(DB_FILENAME);
         Files.delete(path);
     }
