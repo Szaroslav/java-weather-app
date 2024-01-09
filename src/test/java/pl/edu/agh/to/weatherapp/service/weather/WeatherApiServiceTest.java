@@ -26,6 +26,9 @@ class WeatherApiServiceTest {
     private static final int DAYS = 1;
     private static final int START_TIME = 8;
     private static final int END_TIME = 20;
+    private static final DateTime DATE = new DateTime(
+        2137, 4, 2, 21, 37);
+
     @Captor
     private final ArgumentCaptor<List<DailyWeatherApiDto>> captor = ArgumentCaptor.captor();
     @Mock
@@ -36,9 +39,9 @@ class WeatherApiServiceTest {
     private final ExtremeWeatherService extremeWeatherService = Mockito.mock(ExtremeWeatherService.class);
     @Mock
     private final WeatherApiService weatherApiService = new WeatherApiService(
-            weatherApiFetcher,
-            jsonParser,
-            extremeWeatherService
+        weatherApiFetcher,
+        jsonParser,
+        extremeWeatherService
     );
 
     @Test
@@ -52,26 +55,26 @@ class WeatherApiServiceTest {
 
         //when
         Mockito.when(weatherApiFetcher.fetchForecast(LOCATION_1, DAYS))
-                .thenReturn(CompletableFuture.completedFuture(RESPONSE_1));
+            .thenReturn(CompletableFuture.completedFuture(RESPONSE_1));
         Mockito.when(jsonParser.parseForecast(RESPONSE_1))
-                .thenReturn(forecastWeatherDto1);
+            .thenReturn(forecastWeatherDto1);
         Mockito.when(weatherApiFetcher.fetchForecast(LOCATION_2, DAYS))
-                .thenReturn(CompletableFuture.completedFuture(RESPONSE_2));
+            .thenReturn(CompletableFuture.completedFuture(RESPONSE_2));
         Mockito.when(jsonParser.parseForecast(RESPONSE_2))
-                .thenReturn(forecastWeatherDto2);
+            .thenReturn(forecastWeatherDto2);
         Mockito.when(extremeWeatherService.getSummary(Mockito.anyList()))
-                .thenReturn(expectedWeather);
+            .thenReturn(expectedWeather);
         Weather result = weatherApiService.getForecastSummaryWeatherData(List.of(LOCATION_1, LOCATION_2));
 
         //then
         assertThat(result).isSameAs(expectedWeather);
         Mockito.verify(extremeWeatherService).getSummary(captor.capture());
         assertThat(captor.getValue())
-                .containsExactly(forecastWeatherDto1, forecastWeatherDto2);
+            .containsExactly(forecastWeatherDto1, forecastWeatherDto2);
         assertThat(captor.getValue().get(0).getHourlyWeatherForecasts())
-                .hasSize(24);
+            .hasSize(24);
         assertThat(captor.getValue().get(1).getHourlyWeatherForecasts())
-                .hasSize(24);
+            .hasSize(24);
     }
 
     @Test
@@ -85,35 +88,56 @@ class WeatherApiServiceTest {
 
         //when
         Mockito.when(weatherApiFetcher.fetchForecast(LOCATION_1, DAYS))
-                .thenReturn(CompletableFuture.completedFuture(RESPONSE_1));
+            .thenReturn(CompletableFuture.completedFuture(RESPONSE_1));
         Mockito.when(jsonParser.parseForecast(RESPONSE_1))
-                .thenReturn(forecastWeatherDto1);
+            .thenReturn(forecastWeatherDto1);
         Mockito.when(weatherApiFetcher.fetchForecast(LOCATION_2, DAYS))
-                .thenReturn(CompletableFuture.completedFuture(RESPONSE_2));
+            .thenReturn(CompletableFuture.completedFuture(RESPONSE_2));
         Mockito.when(jsonParser.parseForecast(RESPONSE_2))
-                .thenReturn(forecastWeatherDto2);
+            .thenReturn(forecastWeatherDto2);
         Mockito.when(extremeWeatherService.getSummary(Mockito.anyList()))
-                .thenReturn(expectedWeather);
+            .thenReturn(expectedWeather);
         Weather result =
-                weatherApiService.getForecastSummaryWeatherData(List.of(LOCATION_1, LOCATION_2), START_TIME, END_TIME);
+            weatherApiService.getForecastSummaryWeatherData(List.of(LOCATION_1, LOCATION_2), START_TIME, END_TIME);
 
         //then
         assertThat(result).isSameAs(expectedWeather);
         Mockito.verify(extremeWeatherService).getSummary(captor.capture());
         assertThat(captor.getValue())
-                .containsExactly(forecastWeatherDto1, forecastWeatherDto2);
+            .containsExactly(forecastWeatherDto1, forecastWeatherDto2);
         assertThat(captor.getValue().get(0).getHourlyWeatherForecasts())
-                .hasSize(END_TIME - START_TIME + 1);
+            .hasSize(END_TIME - START_TIME + 1);
         assertThat(captor.getValue().get(1).getHourlyWeatherForecasts())
-                .hasSize(END_TIME - START_TIME + 1);
+            .hasSize(END_TIME - START_TIME + 1);
+    }
+
+    @Test
+    void testWasPrecipitationDaysBefore() {
+        //given
+        DailyWeatherApiDto dailyWeatherDto = prepareMockForecast(LOCATION_1);
+
+        //when
+        Mockito.when(weatherApiFetcher.fetchHistory(
+                Mockito.eq(LOCATION_1),
+                Mockito.any(DateTime.class)))
+            .thenReturn(CompletableFuture.completedFuture(RESPONSE_1));
+        Mockito.when(jsonParser.parseForecast(RESPONSE_1))
+            .thenReturn(dailyWeatherDto);
+
+        boolean result =
+            weatherApiService.wasPrecipitationDaysBefore(LOCATION_1, DAYS);
+
+        //then
+        assertThat(result).isFalse();
     }
 
     private DailyWeatherApiDto prepareMockForecast(String location) {
         DailyWeatherApiDto forecastWeatherDto = new DailyWeatherApiDto()
-                .setLocationName(location);
+            .setLocationName(location);
+        DateTime now = new DateTime();
         for (int i = 0; i < 24; i++) {
-            var weatherData = Mockito.mock(HourlyWeatherApiDto.class);
-            Mockito.when(weatherData.getDate()).thenReturn(new DateTime().plusHours(i));
+            var weatherData = Mockito.mock(HourlyWeatherApiDto.class, Mockito.RETURNS_DEEP_STUBS);
+            Mockito.when(weatherData.getDate()).thenReturn(now.plusHours(i));
             forecastWeatherDto.getHourlyWeatherForecasts().add(weatherData);
         }
         return forecastWeatherDto;
