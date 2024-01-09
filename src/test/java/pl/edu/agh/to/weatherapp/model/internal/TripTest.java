@@ -20,13 +20,10 @@ class TripTest {
     }
 
     @Test
-    void testThrowsWhenSameCityMultipleTimes() {
+    void testEquals() {
         assertEquals(SHORT_TRIP_1, SHORT_TRIP_1_COPY);
         assertEquals(LONG_TRIP_1, LONG_TRIP_1_COPY);
-    }
 
-    @Test
-    void testThrowsWhenSameCityMultipleTime2s() {
         assertNotEquals(SHORT_TRIP_1,SHORT_TRIP_2);
         assertNotEquals(LONG_TRIP_1,LONG_TRIP_2);
     }
