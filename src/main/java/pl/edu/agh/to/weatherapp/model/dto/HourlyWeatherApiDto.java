@@ -12,7 +12,7 @@ import org.joda.time.DateTime;
 @Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class WeatherApiDto {
+public class HourlyWeatherApiDto {
     private DateTime date;
     private String conditionIconUrl;
     private int temperatureC;

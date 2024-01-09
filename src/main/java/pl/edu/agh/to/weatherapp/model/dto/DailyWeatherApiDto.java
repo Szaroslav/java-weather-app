@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class ForecastWeatherApiDto {
+public class DailyWeatherApiDto {
     private String locationName;
-    private final List<WeatherApiDto> hourlyWeatherForecasts = new ArrayList<>();
+    private final List<HourlyWeatherApiDto> hourlyWeatherForecasts = new ArrayList<>();
 }

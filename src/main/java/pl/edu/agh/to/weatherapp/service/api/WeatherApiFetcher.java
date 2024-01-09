@@ -1,5 +1,7 @@
 package pl.edu.agh.to.weatherapp.service.api;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
@@ -39,6 +41,18 @@ public class WeatherApiFetcher implements WeatherFetcher {
             apiKey,
             URLEncoder.encode(cityName, StandardCharsets.UTF_8),
             daysNumber
+        );
+
+        return fetchFromUrl(encodedUrl);
+    }
+
+    @Override
+    public CompletableFuture<String> fetchHistory(String locationName, DateTime date) {
+        String encodedUrl = BASE_API_URL + String.format(
+            "history.json?key=%s&q=%s&dt=%s",
+            apiKey,
+            URLEncoder.encode(locationName, StandardCharsets.UTF_8),
+            DateTimeFormat.forPattern("yyyy-MM-dd").print(date)
         );
 
         return fetchFromUrl(encodedUrl);

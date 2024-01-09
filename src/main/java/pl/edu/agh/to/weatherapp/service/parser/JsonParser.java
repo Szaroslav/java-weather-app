@@ -6,13 +6,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.joda.time.DateTime;
 import pl.edu.agh.to.weatherapp.exceptions.InvalidRequest;
-import pl.edu.agh.to.weatherapp.model.dto.ForecastWeatherApiDto;
-import pl.edu.agh.to.weatherapp.model.dto.WeatherApiDto;
+import pl.edu.agh.to.weatherapp.model.dto.DailyWeatherApiDto;
+import pl.edu.agh.to.weatherapp.model.dto.HourlyWeatherApiDto;
 
 import java.nio.charset.StandardCharsets;
 
 public class JsonParser {
-    private WeatherApiDto weatherDataFromJsonObject(JsonObject json) {
+    private HourlyWeatherApiDto weatherDataFromJsonObject(JsonObject json) {
         DateTime date = new DateTime(json.getAsJsonPrimitive("time_epoch").getAsLong() * 1000);
         String conditionIconUrl = json
                 .getAsJsonObject("condition")
@@ -23,7 +23,7 @@ public class JsonParser {
         float precipitationMm = json.getAsJsonPrimitive("precip_mm").getAsFloat();
         boolean willRain = Integer.parseInt(json.getAsJsonPrimitive("chance_of_rain").getAsString()) > 0;
         boolean willSnow = Integer.parseInt(json.getAsJsonPrimitive("chance_of_snow").getAsString()) > 0;
-        return new WeatherApiDto(
+        return new HourlyWeatherApiDto(
                 date,
                 conditionIconUrl,
                 temperatureC,
@@ -34,7 +34,7 @@ public class JsonParser {
         );
     }
 
-    public ForecastWeatherApiDto parseForecast(String content) {
+    public DailyWeatherApiDto parseForecast(String content) {
         JsonObject json = new Gson()
                 .fromJson(new String(content.getBytes(), StandardCharsets.UTF_8), JsonObject.class);
         if (json.has("error")) {
@@ -48,7 +48,7 @@ public class JsonParser {
         }
     }
 
-    private ForecastWeatherApiDto forecastWeatherFromJson(JsonObject json) {
+    private DailyWeatherApiDto forecastWeatherFromJson(JsonObject json) {
         // Parse location details.
         JsonObject locationJson = json.getAsJsonObject("location");
         String locationName = locationJson.getAsJsonPrimitive("name").getAsString();
@@ -57,13 +57,13 @@ public class JsonParser {
         JsonArray hourlyWeatherJsonArray = hourlyWeatherFromJson(json);
 
         // Init forecast weather data.
-        ForecastWeatherApiDto forecastWeather = new ForecastWeatherApiDto();
+        DailyWeatherApiDto forecastWeather = new DailyWeatherApiDto();
         forecastWeather.setLocationName(String.format("%s, %s", locationName, country));
 
         // Fill hourly weather list.
         for (JsonElement element : hourlyWeatherJsonArray) {
             JsonObject object = element.getAsJsonObject();
-            WeatherApiDto weatherDto = weatherDataFromJsonObject(object);
+            HourlyWeatherApiDto weatherDto = weatherDataFromJsonObject(object);
             forecastWeather.getHourlyWeatherForecasts().add(weatherDto);
         }
         return forecastWeather;

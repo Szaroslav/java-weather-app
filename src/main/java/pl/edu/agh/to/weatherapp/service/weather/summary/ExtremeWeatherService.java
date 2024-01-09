@@ -1,8 +1,8 @@
 package pl.edu.agh.to.weatherapp.service.weather.summary;
 
 import pl.edu.agh.to.weatherapp.service.weather.summary.dataprocessing.WeatherDataProcessing;
-import pl.edu.agh.to.weatherapp.model.dto.ForecastWeatherApiDto;
-import pl.edu.agh.to.weatherapp.model.dto.WeatherApiDto;
+import pl.edu.agh.to.weatherapp.model.dto.DailyWeatherApiDto;
+import pl.edu.agh.to.weatherapp.model.dto.HourlyWeatherApiDto;
 import pl.edu.agh.to.weatherapp.model.internal.Weather;
 import pl.edu.agh.to.weatherapp.model.internal.enums.PrecipitationIntensity;
 import pl.edu.agh.to.weatherapp.model.internal.enums.PrecipitationType;
@@ -14,43 +14,43 @@ import java.util.List;
 
 public class ExtremeWeatherService implements WeatherSummaryService {
     @Override
-    public Weather getSummary(List<ForecastWeatherApiDto> weatherDataList) {
+    public Weather getSummary(List<DailyWeatherApiDto> weatherDataList) {
         List<Weather> summarisedLocations = weatherDataList.stream()
                 .map(x -> mapLocation(x.getHourlyWeatherForecasts()))
                 .toList();
         return getExtremeWeather(summarisedLocations);
     }
 
-    private Weather mapLocation(List<WeatherApiDto> weatherApiDtoList) {
-        int minTemperature = weatherApiDtoList.stream()
-                .map(WeatherApiDto::getTemperatureC)
+    private Weather mapLocation(List<HourlyWeatherApiDto> hourlyWeatherList) {
+        int minTemperature = hourlyWeatherList.stream()
+                .map(HourlyWeatherApiDto::getTemperatureC)
                 .min(Comparator.comparing(Integer::valueOf))
                 .orElseThrow();
 
-        float minApparentTemperature = weatherApiDtoList.stream()
+        float minApparentTemperature = hourlyWeatherList.stream()
                 .map(data -> WeatherDataProcessing.getApparentTemperature(data.getTemperatureC(), data.getWindKph()))
                 .min(Comparator.comparing(Float::valueOf))
                 .orElseThrow();
 
-        int maxPrecipitationMm = weatherApiDtoList.stream()
-                .map(WeatherApiDto::getPrecipitationMm)
+        int maxPrecipitationMm = hourlyWeatherList.stream()
+                .map(HourlyWeatherApiDto::getPrecipitationMm)
                 .max(Comparator.comparing(Float::valueOf))
                 .map(data -> (int) Math.ceil(data))
                 .orElseThrow();
 
-        int maxWindInMps = weatherApiDtoList.stream()
+        int maxWindInMps = hourlyWeatherList.stream()
                 .map(data -> WeatherDataProcessing.kphToMps(data.getWindKph()))
                 .max(Comparator.comparing(Float::valueOf))
                 .map(data -> (int) Math.ceil(data))
                 .orElseThrow();
 
-        boolean willRain = weatherApiDtoList.stream()
-                .map(WeatherApiDto::isWillRain)
+        boolean willRain = hourlyWeatherList.stream()
+                .map(HourlyWeatherApiDto::isWillRain)
                 .max(Comparator.comparing(Boolean::valueOf))
                 .orElseThrow();
 
-        boolean willSnow = weatherApiDtoList.stream()
-                .map(WeatherApiDto::isWillSnow)
+        boolean willSnow = hourlyWeatherList.stream()
+                .map(HourlyWeatherApiDto::isWillSnow)
                 .max(Comparator.comparing(Boolean::valueOf))
                 .orElseThrow();
 
