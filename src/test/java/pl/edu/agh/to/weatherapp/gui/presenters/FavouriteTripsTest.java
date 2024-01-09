@@ -14,7 +14,7 @@ class FavouriteTripsTest {
     private final static Trip EXAMPLE_TRIP_1 = new Trip(List.of("Tarnów", "Cracow"));
     private final static Trip EXAMPLE_TRIP_2 = new Trip(List.of("Tarnów", "Cracow", "Rzeszów"));
     @Mock
-    private final TripPersistenceService tripPersistenceService = Mockito.mock(TripPersistenceService.class);
+    private final TripPersistenceService tripPersistenceService = Mockito.mock();
 
     @Test
     void testMemoryEmpty() {
@@ -52,5 +52,9 @@ class FavouriteTripsTest {
 
         // then
         assertThat(favouriteTrips.getTrips()).containsExactly(EXAMPLE_TRIP_2);
+        Mockito.verify(tripPersistenceService, Mockito.times(1))
+                .add(Mockito.any(Trip.class));
+        Mockito.verify(tripPersistenceService, Mockito.times(1))
+                .delete(Mockito.any(Trip.class));
     }
 }
