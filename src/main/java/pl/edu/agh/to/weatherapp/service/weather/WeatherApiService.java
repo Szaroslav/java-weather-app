@@ -2,15 +2,13 @@ package pl.edu.agh.to.weatherapp.service.weather;
 
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
-import pl.edu.agh.to.weatherapp.model.dto.HourlyWeatherApiDto;
-import pl.edu.agh.to.weatherapp.service.api.WeatherFetcher;
 import pl.edu.agh.to.weatherapp.model.dto.DailyWeatherApiDto;
 import pl.edu.agh.to.weatherapp.model.internal.Weather;
+import pl.edu.agh.to.weatherapp.service.api.WeatherFetcher;
 import pl.edu.agh.to.weatherapp.service.parser.JsonParser;
 import pl.edu.agh.to.weatherapp.service.weather.summary.WeatherSummaryService;
 
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class WeatherApiService implements WeatherService {
@@ -19,12 +17,10 @@ public class WeatherApiService implements WeatherService {
     private final JsonParser responseParser;
     private final WeatherSummaryService weatherSummaryService;
 
-    public WeatherApiService(
-        int noDaysToCheckPrecipitation,
-        WeatherFetcher weatherFetcher,
-        JsonParser responseParser,
-        WeatherSummaryService weatherSummaryService
-    ) {
+    public WeatherApiService(int noDaysToCheckPrecipitation,
+                             WeatherFetcher weatherFetcher,
+                             JsonParser responseParser,
+                             WeatherSummaryService weatherSummaryService) {
         this.noDaysToCheckPrecipitation = noDaysToCheckPrecipitation;
         this.weatherFetcher = weatherFetcher;
         this.responseParser = responseParser;
@@ -51,8 +47,8 @@ public class WeatherApiService implements WeatherService {
 
     private DailyWeatherApiDto getHistoryWeatherData(String location, DateTime date) {
         return weatherFetcher.fetchHistory(location, date)
-            .thenApply(responseParser::parseForecast)
-            .join();
+                .thenApply(responseParser::parseForecast)
+                .join();
     }
 
     @Override
@@ -63,29 +59,25 @@ public class WeatherApiService implements WeatherService {
     @Override
     public Weather getForecastSummaryWeatherData(List<String> locations, int startHour, int endHour) {
         List<DailyWeatherApiDto> weatherList = locations.stream()
-                .map(x->getForecastWeatherData(x, startHour, endHour))
+                .map(x -> getForecastWeatherData(x, startHour, endHour))
                 .toList();
-
-        Weather summary = weatherSummaryService.getSummary(weatherList);
-        summary.getLocationNames().addAll(locations);
-        return summary
-            .setMud(wasMudDaysBefore(locations.get(0), noDaysToCheckPrecipitation));
+        return weatherSummaryService.getSummary(weatherList)
+                .setLocationNames(locations)
+                .setMud(wasMudDaysBefore(locations.get(0), noDaysToCheckPrecipitation));
     }
 
     public boolean wasMudDaysBefore(String locationName, int daysNumber) {
         DateTime now = DateTime.now();
-
         for (int i = 1; i <= daysNumber; i++) {
             DailyWeatherApiDto dailyWeatherDto = getHistoryWeatherData(locationName, now.minusDays(i));
-            long hoursWithPrecipitation = dailyWeatherDto.getHourlyWeatherForecasts()
-                .stream()
-                .filter(hourlyWeather -> hourlyWeather.getPrecipitationMm() > 0)
-                .count();
-            if (hoursWithPrecipitation > 0) {
+            long hoursWithPrecipitationCount = dailyWeatherDto.getHourlyWeatherForecasts()
+                    .stream()
+                    .filter(hourlyWeather -> hourlyWeather.getPrecipitationMm() > 0)
+                    .count();
+            if (hoursWithPrecipitationCount > 0) {
                 return true;
             }
         }
-
         return false;
     }
 }

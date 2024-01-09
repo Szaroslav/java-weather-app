@@ -2,7 +2,6 @@ package pl.edu.agh.to.weatherapp.service.api;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;

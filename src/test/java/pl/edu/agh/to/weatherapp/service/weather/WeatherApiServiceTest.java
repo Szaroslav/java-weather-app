@@ -132,10 +132,8 @@ class WeatherApiServiceTest {
         Mockito.when(jsonParser.parseForecast(RESPONSE_1))
             .thenReturn(dailyWeatherDto);
 
-        boolean result = weatherApiService.wasMudDaysBefore(LOCATION_1, DAYS);
-
         //then
-        assertThat(result).isFalse();
+        assertThat(weatherApiService.wasMudDaysBefore(LOCATION_1, DAYS)).isTrue();
     }
 
     private DailyWeatherApiDto prepareMockForecast(String location) {
@@ -145,6 +143,7 @@ class WeatherApiServiceTest {
         for (int i = 0; i < 24; i++) {
             var weatherData = Mockito.mock(HourlyWeatherApiDto.class, Mockito.RETURNS_DEEP_STUBS);
             Mockito.when(weatherData.getDate()).thenReturn(now.plusHours(i));
+            Mockito.when(weatherData.getPrecipitationMm()).thenReturn(1F);
             forecastWeatherDto.getHourlyWeatherForecasts().add(weatherData);
         }
         return forecastWeatherDto;
