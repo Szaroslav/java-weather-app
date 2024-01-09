@@ -1,5 +1,7 @@
-package pl.edu.agh.to.weatherapp.gui.presenters.WeatherPresenter;
+package pl.edu.agh.to.weatherapp.gui.presenters.weatherpresenter;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,18 +16,19 @@ import org.mockito.stubbing.Answer;
 import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
+import pl.edu.agh.to.weatherapp.gui.presenters.FavouriteTrips;
+import pl.edu.agh.to.weatherapp.gui.presenters.WeatherPresenter;
+import pl.edu.agh.to.weatherapp.model.internal.Trip;
 import pl.edu.agh.to.weatherapp.model.internal.Weather;
 import pl.edu.agh.to.weatherapp.model.internal.enums.PrecipitationIntensity;
 import pl.edu.agh.to.weatherapp.model.internal.enums.PrecipitationType;
 import pl.edu.agh.to.weatherapp.model.internal.enums.TemperatureLevel;
 import pl.edu.agh.to.weatherapp.model.internal.enums.WindIntensity;
-import pl.edu.agh.to.weatherapp.gui.presenters.FavouriteTrips;
-import pl.edu.agh.to.weatherapp.gui.presenters.WeatherPresenter;
-import pl.edu.agh.to.weatherapp.service.persistence.TripPersistenceService;
 import pl.edu.agh.to.weatherapp.service.weather.WeatherService;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.List;
 
 import static org.awaitility.Awaitility.await;
 import static org.testfx.assertions.api.Assertions.assertThat;
@@ -49,29 +52,30 @@ class GuiTestServiceDelayTestIT {
         stage.setMinHeight(400);
 
         WeatherService weatherServiceMock = Mockito.mock((WeatherService.class));
-        Mockito.when(weatherServiceMock.getSummaryWeatherData(LOCATION_START, LOCATION_END, START_HOUR, END_HOUR)).thenAnswer(
+        ObservableList<Trip> trips = FXCollections.observableArrayList();
+        FavouriteTrips favouriteTripsMock = Mockito.mock(FavouriteTrips.class);
+        Mockito.when(favouriteTripsMock.getTrips()).thenAnswer((Answer<ObservableList<Trip>>) invocation -> trips);
+        Mockito.when(weatherServiceMock.getForecastSummaryWeatherData(List.of(LOCATION_START, LOCATION_END), START_HOUR, END_HOUR)).thenAnswer(
                 (Answer<Weather>) invocation -> {
                     await()
                             .pollDelay(Duration.ofSeconds(2))
                             .until(() -> true);
-                    Weather weatherData = new Weather();
-                    weatherData.getLocationNames().add(LOCATION_START);
-                    weatherData.getLocationNames().add(LOCATION_END);
-                    weatherData.setTemperatureLevel(TemperatureLevel.COLD);
-                    weatherData.setWindIntensity(WindIntensity.WINDY);
-                    weatherData.setPrecipitationIntensity(PrecipitationIntensity.WEAK);
-                    weatherData.setPrecipitationType(PrecipitationType.BOTH);
-                    weatherData.setApparentTemperature(TEMP);
-                    weatherData.setWindInMps(WIND);
-                    weatherData.setPrecipitationInMm(RAIN);
-                    return weatherData;
+                    return new Weather()
+                            .setTemperatureLevel(TemperatureLevel.COLD)
+                            .setWindIntensity(WindIntensity.WINDY)
+                            .setPrecipitationIntensity(PrecipitationIntensity.WEAK)
+                            .setPrecipitationType(PrecipitationType.BOTH)
+                            .setApparentTemperature(TEMP)
+                            .setWindInMps(WIND)
+                            .setPrecipitationInMm(RAIN)
+                            .setLocationNames(List.of(LOCATION_START, LOCATION_END));
                 });
+
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/view/WeatherPresenter.fxml"));
         loader.setControllerFactory(c ->
-                //TODO: create mock for FavouriteTrips
-                new WeatherPresenter(weatherServiceMock, new FavouriteTrips(new TripPersistenceService())));
+                new WeatherPresenter(weatherServiceMock, favouriteTripsMock));
         GridPane rootLayout = loader.load();
 
         Button button = new Button("click me!");
@@ -86,9 +90,9 @@ class GuiTestServiceDelayTestIT {
 
     @Test
     void serviceNonBlocking(FxRobot robot) {
-        robot.clickOn("#searchTextField");
+        robot.clickOn("#searchStartTextField");
         robot.write(LOCATION_START);
-        robot.clickOn("#searchDestinationTextField");
+        robot.clickOn("#searchMiddleTextField");
         robot.write(LOCATION_END);
         robot.clickOn("#searchButton");
         assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
@@ -111,9 +115,9 @@ class GuiTestServiceDelayTestIT {
 
     @Test
     void whenSearchButtonClick_thenButtonDisabled(FxRobot robot) {
-        robot.clickOn("#searchTextField");
+        robot.clickOn("#searchStartTextField");
         robot.write(LOCATION_START);
-        robot.clickOn("#searchDestinationTextField");
+        robot.clickOn("#searchMiddleTextField");
         robot.write(LOCATION_END);
         robot.clickOn("#searchButton");
 
