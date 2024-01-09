@@ -257,7 +257,12 @@ public class WeatherPresenter {
     }
 
     private void showLocation(List<String> locationNames) {
-        locationLabel.setText(locationNames.size() == 1 ? locationNames.get(0) : locationNames.get(0) + CITY_NAMES_SEPARATOR + locationNames.get(1));
+        switch (locationNames.size()) {
+            case 2 -> locationLabel.setText(locationNames.get(0) + CITY_NAMES_SEPARATOR + locationNames.get(1));
+            case 3 ->
+                    locationLabel.setText(locationNames.get(0) + CITY_NAMES_SEPARATOR + locationNames.get(1) + CITY_NAMES_SEPARATOR + locationNames.get(2));
+            default -> locationLabel.setText(locationNames.get(0));
+        }
     }
 
     private void showTemperature(String temperature, TemperatureLevel temperatureLevel) {
