@@ -69,7 +69,7 @@ public class WeatherApiService implements WeatherService {
         DateTime now = DateTime.now();
 
         for (int i = 1; i <= daysNumber; i++) {
-            DailyWeatherApiDto dailyWeatherDto = getHistoryWeatherData(locationName, now.minusDays(1));
+            DailyWeatherApiDto dailyWeatherDto = getHistoryWeatherData(locationName, now.minusDays(i));
             long hoursWithPrecipitation = dailyWeatherDto.getHourlyWeatherForecasts()
                 .stream()
                 .filter(hourlyWeather -> hourlyWeather.getPrecipitationMm() > 0)
