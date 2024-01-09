@@ -31,7 +31,7 @@ public class AppConfiguration {
 
     @Bean
     public WeatherPresenter weatherPresenter(WeatherService weatherService, FavouriteTrips tripMemory) {
-        return new WeatherPresenter(weatherService,tripMemory);
+        return new WeatherPresenter(weatherService, tripMemory);
     }
 
     @Bean

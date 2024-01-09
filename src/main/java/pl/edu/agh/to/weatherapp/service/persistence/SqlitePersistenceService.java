@@ -35,8 +35,7 @@ public class SqlitePersistenceService implements TripPersistenceService {
                     String location = rs.getString("location" + i);
                     if (location != null) {
                         locationNames.add(location);
-                    }
-                    else break;
+                    } else break;
                 }
                 tripList.add(new Trip(locationNames));
             }
@@ -51,6 +50,30 @@ public class SqlitePersistenceService implements TripPersistenceService {
     public void add(Trip trip) {
         createTableIfNotExists();
         String sql = "INSERT INTO trips(location1,location2,location3) VALUES(?,?,?)";
+
+        try (Connection conn = this.connect();
+             PreparedStatement statement = conn.prepareStatement(sql)) {
+
+            List<String> locationNames = trip.getLocationNames();
+            int paramCount = Math.min(locationNames.size(), 3);
+
+            for (int i = 0; i < paramCount; i++) {
+                statement.setString(i + 1, locationNames.get(i));
+            }
+            for (int i = paramCount; i < 3; i++) {
+                statement.setNull(i + 1, Types.VARCHAR);
+            }
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DatabaseFailure(e.getMessage());
+        }
+    }
+
+    @Override
+    public void delete(Trip trip) {
+        createTableIfNotExists();
+        String sql = "DELETE FROM trips WHERE location1 IS ? AND location2 IS ? AND location3 IS ?";
 
         try (Connection conn = this.connect();
              PreparedStatement statement = conn.prepareStatement(sql)) {
