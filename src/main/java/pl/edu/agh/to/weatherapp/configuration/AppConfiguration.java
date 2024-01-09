@@ -9,7 +9,7 @@ import pl.edu.agh.to.weatherapp.service.api.WeatherApiFetcher;
 import pl.edu.agh.to.weatherapp.service.parser.JsonParser;
 import pl.edu.agh.to.weatherapp.gui.presenters.FavouriteTrips;
 import pl.edu.agh.to.weatherapp.gui.presenters.WeatherPresenter;
-import pl.edu.agh.to.weatherapp.service.persistence.JsonPersistenceService;
+import pl.edu.agh.to.weatherapp.service.persistence.SqlitePersistenceService;
 import pl.edu.agh.to.weatherapp.service.persistence.TripPersistenceService;
 import pl.edu.agh.to.weatherapp.service.weather.WeatherService;
 import pl.edu.agh.to.weatherapp.service.weather.WeatherApiService;
@@ -63,7 +63,7 @@ public class AppConfiguration {
 
     @Bean
     public TripPersistenceService tripPersistenceService() {
-        return new JsonPersistenceService();
+        return new SqlitePersistenceService();
     }
 
     @Bean
