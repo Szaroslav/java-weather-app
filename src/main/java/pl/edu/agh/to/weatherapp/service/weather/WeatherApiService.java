@@ -56,16 +56,16 @@ public class WeatherApiService implements WeatherService {
     @Override
     public Weather getForecastSummaryWeatherData(List<String> locations, int startHour, int endHour) {
         List<DailyWeatherApiDto> weatherList = locations.stream()
-                .map(x->getForecastWeatherData(x,startHour,endHour))
+                .map(x->getForecastWeatherData(x, startHour, endHour))
                 .toList();
+
         Weather summary = weatherSummaryService.getSummary(weatherList);
         summary.getLocationNames().addAll(locations);
-        //TODO: implement + test
-        return summary.setMud(ThreadLocalRandom.current().nextBoolean());
+        return summary
+            .setMud(wasMudDaysBefore(locations.get(0), 2));
     }
 
-    @Override
-    public boolean wasPrecipitationDaysBefore(String locationName, int daysNumber) {
+    public boolean wasMudDaysBefore(String locationName, int daysNumber) {
         DateTime now = DateTime.now();
 
         for (int i = 1; i <= daysNumber; i++) {
