@@ -1,8 +1,10 @@
 package pl.edu.agh.to.weatherapp.service.api;
 
+import lombok.SneakyThrows;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.springframework.stereotype.Component;
+import org.apache.http.client.utils.URIBuilder;
 
 import java.net.URI;
 import java.net.URLEncoder;
@@ -15,6 +17,10 @@ import java.util.concurrent.CompletableFuture;
 @Component
 public class WeatherApiFetcher implements WeatherFetcher {
     private static final String BASE_API_URL = "https://api.weatherapi.com/v1/";
+    private static final String CURRENT_WEATHER_URL = BASE_API_URL + "current.json";
+    private static final String FORECAST_WEATHER_URL = BASE_API_URL + "forecast.json";
+    private static final String HISTORY_WEATHER_URL = BASE_API_URL + "history.json";
+
     private final String apiKey;
     private final HttpClient client;
 
@@ -24,43 +30,45 @@ public class WeatherApiFetcher implements WeatherFetcher {
     }
 
     @Override
-    public CompletableFuture<String> fetchCurrent(String cityName) {
-        String encodedUrl = BASE_API_URL + String.format(
-            "current.json?key=%s&q=%s",
-            apiKey,
-            URLEncoder.encode(cityName, StandardCharsets.UTF_8)
-        );
+    @SneakyThrows
+    public CompletableFuture<String> fetchCurrent(String locationName) {
+        URI uri = new URIBuilder(CURRENT_WEATHER_URL)
+            .addParameter("key", apiKey)
+            .addParameter("q",   locationName)
+            .build();
 
-        return fetchFromUrl(encodedUrl);
+        return fetchFromUri(uri);
     }
 
     @Override
-    public CompletableFuture<String> fetchForecast(String cityName, int daysNumber) {
-        String encodedUrl = BASE_API_URL + String.format(
-            "forecast.json?key=%s&q=%s&days=%d",
-            apiKey,
-            URLEncoder.encode(cityName, StandardCharsets.UTF_8),
-            daysNumber
-        );
+    @SneakyThrows
+    public CompletableFuture<String> fetchForecast(String locationName, int daysNumber) {
+        String daysNumberString = Integer.toString(daysNumber);
+        URI uri = new URIBuilder(FORECAST_WEATHER_URL)
+            .addParameter("key",  apiKey)
+            .addParameter("q",    locationName)
+            .addParameter("days", daysNumberString)
+            .build();
 
-        return fetchFromUrl(encodedUrl);
+        return fetchFromUri(uri);
     }
 
     @Override
+    @SneakyThrows
     public CompletableFuture<String> fetchHistory(String locationName, DateTime date) {
-        String encodedUrl = BASE_API_URL + String.format(
-            "history.json?key=%s&q=%s&dt=%s",
-            apiKey,
-            URLEncoder.encode(locationName, StandardCharsets.UTF_8),
-            DateTimeFormat.forPattern("yyyy-MM-dd").print(date)
-        );
+        String dateString = DateTimeFormat.forPattern("yyyy-MM-dd").print(date);
+        URI uri = new URIBuilder(HISTORY_WEATHER_URL)
+            .addParameter("key", apiKey)
+            .addParameter("q",   locationName)
+            .addParameter("dt",  dateString)
+            .build();
 
-        return fetchFromUrl(encodedUrl);
+        return fetchFromUri(uri);
     }
 
-    private CompletableFuture<String> fetchFromUrl(String url) {
+    private CompletableFuture<String> fetchFromUri(URI uri) {
         HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create(url))
+            .uri(uri)
             .build();
 
         return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
