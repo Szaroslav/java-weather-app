@@ -34,48 +34,48 @@ class WeatherApiFetcherTest {
     @Test
     @SneakyThrows
     void buildsProperHttpResponseForCurrentDate() {
-        //given
+        // given
         Mockito.when(httpResponse.body()).thenReturn(RESPONSE);
         Mockito.when(client.sendAsync(
                 Mockito.eq(createRequestFromUrl(URL_FOR_CURRENT_QUERY)), Mockito.any())
         ).thenReturn(CompletableFuture.completedFuture(httpResponse));
 
-        //when
+        // when
         var fetchResult = weatherApiFetcher.fetchCurrent(LOCATION);
 
-        //then
+        // then
         assertThat(fetchResult.get()).isEqualTo(RESPONSE);
     }
 
     @Test
     @SneakyThrows
     void buildsProperHttpResponseForFutureDate() {
-        //given
+        // given
         Mockito.when(httpResponse.body()).thenReturn(RESPONSE);
         Mockito.when(client.sendAsync(
                 Mockito.eq(createRequestFromUrl(URL_FOR_FUTURE_QUERY)), Mockito.any())
         ).thenReturn(CompletableFuture.completedFuture(httpResponse));
 
-        //when
+        // when
         var fetchResult = weatherApiFetcher.fetchForecast(LOCATION, 1);
 
-        //then
+        // then
         assertThat(fetchResult.get()).isEqualTo(RESPONSE);
     }
 
     @Test
     @SneakyThrows
     void buildsProperHttpResponseForPastDate() {
-        //given
+        // given
         Mockito.when(httpResponse.body()).thenReturn(RESPONSE);
         Mockito.when(client.sendAsync(
             Mockito.eq(createRequestFromUrl(URL_FOR_HISTORY_QUERY)), Mockito.any())
         ).thenReturn(CompletableFuture.completedFuture(httpResponse));
 
-        //when
+        // when
         var fetchResult = weatherApiFetcher.fetchHistory(LOCATION, DATE);
 
-        //then
+        // then
         assertThat(fetchResult.get()).isEqualTo(RESPONSE);
     }
 
