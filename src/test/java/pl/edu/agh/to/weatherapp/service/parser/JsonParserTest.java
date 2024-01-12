@@ -4,7 +4,7 @@ import lombok.SneakyThrows;
 import org.assertj.core.data.Percentage;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import pl.edu.agh.to.weatherapp.exceptions.InvalidRequest;
+import pl.edu.agh.to.weatherapp.exceptions.InvalidRequestException;
 import pl.edu.agh.to.weatherapp.model.dto.DailyWeatherApiDto;
 
 import java.nio.file.Files;
@@ -58,6 +58,6 @@ public class JsonParserTest {
 
     @Test
     void parseErrorResponse() {
-        assertThrows(InvalidRequest.class, () -> jsonParser.parseForecast(errorJsonContent));
+        assertThrows(InvalidRequestException.class, () -> jsonParser.parseForecast(errorJsonContent));
     }
 }

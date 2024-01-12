@@ -1,6 +1,6 @@
 package pl.edu.agh.to.weatherapp.service.persistence;
 
-import pl.edu.agh.to.weatherapp.exceptions.DatabaseFailure;
+import pl.edu.agh.to.weatherapp.exceptions.DatabaseFailureException;
 import pl.edu.agh.to.weatherapp.model.internal.Trip;
 
 import java.sql.Connection;
@@ -47,7 +47,7 @@ public class SqlitePersistenceService implements TripPersistenceService {
 
             return tripList;
         } catch (SQLException e) {
-            throw new DatabaseFailure(e.getMessage());
+            throw new DatabaseFailureException(e.getMessage());
         }
     }
 
@@ -67,7 +67,7 @@ public class SqlitePersistenceService implements TripPersistenceService {
         try {
             return DriverManager.getConnection(dbUrl);
         } catch (SQLException e) {
-            throw new DatabaseFailure(e.getMessage());
+            throw new DatabaseFailureException(e.getMessage());
         }
     }
 
@@ -78,7 +78,7 @@ public class SqlitePersistenceService implements TripPersistenceService {
              Statement statement = conn.createStatement()) {
             statement.execute(sql);
         } catch (SQLException e) {
-            throw new DatabaseFailure(e.getMessage());
+            throw new DatabaseFailureException(e.getMessage());
         }
     }
 
@@ -98,7 +98,7 @@ public class SqlitePersistenceService implements TripPersistenceService {
 
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new DatabaseFailure(e.getMessage());
+            throw new DatabaseFailureException(e.getMessage());
         }
     }
 }

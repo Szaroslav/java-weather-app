@@ -5,7 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.joda.time.DateTime;
-import pl.edu.agh.to.weatherapp.exceptions.InvalidRequest;
+import pl.edu.agh.to.weatherapp.exceptions.InvalidRequestException;
 import pl.edu.agh.to.weatherapp.model.dto.DailyWeatherApiDto;
 import pl.edu.agh.to.weatherapp.model.dto.HourlyWeatherApiDto;
 
@@ -42,7 +42,7 @@ public class JsonParser {
                     .getAsJsonObject("error")
                     .getAsJsonPrimitive("message")
                     .getAsString();
-            throw new InvalidRequest(errorMessage);
+            throw new InvalidRequestException(errorMessage);
         } else {
             return forecastWeatherFromJson(json);
         }
@@ -74,13 +74,13 @@ public class JsonParser {
                 .getAsJsonObject("forecast")
                 .getAsJsonArray("forecastday");
         if (dailyWeatherJsonArray.isEmpty()) {
-            throw new InvalidRequest("Cannot fetch a forecast.");
+            throw new InvalidRequestException("Cannot fetch a forecast.");
         }
         JsonArray hourlyWeatherJsonArray = dailyWeatherJsonArray.get(0)
                 .getAsJsonObject()
                 .getAsJsonArray("hour");
         if (hourlyWeatherJsonArray.isEmpty()) {
-            throw new InvalidRequest("Cannot fetch a forecast.");
+            throw new InvalidRequestException("Cannot fetch a forecast.");
         }
         return hourlyWeatherJsonArray;
     }
