@@ -17,10 +17,12 @@ public class WeatherApiService implements WeatherService {
     private final JsonParser responseParser;
     private final WeatherSummaryService weatherSummaryService;
 
-    public WeatherApiService(int noDaysToCheckPrecipitation,
-                             WeatherFetcher weatherFetcher,
-                             JsonParser responseParser,
-                             WeatherSummaryService weatherSummaryService) {
+    public WeatherApiService(
+        int noDaysToCheckPrecipitation,
+        WeatherFetcher weatherFetcher,
+        JsonParser responseParser,
+        WeatherSummaryService weatherSummaryService
+    ) {
         this.noDaysToCheckPrecipitation = noDaysToCheckPrecipitation;
         this.weatherFetcher = weatherFetcher;
         this.responseParser = responseParser;
@@ -52,18 +54,18 @@ public class WeatherApiService implements WeatherService {
     }
 
     @Override
-    public Weather getForecastSummaryWeatherData(List<String> locations) {
-        return getForecastSummaryWeatherData(locations, 0, 24);
+    public Weather getForecastSummaryWeatherData(List<String> locationNames) {
+        return getForecastSummaryWeatherData(locationNames, 0, 24);
     }
 
     @Override
-    public Weather getForecastSummaryWeatherData(List<String> locations, int startHour, int endHour) {
-        List<DailyWeatherApiDto> weatherList = locations.stream()
-                .map(x -> getForecastWeatherData(x, startHour, endHour))
+    public Weather getForecastSummaryWeatherData(List<String> locationNames, int startHour, int endHour) {
+        List<DailyWeatherApiDto> weatherList = locationNames.stream()
+                .map(locationName -> getForecastWeatherData(locationName, startHour, endHour))
                 .toList();
         return weatherSummaryService.getSummary(weatherList)
-                .setLocationNames(locations)
-                .setMud(wasMudDaysBefore(locations.get(0), noDaysToCheckPrecipitation));
+                .setLocationNames(locationNames)
+                .setMud(wasMudDaysBefore(locationNames.get(0), noDaysToCheckPrecipitation));
     }
 
     public boolean wasMudDaysBefore(String locationName, int daysNumber) {
