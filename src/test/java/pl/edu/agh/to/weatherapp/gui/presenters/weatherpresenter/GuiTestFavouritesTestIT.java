@@ -21,7 +21,11 @@ import org.mockito.stubbing.Answer;
 import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
-import pl.edu.agh.to.weatherapp.gui.presenters.*;
+import pl.edu.agh.to.weatherapp.gui.presenters.FavouriteTrips;
+import pl.edu.agh.to.weatherapp.gui.presenters.FavouritesPresenter;
+import pl.edu.agh.to.weatherapp.gui.presenters.SearchPresenter;
+import pl.edu.agh.to.weatherapp.gui.presenters.WeatherInfoPresenter;
+import pl.edu.agh.to.weatherapp.gui.presenters.WeatherPresenter;
 import pl.edu.agh.to.weatherapp.model.internal.Trip;
 import pl.edu.agh.to.weatherapp.model.internal.Weather;
 import pl.edu.agh.to.weatherapp.model.internal.enums.PrecipitationIntensity;
@@ -30,7 +34,6 @@ import pl.edu.agh.to.weatherapp.model.internal.enums.TemperatureLevel;
 import pl.edu.agh.to.weatherapp.model.internal.enums.WindIntensity;
 import pl.edu.agh.to.weatherapp.service.weather.WeatherService;
 
-import javax.security.auth.callback.Callback;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
@@ -50,17 +53,14 @@ class GuiTestFavouritesTestIT {
     private static final int TEMP = 3;
     private static final int START_HOUR = 0;
     private static final int END_HOUR = 24;
-
+    private static final String COLOR_ORANGE = "#FFB347";
     private static final String FIRST_TEXT_FIELD_ID = "#searchStartTextField";
     private static final String SECOND_TEXT_FIELD_ID = "#searchMiddleTextField";
-
-    private static final String COLOR_ORANGE = "#FFB347";
-
-    Trip trip2 = new Trip(List.of(LOCATION_START, LOCATION_END));
-    Trip trip3 = new Trip(List.of(LOCATION_START, LOCATION_MIDDLE));
-    ArgumentCaptor<Trip> valueCapture = ArgumentCaptor.forClass(Trip.class);
-    ArgumentCaptor<Trip> valueCaptureDelete = ArgumentCaptor.forClass(Trip.class);
-    ObservableList<Trip> trips = FXCollections.observableArrayList();
+    private final Trip trip2 = new Trip(List.of(LOCATION_START, LOCATION_END));
+    private final Trip trip3 = new Trip(List.of(LOCATION_START, LOCATION_MIDDLE));
+    private final ArgumentCaptor<Trip> valueCapture = ArgumentCaptor.forClass(Trip.class);
+    private final ArgumentCaptor<Trip> valueCaptureDelete = ArgumentCaptor.forClass(Trip.class);
+    private final ObservableList<Trip> trips = FXCollections.observableArrayList();
 
     @Start
     private void start(Stage stage) throws IOException {
@@ -97,21 +97,19 @@ class GuiTestFavouritesTestIT {
                         .setPrecipitationInMm(RAIN)
                         .setLocationNames(List.of(LOCATION_START, LOCATION_END)));
 
-
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/view/WeatherPresenter.fxml"));
-        loader.setControllerFactory(c ->{
-            if(c == WeatherPresenter.class){
+        loader.setControllerFactory(c -> {
+            if (c == WeatherPresenter.class) {
                 return new WeatherPresenter();
             }
-            if(c == SearchPresenter.class){
+            if (c == SearchPresenter.class) {
                 return new SearchPresenter(weatherServiceMock);
             }
-            if(c == FavouritesPresenter.class){
+            if (c == FavouritesPresenter.class) {
                 return new FavouritesPresenter(favouriteTripsMock);
             }
             return new WeatherInfoPresenter();
-
         });
 
         GridPane rootLayout = loader.load();
@@ -161,7 +159,6 @@ class GuiTestFavouritesTestIT {
         Platform.runLater(() ->
                 trips.remove(valueCaptureDelete.getValue())
         );
-
     }
 
     @Test
@@ -206,5 +203,4 @@ class GuiTestFavouritesTestIT {
         assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
                 .hasText(LOCATION_START + CITY_NAMES_SEPARATOR + LOCATION_MIDDLE);
     }
-
 }

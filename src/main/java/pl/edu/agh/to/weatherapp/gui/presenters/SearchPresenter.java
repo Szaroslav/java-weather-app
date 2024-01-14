@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchPresenter {
+    private static final String FIELD_CANNOT_BE_EMPTY = "Search field cannot be empty";
+    private static final String TIME_INVALID = "Invalid time range";
+    private final WeatherService weatherService;
     @FXML
     private TextField searchStartTextField;
     @FXML
@@ -30,9 +33,6 @@ public class SearchPresenter {
     @FXML
     private TextField timeEndTextField;
     private WeatherPresenter mainController;
-    private final WeatherService weatherService;
-    private static final String FIELD_CANNOT_BE_EMPTY = "Search field cannot be empty";
-    private static final String TIME_INVALID = "Invalid time range";
 
     public SearchPresenter(WeatherService weatherService) {
         this.weatherService = weatherService;

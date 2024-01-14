@@ -12,13 +12,14 @@ import pl.edu.agh.to.weatherapp.model.internal.Trip;
 import java.util.Objects;
 
 public class FavouritesPresenter {
+    private static final String COLOR_ORANGE = "#FFB347";
+    private final FavouriteTrips trips;
     @FXML
     private ListView<Trip> favouritesListView;
 
-    private final FavouriteTrips trips;
     private WeatherPresenter mainController;
 
-    private static final String COLOR_ORANGE = "#FFB347";
+
     private final SimpleBooleanProperty isCurrentTripInFavourites = new SimpleBooleanProperty(false);
     private final ObservableObjectValue<Color> paintProperty = Bindings.when(isCurrentTripInFavourites)
             .then(Color.web(COLOR_ORANGE))

@@ -17,10 +17,6 @@ public class WeatherPresenter {
     @FXML
     private WeatherInfoPresenter weatherInfoController;
 
-    public WeatherPresenter() {
-        //Empty constructor for javafx
-    }
-
     public void initialize() {
         favouritesController.injectMainController(this);
         searchController.injectMainController(this);

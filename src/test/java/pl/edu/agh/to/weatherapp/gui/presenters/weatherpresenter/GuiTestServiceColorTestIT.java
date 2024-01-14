@@ -20,7 +20,11 @@ import org.mockito.stubbing.Answer;
 import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
-import pl.edu.agh.to.weatherapp.gui.presenters.*;
+import pl.edu.agh.to.weatherapp.gui.presenters.FavouriteTrips;
+import pl.edu.agh.to.weatherapp.gui.presenters.FavouritesPresenter;
+import pl.edu.agh.to.weatherapp.gui.presenters.SearchPresenter;
+import pl.edu.agh.to.weatherapp.gui.presenters.WeatherInfoPresenter;
+import pl.edu.agh.to.weatherapp.gui.presenters.WeatherPresenter;
 import pl.edu.agh.to.weatherapp.model.internal.Trip;
 import pl.edu.agh.to.weatherapp.model.internal.Weather;
 import pl.edu.agh.to.weatherapp.model.internal.enums.PrecipitationIntensity;
@@ -80,6 +84,7 @@ class GuiTestServiceColorTestIT {
                         .setPrecipitationInMm(RAIN)
                         .setMud(true)
                         .setLocationNames(List.of(HOT_BREEZE_WEAK_NONE_MUD)));
+
         Mockito.when(weatherServiceMock.getForecastSummaryWeatherData(List.of(WARM_WINDY_MEDIUM_RAIN_NO_MUD), START_HOUR, END_HOUR)).thenAnswer(
                 (Answer<Weather>) invocation -> new Weather()
                         .setTemperatureLevel(TemperatureLevel.WARM)
@@ -91,6 +96,7 @@ class GuiTestServiceColorTestIT {
                         .setPrecipitationInMm(RAIN)
                         .setMud(false)
                         .setLocationNames(List.of(WARM_WINDY_MEDIUM_RAIN_NO_MUD)));
+
         Mockito.when(weatherServiceMock.getForecastSummaryWeatherData(List.of(COLD_STORM_STRONG_SNOW), START_HOUR, END_HOUR)).thenAnswer(
                 (Answer<Weather>) invocation -> new Weather()
                         .setTemperatureLevel(TemperatureLevel.COLD)
@@ -102,6 +108,7 @@ class GuiTestServiceColorTestIT {
                         .setPrecipitationInMm(RAIN)
                         .setMud(true)
                         .setLocationNames(List.of(COLD_STORM_STRONG_SNOW)));
+
         Mockito.when(weatherServiceMock.getForecastSummaryWeatherData(List.of(FREEZING_WINDY_WEAK_BOTH), START_HOUR, END_HOUR)).thenAnswer(
                 (Answer<Weather>) invocation -> new Weather()
                         .setTemperatureLevel(TemperatureLevel.FREEZING)
@@ -117,18 +124,17 @@ class GuiTestServiceColorTestIT {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/view/WeatherPresenter.fxml"));
         Mockito.when(favouriteTripsMock.getTrips()).thenAnswer((Answer<ObservableList<Trip>>) invocation -> trips);
-        loader.setControllerFactory(c ->{
-            if(c == WeatherPresenter.class){
+        loader.setControllerFactory(c -> {
+            if (c == WeatherPresenter.class) {
                 return new WeatherPresenter();
             }
-            if(c == SearchPresenter.class){
+            if (c == SearchPresenter.class) {
                 return new SearchPresenter(weatherServiceMock);
             }
-            if(c == FavouritesPresenter.class){
+            if (c == FavouritesPresenter.class) {
                 return new FavouritesPresenter(favouriteTripsMock);
             }
             return new WeatherInfoPresenter();
-
         });
         GridPane rootLayout = loader.load();
 

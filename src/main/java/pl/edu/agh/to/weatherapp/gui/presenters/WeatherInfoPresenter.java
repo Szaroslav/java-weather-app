@@ -18,6 +18,13 @@ import pl.edu.agh.to.weatherapp.model.internal.enums.WindIntensity;
 import java.util.List;
 
 public class WeatherInfoPresenter {
+    private static final String TEMP_SUFFIX = "°C";
+    private static final String WIND_SUFFIX = "m/s";
+    private static final String PRECIPITATION_SUFFIX = "mm";
+    private static final String COLOR_GREEN = "#77dd77";
+    private static final String COLOR_YELLOW = "#FFD500";
+    private static final String COLOR_ORANGE = "#FFB347";
+    private static final String COLOR_RED = "#FF6961";
     @FXML
     private VBox weatherInfoVBox;
     @FXML
@@ -53,17 +60,6 @@ public class WeatherInfoPresenter {
     @FXML
     private SVGPath starSVGPath;
     private WeatherPresenter mainController;
-    private static final String TEMP_SUFFIX = "°C";
-    private static final String WIND_SUFFIX = "m/s";
-    private static final String PRECIPITATION_SUFFIX = "mm";
-    private static final String COLOR_GREEN = "#77dd77";
-    private static final String COLOR_YELLOW = "#FFD500";
-    private static final String COLOR_ORANGE = "#FFB347";
-    private static final String COLOR_RED = "#FF6961";
-
-    public WeatherInfoPresenter() {
-        // Empty constructor for javafx
-    }
 
     public void injectMainController(WeatherPresenter mainController) {
         this.mainController = mainController;
