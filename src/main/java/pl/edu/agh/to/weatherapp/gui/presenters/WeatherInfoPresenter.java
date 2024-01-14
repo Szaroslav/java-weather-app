@@ -75,6 +75,7 @@ public class WeatherInfoPresenter {
         temperatureLabel.setText("");
         precipitationLabel.setText("");
         windLabel.setText("");
+        hideWeatherInfo();
     }
 
     @FXML
@@ -183,7 +184,11 @@ public class WeatherInfoPresenter {
         weatherInfoVBox.setVisible(true);
     }
 
-    LocationLabel getLocationLabel(){
+    private void hideWeatherInfo() {
+        weatherInfoVBox.setVisible(false);
+    }
+
+    LocationLabel getLocationLabel() {
         return locationLabel;
     }
 
