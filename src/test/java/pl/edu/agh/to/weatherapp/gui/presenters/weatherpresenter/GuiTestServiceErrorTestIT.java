@@ -17,6 +17,9 @@ import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import pl.edu.agh.to.weatherapp.exceptions.InvalidRequestException;
 import pl.edu.agh.to.weatherapp.gui.presenters.FavouriteTrips;
+import pl.edu.agh.to.weatherapp.gui.presenters.FavouritesPresenter;
+import pl.edu.agh.to.weatherapp.gui.presenters.SearchPresenter;
+import pl.edu.agh.to.weatherapp.gui.presenters.WeatherInfoPresenter;
 import pl.edu.agh.to.weatherapp.gui.presenters.WeatherPresenter;
 import pl.edu.agh.to.weatherapp.model.internal.Trip;
 import pl.edu.agh.to.weatherapp.model.internal.Weather;
@@ -59,6 +62,7 @@ class GuiTestServiceErrorTestIT {
                 (Answer<Weather>) invocation -> {
                     throw new CompletionException(new InvalidRequestException("No matching location found."));
                 });
+
         Mockito.when(weatherServiceMock.getForecastSummaryWeatherData(List.of(LOCATION_VALID), START_HOUR, END_HOUR)).thenAnswer(
                 (Answer<Weather>) invocation -> new Weather()
                         .setTemperatureLevel(TemperatureLevel.COLD)
@@ -68,6 +72,7 @@ class GuiTestServiceErrorTestIT {
                         .setApparentTemperature(TEMP)
                         .setWindInMps(WIND)
                         .setPrecipitationInMm(RAIN).setLocationNames(List.of(LOCATION_VALID)));
+
         Mockito.when(weatherServiceMock.getForecastSummaryWeatherData(List.of(LOCATION_VALID), Integer.parseInt(VALID_EARLY_TIME), Integer.parseInt(VALID_LATE_TIME))).thenAnswer(
                 (Answer<Weather>) invocation -> new Weather()
                         .setTemperatureLevel(TemperatureLevel.COLD)
@@ -81,8 +86,18 @@ class GuiTestServiceErrorTestIT {
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/view/WeatherPresenter.fxml"));
-        loader.setControllerFactory(c ->
-                new WeatherPresenter(weatherServiceMock, favouriteTripsMock));
+        loader.setControllerFactory(c -> {
+            if (c == WeatherPresenter.class) {
+                return new WeatherPresenter();
+            }
+            if (c == SearchPresenter.class) {
+                return new SearchPresenter(weatherServiceMock);
+            }
+            if (c == FavouritesPresenter.class) {
+                return new FavouritesPresenter(favouriteTripsMock);
+            }
+            return new WeatherInfoPresenter();
+        });
         GridPane rootLayout = loader.load();
 
         Scene scene = new Scene(rootLayout);

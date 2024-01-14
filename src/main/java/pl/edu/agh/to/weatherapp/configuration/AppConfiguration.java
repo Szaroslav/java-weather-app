@@ -4,11 +4,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import pl.edu.agh.to.weatherapp.gui.presenters.FavouriteTrips;
+import pl.edu.agh.to.weatherapp.gui.presenters.FavouritesPresenter;
+import pl.edu.agh.to.weatherapp.gui.presenters.SearchPresenter;
+import pl.edu.agh.to.weatherapp.gui.presenters.WeatherInfoPresenter;
+import pl.edu.agh.to.weatherapp.gui.presenters.WeatherPresenter;
 import pl.edu.agh.to.weatherapp.service.api.WeatherFetcher;
 import pl.edu.agh.to.weatherapp.service.api.WeatherApiFetcher;
 import pl.edu.agh.to.weatherapp.service.parser.JsonParser;
-import pl.edu.agh.to.weatherapp.gui.presenters.FavouriteTrips;
-import pl.edu.agh.to.weatherapp.gui.presenters.WeatherPresenter;
 import pl.edu.agh.to.weatherapp.service.persistence.SqlitePersistenceService;
 import pl.edu.agh.to.weatherapp.service.persistence.TripPersistenceService;
 import pl.edu.agh.to.weatherapp.service.weather.WeatherService;
@@ -44,8 +47,23 @@ public class AppConfiguration {
     }
 
     @Bean
-    public WeatherPresenter weatherPresenter(WeatherService weatherService, FavouriteTrips tripMemory) {
-        return new WeatherPresenter(weatherService, tripMemory);
+    public WeatherPresenter weatherPresenter() {
+        return new WeatherPresenter();
+    }
+
+    @Bean
+    public FavouritesPresenter favouritesPresenter(FavouriteTrips tripMemory) {
+        return new FavouritesPresenter(tripMemory);
+    }
+
+    @Bean
+    public SearchPresenter searchPresenterPresenter(WeatherService weatherService) {
+        return new SearchPresenter(weatherService);
+    }
+
+    @Bean
+    public WeatherInfoPresenter weatherInfoPresenter() {
+        return new WeatherInfoPresenter();
     }
 
     @Bean

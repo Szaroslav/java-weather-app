@@ -17,6 +17,9 @@ import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import pl.edu.agh.to.weatherapp.gui.presenters.FavouriteTrips;
+import pl.edu.agh.to.weatherapp.gui.presenters.FavouritesPresenter;
+import pl.edu.agh.to.weatherapp.gui.presenters.SearchPresenter;
+import pl.edu.agh.to.weatherapp.gui.presenters.WeatherInfoPresenter;
 import pl.edu.agh.to.weatherapp.gui.presenters.WeatherPresenter;
 import pl.edu.agh.to.weatherapp.model.internal.Trip;
 import pl.edu.agh.to.weatherapp.model.internal.Weather;
@@ -55,6 +58,7 @@ class GuiTestServiceDelayTestIT {
         ObservableList<Trip> trips = FXCollections.observableArrayList();
         FavouriteTrips favouriteTripsMock = Mockito.mock(FavouriteTrips.class);
         Mockito.when(favouriteTripsMock.getTrips()).thenAnswer((Answer<ObservableList<Trip>>) invocation -> trips);
+
         Mockito.when(weatherServiceMock.getForecastSummaryWeatherData(List.of(LOCATION_START, LOCATION_END), START_HOUR, END_HOUR)).thenAnswer(
                 (Answer<Weather>) invocation -> {
                     await()
@@ -71,11 +75,20 @@ class GuiTestServiceDelayTestIT {
                             .setLocationNames(List.of(LOCATION_START, LOCATION_END));
                 });
 
-
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/view/WeatherPresenter.fxml"));
-        loader.setControllerFactory(c ->
-                new WeatherPresenter(weatherServiceMock, favouriteTripsMock));
+        loader.setControllerFactory(c -> {
+            if (c == WeatherPresenter.class) {
+                return new WeatherPresenter();
+            }
+            if (c == SearchPresenter.class) {
+                return new SearchPresenter(weatherServiceMock);
+            }
+            if (c == FavouritesPresenter.class) {
+                return new FavouritesPresenter(favouriteTripsMock);
+            }
+            return new WeatherInfoPresenter();
+        });
         GridPane rootLayout = loader.load();
 
         Button button = new Button("click me!");

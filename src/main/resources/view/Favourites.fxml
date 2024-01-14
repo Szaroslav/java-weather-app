@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ListView?>
+
+<ListView fx:id="favouritesListView"  prefHeight="509.0" prefWidth="362.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml" fx:controller="pl.edu.agh.to.weatherapp.gui.presenters.FavouritesPresenter"/>
