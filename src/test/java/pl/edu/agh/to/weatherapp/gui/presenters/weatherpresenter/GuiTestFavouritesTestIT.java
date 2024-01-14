@@ -58,6 +58,7 @@ class GuiTestFavouritesTestIT {
     private static final String SECOND_TEXT_FIELD_ID = "#searchMiddleTextField";
     private final Trip trip2 = new Trip(List.of(LOCATION_START, LOCATION_END));
     private final Trip trip3 = new Trip(List.of(LOCATION_START, LOCATION_MIDDLE));
+    private final Trip trip4 = new Trip(List.of(LOCATION_START, LOCATION_MIDDLE, LOCATION_END));
     private final ArgumentCaptor<Trip> valueCapture = ArgumentCaptor.forClass(Trip.class);
     private final ArgumentCaptor<Trip> valueCaptureDelete = ArgumentCaptor.forClass(Trip.class);
     private final ObservableList<Trip> trips = FXCollections.observableArrayList();
@@ -96,6 +97,17 @@ class GuiTestFavouritesTestIT {
                         .setWindInMps(WIND)
                         .setPrecipitationInMm(RAIN)
                         .setLocationNames(List.of(LOCATION_START, LOCATION_END)));
+
+        Mockito.when(weatherServiceMock.getForecastSummaryWeatherData(List.of(LOCATION_START, LOCATION_MIDDLE, LOCATION_END), START_HOUR, END_HOUR)).thenAnswer(
+                (Answer<Weather>) invocation -> new Weather()
+                        .setTemperatureLevel(TemperatureLevel.COLD)
+                        .setWindIntensity(WindIntensity.WINDY)
+                        .setPrecipitationIntensity(PrecipitationIntensity.WEAK)
+                        .setPrecipitationType(PrecipitationType.BOTH)
+                        .setApparentTemperature(TEMP)
+                        .setWindInMps(WIND)
+                        .setPrecipitationInMm(RAIN)
+                        .setLocationNames(List.of(LOCATION_START, LOCATION_MIDDLE, LOCATION_END)));
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/view/WeatherPresenter.fxml"));
@@ -202,5 +214,18 @@ class GuiTestFavouritesTestIT {
 
         assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
                 .hasText(LOCATION_START + CITY_NAMES_SEPARATOR + LOCATION_MIDDLE);
+    }
+
+    @Test
+    void showLongWeatherDataOnClick(FxRobot robot) {
+        trips.add(trip4);
+        await()
+                .pollDelay(Duration.ofMillis(300))
+                .until(() -> true);
+
+        robot.clickOn(String.join(CITY_NAMES_SEPARATOR, trip4.locationNames()));
+
+        assertThat(robot.lookup("#locationLabel").queryAs(Label.class))
+                .hasText(LOCATION_START + CITY_NAMES_SEPARATOR + LOCATION_MIDDLE + CITY_NAMES_SEPARATOR + LOCATION_END);
     }
 }
