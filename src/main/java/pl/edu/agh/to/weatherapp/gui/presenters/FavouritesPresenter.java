@@ -13,17 +13,14 @@ import java.util.Objects;
 
 public class FavouritesPresenter {
     private static final String COLOR_ORANGE = "#FFB347";
-    private final FavouriteTrips trips;
-    @FXML
-    private ListView<Trip> favouritesListView;
-
-    private WeatherPresenter mainController;
-
-
     private final SimpleBooleanProperty isCurrentTripInFavourites = new SimpleBooleanProperty(false);
     private final ObservableObjectValue<Color> paintProperty = Bindings.when(isCurrentTripInFavourites)
             .then(Color.web(COLOR_ORANGE))
             .otherwise(Color.web(COLOR_ORANGE, 0));
+    private final FavouriteTrips trips;
+    @FXML
+    private ListView<Trip> favouritesListView;
+    private WeatherPresenter mainController;
 
     public FavouritesPresenter(FavouriteTrips trips) {
         this.trips = trips;

@@ -25,6 +25,7 @@ public class WeatherInfoPresenter {
     private static final String COLOR_YELLOW = "#FFD500";
     private static final String COLOR_ORANGE = "#FFB347";
     private static final String COLOR_RED = "#FF6961";
+    private WeatherPresenter mainController;
     @FXML
     private VBox weatherInfoVBox;
     @FXML
@@ -59,7 +60,6 @@ public class WeatherInfoPresenter {
     private Line noMudLine;
     @FXML
     private SVGPath starSVGPath;
-    private WeatherPresenter mainController;
 
     public void injectMainController(WeatherPresenter mainController) {
         this.mainController = mainController;
