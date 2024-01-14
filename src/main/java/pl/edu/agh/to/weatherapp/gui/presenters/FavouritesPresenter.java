@@ -6,6 +6,7 @@ import javafx.beans.value.ObservableObjectValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.paint.Color;
+import pl.edu.agh.to.weatherapp.gui.customcontrols.TripCell;
 import pl.edu.agh.to.weatherapp.model.internal.Trip;
 
 import java.util.Objects;

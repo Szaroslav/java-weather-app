@@ -191,5 +191,4 @@ public class WeatherInfoPresenter {
     LocationLabel getLocationLabel() {
         return locationLabel;
     }
-
 }
