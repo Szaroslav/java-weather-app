@@ -1,107 +1,73 @@
 package pl.edu.agh.to.weatherapp.service.persistence;
 
-import lombok.SneakyThrows;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import pl.edu.agh.to.weatherapp.model.internal.Trip;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SqlitePersistenceServiceTest {
-    private static final String DB_FILENAME = "test.db";
-    private static final List<Trip> DB_TRIPS_LOAD = List.of();
-    private static final List<Trip> DB_TRIPS_ADD_1 = List.of(new Trip(List.of("Krakow")));
-    private static final List<Trip> DB_TRIPS_ADD_2 = List.of(new Trip(List.of("Krakow")),
-                                                        new Trip(List.of("Krakow", "Tarnow")));
-    private static final List<Trip> DB_TRIPS_ADD_3 = List.of(new Trip(List.of("Krakow")),
-                                                        new Trip(List.of("Krakow", "Tarnow")),
-                                                        new Trip(List.of("Krakow", "Tarnow", "Rzeszow")));
-    private static final List<Trip> DB_TRIPS_DELETE_1 = List.of(new Trip(List.of("Krakow", "Tarnow")),
-                                                            new Trip(List.of("Krakow", "Tarnow", "Rzeszow")));
-    private static final List<Trip> DB_TRIPS_DELETE_2 = List.of(new Trip(List.of("Krakow", "Tarnow", "Rzeszow")));
-    private static final List<Trip> DB_TRIPS_DELETE_3 = List.of();
+class SqlitePersistenceServiceTest {
+    private static final String JDBC = "jdbc:sqlite::memory:";
+    private static final List<Trip> DB_TRIPS_1 = List.of(new Trip(List.of("l1")));
+    private static final List<Trip> DB_TRIPS_2 = List.of(new Trip(List.of("l1")),
+            new Trip(List.of("l1", "l2")));
+    private static final List<Trip> DB_TRIPS_3 = List.of(new Trip(List.of("l1")),
+            new Trip(List.of("l1", "l2")),
+            new Trip(List.of("l1", "l2", "l3")));
     private static SqlitePersistenceService service;
 
-    @BeforeAll
-    public static void setup() {
-        service = new SqlitePersistenceService(DB_FILENAME);
+    @BeforeEach
+    public void setup() {
+        service = new SqlitePersistenceService(JDBC);
     }
 
     @Test
-    @Order(1)
     void loadTripsTest() {
         List<Trip> trips = service.load();
-        assertThat(trips).isEqualTo(DB_TRIPS_LOAD);
+        assertThat(trips).isEqualTo(List.of());
     }
 
     @Test
-    @Order(2)
-    void addTrip1locationTest() {
-        Trip trip = new Trip(List.of("Krakow"));
-        service.add(trip);
-        List<Trip> trips = service.load();
-        assertThat(trips).isEqualTo(DB_TRIPS_ADD_1);
+    void addTripsTest() {
+        Trip trip1 = new Trip(List.of("l1"));
+        service.add(trip1);
+        List<Trip> trips1 = service.load();
+        assertThat(trips1).isEqualTo(DB_TRIPS_1);
+
+        Trip trip2 = new Trip(List.of("l1", "l2"));
+        service.add(trip2);
+        List<Trip> trips2 = service.load();
+        assertThat(trips2).isEqualTo(DB_TRIPS_2);
+
+        Trip trip3 = new Trip(List.of("l1", "l2", "l3"));
+        service.add(trip3);
+        List<Trip> trips3 = service.load();
+        assertThat(trips3).isEqualTo(DB_TRIPS_3);
     }
 
     @Test
-    @Order(3)
-    void addTrip2locationTest() {
-        Trip trip = new Trip(List.of("Krakow", "Tarnow"));
-        service.add(trip);
-        List<Trip> trips = service.load();
-        assertThat(trips).isEqualTo(DB_TRIPS_ADD_2);
-    }
+    void deleteTripsTest() {
+        for (Trip trip : DB_TRIPS_3) {
+            service.add(trip);
+        }
+        List<Trip> trips0 = service.load();
+        assertThat(trips0).isEqualTo(DB_TRIPS_3);
 
-    @Test
-    @Order(4)
-    void addTrip3locationTest() {
-        Trip trip = new Trip(List.of("Krakow", "Tarnow", "Rzeszow"));
-        service.add(trip);
-        List<Trip> trips = service.load();
-        assertThat(trips).isEqualTo(DB_TRIPS_ADD_3);
-    }
+        Trip trip1 = new Trip(List.of("l1", "l2", "l3"));
+        service.delete(trip1);
+        List<Trip> trips1 = service.load();
+        assertThat(trips1).isEqualTo(DB_TRIPS_2);
 
-    @Test
-    @Order(5)
-    void deleteTrip1locationTest() {
-        Trip trip = new Trip(List.of("Krakow"));
-        service.delete(trip);
-        List<Trip> trips = service.load();
-        assertThat(trips).isEqualTo(DB_TRIPS_DELETE_1);
-    }
+        Trip trip2 = new Trip(List.of("l1", "l2"));
+        service.delete(trip2);
+        List<Trip> trips2 = service.load();
+        assertThat(trips2).isEqualTo(DB_TRIPS_1);
 
-    @Test
-    @Order(6)
-    void deleteTrip2locationTest() {
-        Trip trip = new Trip(List.of("Krakow", "Tarnow"));
-        service.delete(trip);
-        List<Trip> trips = service.load();
-        assertThat(trips).isEqualTo(DB_TRIPS_DELETE_2);
-    }
-
-    @Test
-    @Order(7)
-    void deleteTrip3locationTest() {
-        Trip trip = new Trip(List.of("Krakow", "Tarnow", "Rzeszow"));
-        service.delete(trip);
-        List<Trip> trips = service.load();
-        assertThat(trips).isEqualTo(DB_TRIPS_DELETE_3);
-    }
-
-    @AfterAll
-    @SneakyThrows
-    public static void teardown() {
-        Path path = Paths.get(DB_FILENAME);
-        Files.delete(path);
+        Trip trip3 = new Trip(List.of("l1"));
+        service.delete(trip3);
+        List<Trip> trips3 = service.load();
+        assertThat(trips3).isEqualTo(List.of());
     }
 }
