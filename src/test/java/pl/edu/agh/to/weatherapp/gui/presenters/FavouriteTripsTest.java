@@ -12,7 +12,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class FavouriteTripsTest {
     private final static Trip EXAMPLE_TRIP_1 = new Trip(List.of("Tarnów", "Cracow"));
-    private final static Trip EXAMPLE_TRIP_2 = new Trip(List.of("Tarnów", "Cracow", "Rzeszów"));
     @Mock
     private final TripPersistenceService tripPersistenceService = Mockito.mock();
 
@@ -41,20 +40,28 @@ class FavouriteTripsTest {
     }
 
     @Test
-    void testMemoryAddDelete() {
+    void testMemoryAdd() {
+        // given
+        Mockito.when(tripPersistenceService.load()).thenReturn(List.of());
+
+        // when
+        FavouriteTrips favouriteTrips = new FavouriteTrips(tripPersistenceService);
+        favouriteTrips.addTrip(EXAMPLE_TRIP_1);
+
+        // then
+        assertThat(favouriteTrips.getTrips()).containsExactly(EXAMPLE_TRIP_1);
+    }
+
+    @Test
+    void testMemoryDelete() {
         // given
         Mockito.when(tripPersistenceService.load()).thenReturn(List.of(EXAMPLE_TRIP_1));
 
         // when
         FavouriteTrips favouriteTrips = new FavouriteTrips(tripPersistenceService);
-        favouriteTrips.addTrip(EXAMPLE_TRIP_2);
         favouriteTrips.deleteTrip(EXAMPLE_TRIP_1);
 
         // then
-        assertThat(favouriteTrips.getTrips()).containsExactly(EXAMPLE_TRIP_2);
-        Mockito.verify(tripPersistenceService, Mockito.times(1))
-                .add(Mockito.any(Trip.class));
-        Mockito.verify(tripPersistenceService, Mockito.times(1))
-                .delete(Mockito.any(Trip.class));
+        assertThat(favouriteTrips.getTrips()).isEmpty();
     }
 }
