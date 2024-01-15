@@ -1,5 +1,6 @@
 package pl.edu.agh.to.weatherapp.service.persistence;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.edu.agh.to.weatherapp.model.internal.Trip;
@@ -69,5 +70,10 @@ class SqlitePersistenceServiceTest {
         service.delete(trip3);
         List<Trip> trips3 = service.load();
         assertThat(trips3).isEqualTo(List.of());
+    }
+
+    @AfterEach
+    public void teardown() {
+        service.close();
     }
 }
