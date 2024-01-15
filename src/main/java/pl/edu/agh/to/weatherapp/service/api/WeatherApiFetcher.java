@@ -1,17 +1,15 @@
 package pl.edu.agh.to.weatherapp.service.api;
 
 import lombok.SneakyThrows;
+import org.apache.http.client.utils.URIBuilder;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.springframework.stereotype.Component;
-import org.apache.http.client.utils.URIBuilder;
 
 import java.net.URI;
-import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletableFuture;
 
 @Component
