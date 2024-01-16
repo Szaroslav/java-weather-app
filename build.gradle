@@ -32,6 +32,8 @@ test {
 }
 
 dependencies {
+    implementation 'org.apache.httpcomponents:httpclient:4.5.14'
+
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.10.1'
     testImplementation 'junit:junit:4.13.1'
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.1'
@@ -52,4 +54,6 @@ dependencies {
     testImplementation "org.mockito:mockito-core:3.+"
 
     implementation 'joda-time:joda-time:2.3'
+
+    implementation 'org.xerial:sqlite-jdbc:3.44.1.0'
 }

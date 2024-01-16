@@ -4,14 +4,20 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import pl.edu.agh.to.weatherapp.api.WeatherFetcher;
-import pl.edu.agh.to.weatherapp.api.WeatherApiFetcher;
-import pl.edu.agh.to.weatherapp.parser.JsonParser;
-import pl.edu.agh.to.weatherapp.presenters.WeatherPresenter;
-import pl.edu.agh.to.weatherapp.weather.WeatherService;
-import pl.edu.agh.to.weatherapp.weather.WeatherApiService;
-import pl.edu.agh.to.weatherapp.weather.summary.ExtremeWeatherService;
-import pl.edu.agh.to.weatherapp.weather.summary.WeatherSummaryService;
+import pl.edu.agh.to.weatherapp.gui.presenters.FavouriteTrips;
+import pl.edu.agh.to.weatherapp.gui.presenters.FavouritesPresenter;
+import pl.edu.agh.to.weatherapp.gui.presenters.SearchPresenter;
+import pl.edu.agh.to.weatherapp.gui.presenters.WeatherInfoPresenter;
+import pl.edu.agh.to.weatherapp.gui.presenters.WeatherPresenter;
+import pl.edu.agh.to.weatherapp.service.api.WeatherFetcher;
+import pl.edu.agh.to.weatherapp.service.api.WeatherApiFetcher;
+import pl.edu.agh.to.weatherapp.service.parser.JsonParser;
+import pl.edu.agh.to.weatherapp.service.persistence.SqlitePersistenceService;
+import pl.edu.agh.to.weatherapp.service.persistence.TripPersistenceService;
+import pl.edu.agh.to.weatherapp.service.weather.WeatherService;
+import pl.edu.agh.to.weatherapp.service.weather.WeatherApiService;
+import pl.edu.agh.to.weatherapp.service.weather.summary.ExtremeWeatherService;
+import pl.edu.agh.to.weatherapp.service.weather.summary.WeatherSummaryService;
 
 import java.net.http.HttpClient;
 
@@ -20,22 +26,56 @@ import java.net.http.HttpClient;
 public class AppConfiguration {
     @Value("${weather.apiKey}")
     private String apiKey;
+    @Value("${weather.dbJdbc}")
+    private String dbJdbc;
+    @Value("${weather.noDaysToCheckPrecipitation}")
+    private int noDaysToCheckPrecipitation;
 
     @Bean(name = "apiKey")
     public String apiKey() {
         return apiKey;
     }
 
+    @Bean(name = "dbJdbc")
+    public String dbJdbc() {
+        return dbJdbc;
+    }
+
+    @Bean(name = "noDaysToCheckPrecipitation")
+    public int noDaysToCheckPrecipitation() {
+        return noDaysToCheckPrecipitation;
+    }
+
     @Bean
-    public WeatherPresenter weatherPresenter(WeatherService weatherService) {
-        return new WeatherPresenter(weatherService);
+    public WeatherPresenter weatherPresenter() {
+        return new WeatherPresenter();
+    }
+
+    @Bean
+    public FavouritesPresenter favouritesPresenter(FavouriteTrips tripMemory) {
+        return new FavouritesPresenter(tripMemory);
+    }
+
+    @Bean
+    public SearchPresenter searchPresenterPresenter(WeatherService weatherService) {
+        return new SearchPresenter(weatherService);
+    }
+
+    @Bean
+    public WeatherInfoPresenter weatherInfoPresenter() {
+        return new WeatherInfoPresenter();
     }
 
     @Bean
     public WeatherService weatherService(WeatherFetcher weatherFetcher,
                                          JsonParser responseParser,
                                          WeatherSummaryService weatherSummaryService) {
-        return new WeatherApiService(weatherFetcher, responseParser, weatherSummaryService);
+        return new WeatherApiService(
+                noDaysToCheckPrecipitation(),
+                weatherFetcher,
+                responseParser,
+                weatherSummaryService
+        );
     }
 
     @Bean
@@ -56,5 +96,15 @@ public class AppConfiguration {
     @Bean
     public HttpClient httpClient() {
         return HttpClient.newHttpClient();
+    }
+
+    @Bean
+    public TripPersistenceService tripPersistenceService() {
+        return new SqlitePersistenceService(dbJdbc());
+    }
+
+    @Bean
+    public FavouriteTrips tripMemory() {
+        return new FavouriteTrips(tripPersistenceService());
     }
 }
